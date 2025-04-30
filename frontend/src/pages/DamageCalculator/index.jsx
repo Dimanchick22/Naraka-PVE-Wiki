@@ -1,7 +1,7 @@
+// pages/DamageCalculator/index.jsx
 import React, { useState } from "react";
 import CalculatorForm from "./components/CalculatorForm";
 import JadesContainer from "./components/JadesContainer";
-import JadeBonusesDisplay from "./components/JadeBonusesDisplay";
 import DamageSummary from "./components/DamageSummary";
 import { useCalculator } from "./hooks/useCalculator";
 
@@ -47,18 +47,46 @@ const DamageCalculator = () => {
         </p>
       </div>
 
-      <div className="new-calculator-layout">
+      <div className="calculator-layout">
         <div className="left-column">
           {/* Форма ввода параметров */}
           <CalculatorForm calculator={calculator} />
-
-          {/* Отображение бонусов от нефритов (переместили в левую колонку под параметры) */}
-          <JadeBonusesDisplay bonuses={jadeBonuses} />
         </div>
 
         <div className="right-column">
           {/* Контейнер с нефритами */}
           <JadesContainer onJadeBonusChange={handleJadeBonusChange} />
+
+          {/* Отображение текущих бонусов от нефритов */}
+          <div className="jade-bonuses">
+            <h2 className="section-title">Бонусы от нефритов</h2>
+            <div className="bonuses-grid">
+              <div className="bonus-item">
+                <div className="bonus-label">Бонус атаки:</div>
+                <div className="bonus-value">
+                  {(jadeBonuses.attackBonus * 100).toFixed(2)}%
+                </div>
+              </div>
+              <div className="bonus-item">
+                <div className="bonus-label">Бонус ледяного взрыва:</div>
+                <div className="bonus-value">
+                  {(jadeBonuses.iceExplosionBonus * 100).toFixed(2)}%
+                </div>
+              </div>
+              <div className="bonus-item">
+                <div className="bonus-label">Бонус атаки по боссам:</div>
+                <div className="bonus-value">
+                  {(jadeBonuses.bossAttackBonus * 100).toFixed(2)}%
+                </div>
+              </div>
+              <div className="bonus-item">
+                <div className="bonus-label">Бонус атаки по монстрам:</div>
+                <div className="bonus-value">
+                  {(jadeBonuses.monsterAttackBonus * 100).toFixed(2)}%
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -2,7 +2,7 @@ import React from "react";
 import { formatNumber } from "../utils/formatUtils";
 
 /**
- * Компонент для отображения итогового урона (переработанная версия)
+ * Компонент для отображения итогового урона
  * @param {Object} props - Свойства компонента
  * @param {Object} props.results - Результаты расчетов
  * @returns {JSX.Element | null} - Элемент компонента или null, если нет результатов
