@@ -9,7 +9,7 @@ import { useCalculator } from "./hooks/useCalculator";
 import "../../styles/damageCalculator.css";
 
 /**
- * Основной компонент страницы калькулятора урона (переработанная версия)
+ * Основной компонент страницы калькулятора урона (исправленная версия)
  * @returns {JSX.Element} - Элемент компонента
  */
 const DamageCalculator = () => {
@@ -52,11 +52,8 @@ const DamageCalculator = () => {
           {/* Форма ввода параметров */}
           <CalculatorForm calculator={calculator} />
 
-          {/* Отображение бонусов от нефритов */}
+          {/* Отображение бонусов от нефритов (переместили в левую колонку под параметры) */}
           <JadeBonusesDisplay bonuses={jadeBonuses} />
-
-          {/* Итоговый урон */}
-          {calculator.results && <DamageSummary results={calculator.results} />}
         </div>
 
         <div className="right-column">
@@ -64,6 +61,13 @@ const DamageCalculator = () => {
           <JadesContainer onJadeBonusChange={handleJadeBonusChange} />
         </div>
       </div>
+
+      {/* Итоговый урон (на всю ширину, 2 колонки) */}
+      {calculator.results && (
+        <div className="full-width-damage-summary">
+          <DamageSummary results={calculator.results} />
+        </div>
+      )}
     </div>
   );
 };

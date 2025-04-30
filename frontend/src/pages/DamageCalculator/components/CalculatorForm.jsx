@@ -2,7 +2,7 @@ import React from "react";
 import FormSection from "./FormSection";
 
 /**
- * Компонент формы калькулятора
+ * Компонент формы калькулятора (удалены поля для ввода бонусов нефритов)
  * @param {Object} props - Свойства компонента
  * @param {Object} props.calculator - Объект состояния калькулятора из хука useCalculator
  * @returns {JSX.Element} - Элемент компонента
@@ -36,19 +36,8 @@ const CalculatorForm = ({ calculator }) => {
     setTessaF,
     consciousnessMatch,
     setConsciousnessMatch,
-    jadeAttackBonus,
-    setJadeAttackBonus,
-    jadeIceExplosionBonus,
-    setJadeIceExplosionBonus,
-    jadeBossAttackBonus,
-    setJadeBossAttackBonus,
-    jadeMonsterAttackBonus,
-    setJadeMonsterAttackBonus,
 
     // Действия
-    handleNumericInput,
-    handlePercentInput,
-    performCalculation,
     resetAll,
   } = calculator;
 
@@ -196,71 +185,7 @@ const CalculatorForm = ({ calculator }) => {
         </div>
       </FormSection>
 
-      <FormSection title="Бонусы от нефритов">
-        <div className="form-group">
-          <label htmlFor="jadeAttackBonus">Бонус атаки:</label>
-          <div className="input-with-suffix">
-            <input
-              type="number"
-              id="jadeAttackBonus"
-              value={jadeAttackBonus * 100}
-              onChange={handlePercentInput(setJadeAttackBonus)}
-              min="0"
-              step="1"
-            />
-            <span className="input-suffix">%</span>
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="jadeIceExplosionBonus">Бонус ледяного взрыва:</label>
-          <div className="input-with-suffix">
-            <input
-              type="number"
-              id="jadeIceExplosionBonus"
-              value={jadeIceExplosionBonus * 100}
-              onChange={handlePercentInput(setJadeIceExplosionBonus)}
-              min="0"
-              step="1"
-            />
-            <span className="input-suffix">%</span>
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="jadeBossAttackBonus">Бонус атаки по боссам:</label>
-          <div className="input-with-suffix">
-            <input
-              type="number"
-              id="jadeBossAttackBonus"
-              value={jadeBossAttackBonus * 100}
-              onChange={handlePercentInput(setJadeBossAttackBonus)}
-              min="0"
-              step="1"
-            />
-            <span className="input-suffix">%</span>
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="jadeMonsterAttackBonus">
-            Бонус атаки по монстрам:
-          </label>
-          <div className="input-with-suffix">
-            <input
-              type="number"
-              id="jadeMonsterAttackBonus"
-              value={jadeMonsterAttackBonus * 100}
-              onChange={handlePercentInput(setJadeMonsterAttackBonus)}
-              min="0"
-              step="1"
-            />
-            <span className="input-suffix">%</span>
-          </div>
-        </div>
-      </FormSection>
-
       <div className="form-actions">
-        <button className="btn btn-primary" onClick={performCalculation}>
-          Рассчитать
-        </button>
         <button className="btn btn-secondary" onClick={resetAll}>
           Сбросить
         </button>

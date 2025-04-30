@@ -3,7 +3,7 @@ import { calculateDamage } from "../utils/calculationUtils";
 import { DEFAULT_CONSCIOUSNESS, DEFAULT_HERO_LEVEL } from "../constants";
 
 /**
- * Хук для работы с калькулятором урона (упрощенная версия)
+ * Хук для работы с калькулятором урона (убраны дублирующиеся поля)
  * @returns {Object} - Состояние калькулятора и функции управления
  */
 export const useCalculator = () => {
@@ -28,7 +28,7 @@ export const useCalculator = () => {
   const [tessaF, setTessaF] = useState(false);
   const [consciousnessMatch, setConsciousnessMatch] = useState(false);
 
-  // Параметры нефритов
+  // Параметры нефритов (устанавливаются только через JadesContainer)
   const [jadeAttackBonus, setJadeAttackBonus] = useState(0);
   const [jadeIceExplosionBonus, setJadeIceExplosionBonus] = useState(0);
   const [jadeBossAttackBonus, setJadeBossAttackBonus] = useState(0);
@@ -102,30 +102,8 @@ export const useCalculator = () => {
     setFrostboundLotus(false);
     setTessaF(false);
     setConsciousnessMatch(false);
-    setJadeAttackBonus(0);
-    setJadeIceExplosionBonus(0);
-    setJadeBossAttackBonus(0);
-    setJadeMonsterAttackBonus(0);
-  };
 
-  // Функция для обработки изменения численных полей
-  const handleNumericInput = (setter) => (e) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value)) {
-      setter(value);
-    } else if (e.target.value === "") {
-      setter(0);
-    }
-  };
-
-  // Функция для обработки изменения процентных полей
-  const handlePercentInput = (setter) => (e) => {
-    const value = parseFloat(e.target.value) / 100;
-    if (!isNaN(value)) {
-      setter(value);
-    } else if (e.target.value === "") {
-      setter(0);
-    }
+    // Не сбрасываем параметры нефритов, они управляются компонентом JadesContainer
   };
 
   return {
@@ -156,6 +134,8 @@ export const useCalculator = () => {
     setTessaF,
     consciousnessMatch,
     setConsciousnessMatch,
+
+    // Параметры нефритов
     jadeAttackBonus,
     setJadeAttackBonus,
     jadeIceExplosionBonus,
@@ -171,7 +151,5 @@ export const useCalculator = () => {
     // Функции
     performCalculation,
     resetAll,
-    handleNumericInput,
-    handlePercentInput,
   };
 };
