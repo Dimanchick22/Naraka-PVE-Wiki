@@ -7,29 +7,34 @@
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 0;
-    height: 100%;
     display: flex;
     flex-direction: column;
   }
   
-  /* Сетка нефритов */
+  /* Заголовок блока */
+  .jades-grid-container .section-title {
+    margin-bottom: 1.25rem;
+  }
+  
+  /* Сетка нефритов с фиксированной высотой */
   .jades-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 1rem;
     margin-bottom: 1.5rem;
-    flex-grow: 1;
+    /* Фиксированная высота сетки - увеличена */
+    height: 400px;
   }
   
-  /* Карточка нефрита */
+  /* Карточка нефрита с увеличенной высотой */
   .jade-item {
     position: relative;
     border: 2px solid rgba(212, 175, 55, 0.3);
     border-radius: 8px;
     padding: 1rem;
     background-color: rgba(26, 26, 26, 0.6);
-    min-height: 120px;
+    height: 200px; /* Увеличенная высота каждого нефрита */
     display: flex;
     flex-direction: column;
     transition: all 0.2s ease;
@@ -60,11 +65,12 @@
     color: var(--naraka-secondary);
   }
   
-  /* Предпросмотр статов */
+  /* Предпросмотр статов - без скроллбара */
   .jade-stats-preview {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.1rem;
+    flex-grow: 1;
   }
   
   .jade-stat-preview {
@@ -91,6 +97,11 @@
     opacity: 0.5;
     font-style: italic;
     padding: 1rem 0;
+    /* Центрирование сообщения внутри нефрита */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
   
   /* Панель редактирования нефрита */
@@ -146,123 +157,23 @@
     min-width: 0;
   }
   
-  /* Кастомный селект */
-  .custom-select-container {
-    position: relative;
-    width: 100%;
-  }
-  
-  .custom-select-selected {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: rgba(26, 26, 26, 0.8);
-    border: 1px solid var(--naraka-secondary);
-    border-radius: 4px;
-    padding: 0.5rem 0.75rem;
-    color: var(--naraka-light);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    height: 36px;
-  }
-  
-  .custom-select-selected::after {
-    content: "";
-    width: 0.5rem;
-    height: 0.5rem;
-    border-right: 2px solid var(--naraka-secondary);
-    border-bottom: 2px solid var(--naraka-secondary);
-    transform: rotate(45deg);
-    margin-left: 0.5rem;
-    transition: transform 0.2s;
-  }
-  
-  .custom-select-selected.open::after {
-    transform: rotate(-135deg);
-  }
-  
-  .custom-select-selected.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-  
-  .custom-select-selected:hover:not(.disabled) {
-    border-color: var(--naraka-primary);
-  }
-  
-  .custom-select-options {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    max-height: 15rem;
-    overflow-y: auto;
-    background-color: rgba(26, 26, 26, 0.95);
-    border: 1px solid var(--naraka-secondary);
-    border-top: none;
-    border-radius: 0 0 4px 4px;
-    z-index: 100;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    display: none;
-  }
-  
-  .custom-select-container.open .custom-select-options {
-    display: block;
-  }
-  
-  /* Стилизация скроллбара для выпадающего списка */
-  .custom-select-options::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .custom-select-options::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 0 0 4px 0;
-  }
-  
-  .custom-select-options::-webkit-scrollbar-thumb {
-    background-color: var(--naraka-primary);
-    border-radius: 3px;
-  }
-  
-  .custom-select-option {
-    padding: 0.5rem 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .custom-select-option:hover {
-    background-color: var(--naraka-primary);
-    color: white;
-  }
-  
-  .custom-select-option.selected {
-    background-color: rgba(139, 0, 0, 0.3);
-    color: var(--naraka-secondary);
-  }
-  
-  /* Общие стили для селектов/инпутов */
-  .stat-select .custom-select-selected,
-  .stat-value-input {
-    background-color: rgba(26, 26, 26, 0.8);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 4px;
-    padding: 0.4rem 0.6rem;
-    color: var(--naraka-light);
-    font-size: 0.875rem;
-    height: 36px;
-  }
-  
-  /* Контейнер для инпута значения */
+  /* Стили для поля ввода значения */
   .stat-value-input-container {
     position: relative;
     width: 100%;
   }
   
-  /* Инпут для значения */
   .stat-value-input {
     width: 100%;
     padding-right: 1.5rem;
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: var(--naraka-light);
+    font-size: 0.875rem;
+    height: 36px;
+    box-sizing: border-box;
   }
   
   .stat-value-input:focus {
@@ -281,7 +192,7 @@
     opacity: 0.7;
   }
   
-  /* Контейнер для кнопки закрытия */
+  /* Кнопка закрытия */
   .jade-edit-actions {
     display: flex;
     justify-content: flex-end;
@@ -290,7 +201,6 @@
     border-top: 1px solid rgba(212, 175, 55, 0.3);
   }
   
-  /* Стили для кнопки закрытия */
   .close-edit-button {
     padding: 0.4rem 1rem;
     font-size: 0.875rem;
@@ -317,18 +227,12 @@
     border-left-color: rgba(45, 197, 14, 0.7);
   }
   
-  /* Обновляем стили для правой колонки */
-  .calculator-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  
   /* Адаптивность для планшетов */
   @media (max-width: 768px) {
     .jades-grid {
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(3, auto);
+      grid-template-rows: repeat(3, 180px);
+      height: auto;
     }
   }
   
@@ -336,6 +240,7 @@
   @media (max-width: 480px) {
     .jades-grid {
       grid-template-columns: 1fr;
+      grid-template-rows: repeat(6, 180px);
     }
     
     .jade-stat-row {

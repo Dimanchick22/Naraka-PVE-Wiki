@@ -52,6 +52,18 @@ const getStatTypeName = (type) => {
   }
 };
 
+// Получение максимального значения для типа стата
+const getMaxValueForType = (type) => {
+  switch (type) {
+    case "attack": return 4;
+    case "ice_explosion": return 30;
+    case "boss_attack": return 5;
+    case "monster_attack": return 5;
+    case "fusion": return 50;  // Для слияния используется выпадающий список со своими значениями
+    default: return 50;
+  }
+};
+
 /**
  * Компонент для отображения сетки нефритов
  * @param {Object} props - Свойства компонента
@@ -82,7 +94,7 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     { id: "monster_attack", name: "Атака по монстрам" },
   ];
 
-  // Значения для статов слияния (только для слияния используем предопределенные значения)
+  // Значения только для статов слияния
   const fusionStatValueOptions = [
     { id: "30", name: "30%" },
     { id: "40", name: "40%" },
@@ -105,7 +117,8 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     if (type === "fusion") {
       updatedJade.stats[statIndex].value = "30";
     } else if (type !== "empty") {
-      updatedJade.stats[statIndex].value = "20";
+      // Для других типов устанавливаем значение по умолчанию
+      updatedJade.stats[statIndex].value = type === "ice_explosion" ? "30" : type === "attack" ? "4" : "5";
     } else {
       updatedJade.stats[statIndex].value = "0";
     }
@@ -125,11 +138,16 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     // Получаем введенное значение
     let inputValue = event.target.value.replace(/[^\d]/g, ''); // Оставляем только цифры
     
-    // Ограничиваем значение от 1 до 99
+    // Получаем тип стата
+    const statType = jades[jadeIndex].stats[statIndex].type;
+    // Определяем максимальное значение для данного типа
+    const maxValue = getMaxValueForType(statType);
+    
+    // Ограничиваем значение
     if (inputValue !== '') {
       const numValue = parseInt(inputValue, 10);
       if (numValue < 1) inputValue = '1';
-      if (numValue > 99) inputValue = '99';
+      if (numValue > maxValue) inputValue = maxValue.toString();
     }
 
     const updatedJade = { ...jades[jadeIndex] };
@@ -215,13 +233,14 @@ const JadesGrid = ({ onJadeBonusChange }) => {
             </div>
             
             <div className="jade-stats-preview">
-              {jade.stats.filter(stat => stat.type !== "empty").map((stat, statIndex) => (
-                <div key={statIndex} className="jade-stat-preview">
-                  <span className="stat-type">{getStatTypeName(stat.type)}</span>
-                  <span className="stat-value">+{stat.value}%</span>
-                </div>
-              ))}
-              {jade.stats.filter(stat => stat.type !== "empty").length === 0 && (
+              {jade.stats.filter(stat => stat.type !== "empty").length > 0 ? (
+                jade.stats.filter(stat => stat.type !== "empty").map((stat, statIndex) => (
+                  <div key={statIndex} className="jade-stat-preview">
+                    <span className="stat-type">{getStatTypeName(stat.type)}</span>
+                    <span className="stat-value">+{stat.value}%</span>
+                  </div>
+                ))
+              ) : (
                 <div className="jade-empty-message">Пустой слот</div>
               )}
             </div>

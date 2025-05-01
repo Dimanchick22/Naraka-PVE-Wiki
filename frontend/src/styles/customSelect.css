@@ -15,6 +15,8 @@
     color: var(--naraka-light);
     cursor: pointer;
     transition: all 0.2s ease;
+    height: 36px;
+    box-sizing: border-box;
   }
   
   .custom-select-selected::after {
@@ -41,6 +43,13 @@
     border-color: var(--naraka-primary);
   }
   
+  /* Доступность - стили для фокуса */
+  .custom-select-selected:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+  }
+  
+  /* Выпадающий список опций */
   .custom-select-options {
     position: absolute;
     top: 100%;
@@ -61,7 +70,7 @@
     display: block;
   }
   
-  /* Стилизация скроллбара для выпадающего списка */
+  /* Стилизация скроллбара */
   .custom-select-options::-webkit-scrollbar {
     width: 6px;
   }
@@ -76,6 +85,7 @@
     border-radius: 3px;
   }
   
+  /* Стили для опции */
   .custom-select-option {
     padding: 0.5rem 0.75rem;
     cursor: pointer;
@@ -92,29 +102,40 @@
     color: var(--naraka-secondary);
   }
   
-  /* Стили для кастомного селекта в контексте калькулятора нефритов */
+  /* Доступность - стили для фокуса на опциях */
+  .custom-select-option:focus {
+    outline: none;
+    background-color: rgba(139, 0, 0, 0.5);
+    box-shadow: inset 0 0 0 1px var(--naraka-secondary);
+  }
+  
+  /* Специфичные стили для селектов в контексте нефритов */
   .stat-type-select .custom-select-selected,
   .stat-value-select .custom-select-selected {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid rgba(212, 175, 55, 0.3);
   }
   
-  .stat-row {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.75rem;
+  .stat-select .custom-select-selected {
+    height: 36px;
+    font-size: 0.875rem;
   }
   
-  .stat-type-select {
-    flex: 2;
+  /* Стили для специфичного контекста нефритов */
+  .jade-stat-type .custom-select-selected,
+  .jade-stat-value .custom-select-selected {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    font-size: 0.875rem;
   }
   
-  .stat-value-select {
-    flex: 1;
+  .jade-stat-type .custom-select-options,
+  .jade-stat-value .custom-select-options {
+    font-size: 0.875rem;
   }
-
+  
   /* Стили для поля ввода значения стата */
-.stat-value-input-container {
+  .stat-value-input-container {
     position: relative;
     flex: 1;
   }
@@ -144,30 +165,8 @@
     opacity: 0.7;
   }
   
-  /* Стили для мобильных устройств */
+  /* Адаптивность для мобильных устройств */
   @media (max-width: 768px) {
-    .stat-row {
-      flex-direction: column;
-    }
-    
-    .stat-type-select,
-    .stat-value-input-container {
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-  }
-  
-  /* Адаптивные стили для мобильных устройств */
-  @media (max-width: 768px) {
-    .stat-row {
-      flex-direction: column;
-    }
-    
-    .stat-type-select,
-    .stat-value-select {
-      width: 100%;
-    }
-    
     .custom-select-options {
       max-height: 10rem;
     }

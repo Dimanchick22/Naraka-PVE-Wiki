@@ -1,6 +1,6 @@
 /* Стили для калькулятора урона */
 
-/* Общие стили для калькулятора */
+/* Общие стили для страницы калькулятора */
 .calculator-page {
     padding: 2rem 1rem;
   }
@@ -13,7 +13,7 @@
     opacity: 0.9;
   }
   
-  /* Схема расположения */
+  /* Схема расположения калькулятора */
   .calculator-main-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -27,32 +27,31 @@
     }
   }
   
-  .calculator-left-column {
+  /* Стили для левой и правой колонок */
+  .calculator-left-column,
+  .calculator-right-column {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
   
+  /* Фиксированная высота для левой и правой колонок */
+  .calculator-left-column,
   .calculator-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+    min-height: 600px;
   }
   
-  /* Стили для итогового урона на всю ширину */
-  .calculator-results-section {
-    margin-top: 2rem;
-    width: 100%;
-  }
-  
-  /* Стили для формы калькулятора */
+  /* Форма калькулятора */
   .calculator-form {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
     padding: 1.5rem;
+    height: 100%;
+    overflow-y: auto;
   }
   
+  /* Секции формы */
   .form-section {
     margin-bottom: 1.5rem;
   }
@@ -63,6 +62,7 @@
     color: var(--naraka-secondary);
   }
   
+  /* Поля формы */
   .form-group {
     margin-bottom: 1rem;
     display: flex;
@@ -88,6 +88,7 @@
     border-color: var(--naraka-secondary);
   }
   
+  /* Чекбоксы */
   .form-group.checkbox {
     display: flex;
     align-items: center;
@@ -97,6 +98,7 @@
     margin-right: 0.5rem;
   }
   
+  /* Кнопки действий */
   .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -104,7 +106,13 @@
     margin-top: 1.5rem;
   }
   
-  /* Стили для отображения итогового урона */
+  /* Секция результатов расчета */
+  .calculator-results-section {
+    margin-top: 2rem;
+    width: 100%;
+  }
+  
+  /* Итоговый урон */
   .damage-summary {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
@@ -401,12 +409,43 @@
     opacity: 0.7;
   }
   
+  /* Стили для графиков */
+  .charts-container {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  
+  .chart-section {
+    margin-bottom: 2rem;
+  }
+  
+  .chart-section h3 {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .chart-container {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow: hidden;
+  }
+  
   /* Адаптивность для мобильных устройств */
-  @media (max-width: 768px) {
-    .results-grid {
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  @media (max-width: 1023px) {
+    .calculator-main-layout {
+      grid-template-columns: 1fr;
     }
     
+    .calculator-left-column,
+    .calculator-right-column {
+      min-height: auto;
+    }
+  }
+  
+  @media (max-width: 768px) {
     .form-group {
       flex-direction: column;
       align-items: flex-start;
@@ -414,9 +453,18 @@
     
     .form-group label {
       margin-bottom: 0.5rem;
+      margin-right: 0;
     }
     
     .input-with-suffix {
       width: 100%;
+    }
+    
+    .summary-blocks {
+      grid-template-columns: 1fr;
+    }
+    
+    .results-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     }
   }
