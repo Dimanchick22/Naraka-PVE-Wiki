@@ -375,6 +375,8 @@ export const calculateDamage = (params) => {
       monsterTotalJadeDamage,
       bossIceExplosionPercent,
       monsterIceExplosionPercent,
+      jadeMonsterAttackBonus,
+      jadeBossAttackBonus,
     },
     steps,
   };

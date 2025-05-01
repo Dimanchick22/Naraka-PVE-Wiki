@@ -11,15 +11,12 @@ const DamageSummary = ({ results }) => {
   if (!results) return null;
 
   // Получаем процент урона по боссам и монстрам из results напрямую
-  const bossDamagePercent = results.jadeBossAttackBonus !== undefined ? Math.round(results.jadeBossAttackBonus * 100) : 0;
-  const monsterDamagePercent = results.jadeMonsterAttackBonus !== undefined ? Math.round(results.jadeMonsterAttackBonus * 100) : 0;
+  const bossDamagePercent = Math.round((results.jadeBossAttackBonus) * 100);
+  const monsterDamagePercent = Math.round(results.jadeMonsterAttackBonus * 100);
 
   // Расчёт урона с оружия (финальная атака * (1 + % урона))
-  const bossWeaponDamage = Math.round(results.finalAttack * (1 + (results.jadeBossAttackBonus || 0)));
-  const monsterWeaponDamage = Math.round(results.finalAttack * (1 + (results.jadeMonsterAttackBonus || 0)));
-
-  // Расчет базового процента ледяного взрыва
-  const baseIceExplosionPercent = Math.round((results.iceExplosionPercent || 1) * 100);
+  const bossWeaponDamage = Math.round(results.finalAttack * (1 + results.jadeBossAttackBonus));
+  const monsterWeaponDamage = Math.round(results.finalAttack * (1 + results.jadeMonsterAttackBonus));
 
   return (
     <div className="damage-summary">
@@ -204,20 +201,6 @@ const DamageSummary = ({ results }) => {
       </div>
 
       <div className="summary-info">
-        <div className="info-item">
-          <div className="info-label">Базовая атака</div>
-          <div className="info-value">{formatNumber(Math.round(results.baseAttack))}</div>
-        </div>
-
-        <div className="info-item">
-          <div className="info-label">Финальная атака</div>
-          <div className="info-value">{formatNumber(Math.round(results.finalAttack))}</div>
-        </div>
-
-        <div className="info-item">
-          <div className="info-label">Базовый % лед. взрыва</div>
-          <div className="info-value">{baseIceExplosionPercent}%</div>
-        </div>
 
         <div className="info-item">
           <div className="info-label">% урона по боссам</div>
