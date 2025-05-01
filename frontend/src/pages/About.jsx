@@ -44,7 +44,7 @@ const About = () => {
         <div className="team-member">
           <div className="team-member-avatar"></div>
           <div className="team-member-info">
-            <h3 className="team-member-name">Разработчик</h3>
+            <h3 className="team-member-name">ChillGuy</h3>
             <p className="team-member-role">
               Full-stack разработчик & энтузиаст Naraka Bladepoint
             </p>

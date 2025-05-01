@@ -17,8 +17,8 @@ const JadeSlot = ({ index, jade, onJadeChange }) => {
     { id: "attack", name: "Атака" },
     { id: "ice_explosion", name: "Лед. взрыв" },
     { id: "fusion", name: "Слияние" },
-    { id: "boss_attack", name: "Атака по боссу" },
-    { id: "monster_attack", name: "Атака по монстрам" },
+    { id: "boss_attack", name: "Урон по боссу" },
+    { id: "monster_attack", name: "Урон по монстрам" },
   ];
 
   // Значения для статов

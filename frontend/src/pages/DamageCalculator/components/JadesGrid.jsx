@@ -46,8 +46,8 @@ const getStatTypeName = (type) => {
     case "attack": return "Атака";
     case "ice_explosion": return "Лед. взрыв";
     case "fusion": return "Слияние";
-    case "boss_attack": return "Атака по боссу";
-    case "monster_attack": return "Атака по монстрам";
+    case "boss_attack": return "Урон по боссу";
+    case "monster_attack": return "Урон по монстрам";
     default: return type;
   }
 };
@@ -90,8 +90,8 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     { id: "attack", name: "Атака" },
     { id: "ice_explosion", name: "Лед. взрыв" },
     { id: "fusion", name: "Слияние" },
-    { id: "boss_attack", name: "Атака по боссу" },
-    { id: "monster_attack", name: "Атака по монстрам" },
+    { id: "boss_attack", name: "Урон по боссу" },
+    { id: "monster_attack", name: "Урон по монстрам" },
   ];
 
   // Значения только для статов слияния
@@ -115,7 +115,7 @@ const JadesGrid = ({ onJadeBonusChange }) => {
 
     // Если изменился тип на слияние, установим соответствующее значение
     if (type === "fusion") {
-      updatedJade.stats[statIndex].value = "30";
+      updatedJade.stats[statIndex].value = "50";
     } else if (type !== "empty") {
       // Для других типов устанавливаем значение по умолчанию
       updatedJade.stats[statIndex].value = type === "ice_explosion" ? "30" : type === "attack" ? "4" : "5";
