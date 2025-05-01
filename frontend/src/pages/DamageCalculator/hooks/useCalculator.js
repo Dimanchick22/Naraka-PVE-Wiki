@@ -27,6 +27,9 @@ export const useCalculator = () => {
   // Мультипликаторы
   const [tessaF, setTessaF] = useState(false);
   const [consciousnessMatch, setConsciousnessMatch] = useState(false);
+  
+  // Диковинки
+  const [witheredGlorySnokha, setWitheredGlorySnokha] = useState(false);
 
   // Параметры нефритов (устанавливаются только через JadesContainer)
   const [jadeAttackBonus, setJadeAttackBonus] = useState(0);
@@ -54,6 +57,7 @@ export const useCalculator = () => {
     frostboundLotus,
     tessaF,
     consciousnessMatch,
+    witheredGlorySnokha,
     jadeAttackBonus,
     jadeIceExplosionBonus,
     jadeBossAttackBonus,
@@ -76,6 +80,7 @@ export const useCalculator = () => {
       frostboundLotus,
       tessaF,
       consciousnessMatch,
+      witheredGlorySnokha,
       jadeAttackBonus,
       jadeIceExplosionBonus,
       jadeBossAttackBonus,
@@ -102,6 +107,7 @@ export const useCalculator = () => {
     setFrostboundLotus(false);
     setTessaF(false);
     setConsciousnessMatch(false);
+    setWitheredGlorySnokha(false);
 
     // Не сбрасываем параметры нефритов, они управляются компонентом JadesContainer
   };
@@ -134,6 +140,8 @@ export const useCalculator = () => {
     setTessaF,
     consciousnessMatch,
     setConsciousnessMatch,
+    witheredGlorySnokha,
+    setWitheredGlorySnokha,
 
     // Параметры нефритов
     jadeAttackBonus,

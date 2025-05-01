@@ -36,6 +36,8 @@ const CalculatorForm = ({ calculator }) => {
     setTessaF,
     consciousnessMatch,
     setConsciousnessMatch,
+    witheredGlorySnokha,
+    setWitheredGlorySnokha,
 
     // Действия
     resetAll,
@@ -181,6 +183,20 @@ const CalculatorForm = ({ calculator }) => {
           />
           <label htmlFor="consciousnessMatch">
             Совпадение сознания
+          </label>
+        </div>
+      </FormSection>
+      
+      <FormSection title="Диковинки">
+        <div className="form-group checkbox">
+          <input
+            type="checkbox"
+            id="witheredGlorySnokha"
+            checked={witheredGlorySnokha}
+            onChange={() => setWitheredGlorySnokha(!witheredGlorySnokha)}
+          />
+          <label htmlFor="witheredGlorySnokha">
+            Сноха увядшей славы
           </label>
         </div>
       </FormSection>

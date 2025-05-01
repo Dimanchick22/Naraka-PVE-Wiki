@@ -54,6 +54,15 @@ const DetailedStats = ({ calculationSteps }) => {
             )}
           </div>
         ))}
+        
+        <div className="formula-card">
+          <h4>Диковинка "Сноха увядшей славы"</h4>
+          <p className="formula">Увеличивает урон цветочного взрыва на 50%</p>
+          <p className="formula-explanation">
+            Этот бонус применяется как множитель при расчете урона цветочного взрыва, 
+            добавляя 0.5 к базовому множителю (1.0).
+          </p>
+        </div>
       </div>
     </div>
   );

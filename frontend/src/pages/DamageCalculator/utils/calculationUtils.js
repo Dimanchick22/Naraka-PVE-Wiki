@@ -120,6 +120,7 @@ export const calculateDamage = (params) => {
     frostboundLotus,
     tessaF,
     consciousnessMatch,
+    witheredGlorySnokha,
     jadeAttackBonus,
     jadeIceExplosionBonus,
     jadeBossAttackBonus,
@@ -229,9 +230,22 @@ export const calculateDamage = (params) => {
     value: iceExplosionDamage.toFixed(2),
   });
 
-  // 11. Расчет урона взрыва цветка
+  // 11. Получаем множитель для урона цветка от диковинки
+  const flowerBonusMultiplier = witheredGlorySnokha ? TALENT_VALUES.withered_glory_snokha : 0;
+  steps.push({
+    title: "Бонус цветочного взрыва от Снохи увядшей славы",
+    value: flowerBonusMultiplier.toFixed(2),
+  });
+  
+  // Расчет урона взрыва цветка с учетом диковинки
+  const flowerExplosionPercent = 1 * (1 + flowerBonusMultiplier) + (finalIceExplosionPercent - 1);
+  steps.push({
+    title: "Процент цветочного взрыва с диковинкой",
+    value: flowerExplosionPercent.toFixed(2),
+  });
+  
   const flowerExplosionDamage =
-    finalAttack * finalIceExplosionPercent * FLOWER_EXPLOSION_COEF;
+    finalAttack * flowerExplosionPercent * FLOWER_EXPLOSION_COEF;
   steps.push({
     title: "Расчет урона взрыва цветка",
     value: flowerExplosionDamage.toFixed(2),
@@ -257,8 +271,15 @@ export const calculateDamage = (params) => {
     value: bossDamage.toFixed(2),
   });
 
+  // Расчет урона взрыва цветка по боссам с учетом диковинки
+  const bossFlowerExplosionPercent = 1 * (1 + bossAttackBonus + flowerBonusMultiplier) + (finalIceExplosionPercent - 1);
+  steps.push({
+    title: "Процент цветочного взрыва по боссам с диковинкой",
+    value: bossFlowerExplosionPercent.toFixed(2),
+  });
+  
   const bossFlowerDamage =
-    finalAttack * bossIceExplosionPercent * FLOWER_EXPLOSION_COEF;
+    finalAttack * bossFlowerExplosionPercent * FLOWER_EXPLOSION_COEF;
   steps.push({
     title: "Урон взрыва цветка по боссам",
     value: bossFlowerDamage.toFixed(2),
@@ -285,8 +306,15 @@ export const calculateDamage = (params) => {
     value: monsterDamage.toFixed(2),
   });
 
+  // Расчет урона взрыва цветка по монстрам с учетом диковинки
+  const monsterFlowerExplosionPercent = 1 * (1 + monsterAttackBonus + flowerBonusMultiplier) + (finalIceExplosionPercent - 1);
+  steps.push({
+    title: "Процент цветочного взрыва по монстрам с диковинкой",
+    value: monsterFlowerExplosionPercent.toFixed(2),
+  });
+  
   const monsterFlowerDamage =
-    finalAttack * monsterIceExplosionPercent * FLOWER_EXPLOSION_COEF;
+    finalAttack * monsterFlowerExplosionPercent * FLOWER_EXPLOSION_COEF;
   steps.push({
     title: "Урон взрыва цветка по монстрам",
     value: monsterFlowerDamage.toFixed(2),
@@ -367,112 +395,21 @@ export const calculateDamage = (params) => {
       physicalDamage,
       iceExplosionDamage,
       flowerExplosionDamage,
+      flowerExplosionPercent,
       bossDamage,
       bossFlowerDamage,
+      bossFlowerExplosionPercent,
       monsterDamage,
       monsterFlowerDamage,
+      monsterFlowerExplosionPercent,
       bossTotalJadeDamage,
       monsterTotalJadeDamage,
       bossIceExplosionPercent,
       monsterIceExplosionPercent,
       jadeMonsterAttackBonus,
       jadeBossAttackBonus,
+      witheredGlorySnokhaBonus: flowerBonusMultiplier,
     },
     steps,
   };
-};
-
-/**
- * Генерация данных для графика зависимости урона от сознания
- * @param {number} finalAttack - Финальная атака
- * @param {number} bossIceExplosionPercent - Процент ледяного взрыва по боссам
- * @param {number} monsterIceExplosionPercent - Процент ледяного взрыва по монстрам
- * @param {Object} params - Параметры персонажа
- * @returns {Array} - Данные для графика
- */
-export const generateChartData = (
-  finalAttack,
-  bossIceExplosionPercent,
-  monsterIceExplosionPercent,
-  params,
-) => {
-  const data = [];
-  const icePercent = calculateIceExplosionPercent(
-    params.iceRoot,
-    params.iceFlash,
-    params.jadeIceExplosionBonus,
-    params.frostBloom,
-  );
-
-  // Генерация данных по сознанию
-  for (let c = 1000; c <= 1500; c += 50) {
-    const baseAttack = BASE_ATTACK + c / 10;
-    const combatBonus = calculateCombatAttackBonus(
-      calculateBaseAttackBonus(
-        params.heroLevel,
-        params.untouchableTalent,
-        params.power,
-        params.jadeAttackBonus,
-      ),
-      params.aromaAura,
-      params.frostSeal,
-      params.tundraPower,
-      params.frostboundLotus,
-    );
-
-    const fa =
-      baseAttack *
-      combatBonus *
-      (params.tessaF ? TALENT_VALUES.tessa_f : 1.0) *
-      (params.consciousnessMatch ? TALENT_VALUES.consciousness_match : 1.0);
-
-    data.push({
-      consciousness: c,
-      attack: Math.round(fa),
-      normalDamage: Math.round(fa * icePercent * EXPLOSION_COEF),
-      bossDamage: Math.round(fa * bossIceExplosionPercent * EXPLOSION_COEF),
-      monsterDamage: Math.round(
-        fa * monsterIceExplosionPercent * EXPLOSION_COEF,
-      ),
-    });
-  }
-
-  return data;
-};
-
-/**
- * Генерация данных для сравнения урона по типам противников
- * @param {number} normal - Обычный урон
- * @param {number} boss - Урон по боссам
- * @param {number} monster - Урон по монстрам
- * @param {number} flowerNormal - Урон взрыва цветка
- * @param {number} flowerBoss - Урон взрыва цветка по боссам
- * @param {number} flowerMonster - Урон взрыва цветка по монстрам
- * @returns {Array} - Данные для графика
- */
-export const generateComparisonData = (
-  normal,
-  boss,
-  monster,
-  flowerNormal,
-  flowerBoss,
-  flowerMonster,
-) => {
-  return [
-    {
-      name: "Обычный урон",
-      explosion: Math.round(normal),
-      flower: Math.round(flowerNormal),
-    },
-    {
-      name: "Урон по боссам",
-      explosion: Math.round(boss),
-      flower: Math.round(flowerBoss),
-    },
-    {
-      name: "Урон по монстрам",
-      explosion: Math.round(monster),
-      flower: Math.round(flowerMonster),
-    },
-  ];
 };
