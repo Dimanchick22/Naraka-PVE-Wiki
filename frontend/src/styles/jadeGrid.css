@@ -1,52 +1,11 @@
-/* Обновленные стили для калькулятора урона */
+/* Стили для отображения нефритов в виде сетки */
 
-/* Общие стили для калькулятора */
-.calculator-page {
-    padding: 2rem 1rem;
-  }
-  
-  .section-description {
-    max-width: 800px;
-    margin: 0 auto 2rem;
-    text-align: center;
-    color: var(--naraka-light);
-    opacity: 0.9;
-  }
-  
-  /* Обновленная схема расположения */
-  .calculator-main-layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  @media (min-width: 1024px) {
-    .calculator-main-layout {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  
-  .calculator-left-column,
-  .calculator-right-column {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  /* Стили для итогового урона на всю ширину */
-  .calculator-results-section {
-    grid-column: 1 / -1;
-    margin-top: 2rem;
-    width: 100%;
-  }
-  
-  /* Стили для сетки нефритов */
-  .jades-grid-container {
+.jades-grid-container {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
     padding: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .jades-grid {
@@ -184,6 +143,27 @@
     margin-left: auto;
   }
   
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .jades-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, auto);
+    }
+    
+    .jade-stats-edit {
+      grid-template-columns: 1fr;
+    }
+    
+    .stat-row {
+      flex-direction: column;
+    }
+    
+    .stat-type-select,
+    .stat-value-select {
+      width: 100%;
+    }
+  }
+  
   /* Стили для отображения бонусов нефритов */
   .jade-bonuses-display {
     background-color: rgba(26, 26, 26, 0.8);
@@ -220,25 +200,4 @@
   .bonus-value {
     color: var(--naraka-secondary);
     font-weight: bold;
-  }
-  
-  /* Адаптивность для мобильных устройств */
-  @media (max-width: 768px) {
-    .jades-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(3, auto);
-    }
-    
-    .jade-stats-edit {
-      grid-template-columns: 1fr;
-    }
-    
-    .stat-row {
-      flex-direction: column;
-    }
-    
-    .stat-type-select,
-    .stat-value-select {
-      width: 100%;
-    }
   }
