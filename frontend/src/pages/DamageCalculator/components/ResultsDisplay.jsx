@@ -2,7 +2,7 @@ import React from "react";
 import { formatNumber } from "../utils/formatUtils";
 
 /**
- * Компонент для отображения результатов расчетов
+ * Упрощенный компонент для отображения результатов расчетов
  * @param {Object} props - Свойства компонента
  * @param {Object} props.results - Результаты расчетов
  * @param {boolean} props.tessaF - Использовался ли мультипликатор Тессы
@@ -16,38 +16,38 @@ const ResultsDisplay = ({ results, tessaF, consciousnessMatch }) => {
     <div className="results-container">
       <h2 className="section-title">Результаты расчетов</h2>
 
-      <div className="results-grid">
-        <div className="results-summary">
-          <div className="summary-row">
-            <span className="summary-label">Атака:</span>
-            <span className="summary-value">
-              {formatNumber(Math.round(results.finalAttack))}
-            </span>
-          </div>
-          <div className="summary-row">
-            <span className="summary-label">Мультипликаторы:</span>
-            <span className="summary-value">
-              {tessaF ? "Тесса (×1.08)" : ""}
-              {tessaF && consciousnessMatch ? ", " : ""}
-              {consciousnessMatch ? "Сознание (×1.15)" : ""}
-              {!tessaF && !consciousnessMatch ? "Нет" : ""}
-            </span>
-          </div>
-          <div className="summary-divider"></div>
-          <div className="summary-row">
-            <span className="summary-label">Общий урон нефрита (боссы):</span>
-            <span className="summary-value highlight">
-              {formatNumber(results.bossTotalJadeDamage)}
-            </span>
-          </div>
-          <div className="summary-row">
-            <span className="summary-label">Общий урон нефрита (монстры):</span>
-            <span className="summary-value highlight">
-              {formatNumber(results.monsterTotalJadeDamage)}
-            </span>
-          </div>
+      <div className="results-summary">
+        <div className="summary-row">
+          <span className="summary-label">Атака:</span>
+          <span className="summary-value">
+            {formatNumber(Math.round(results.finalAttack))}
+          </span>
         </div>
+        <div className="summary-row">
+          <span className="summary-label">Мультипликаторы:</span>
+          <span className="summary-value">
+            {tessaF ? "Тесса (×1.08)" : ""}
+            {tessaF && consciousnessMatch ? ", " : ""}
+            {consciousnessMatch ? "Сознание (×1.15)" : ""}
+            {!tessaF && !consciousnessMatch ? "Нет" : ""}
+          </span>
+        </div>
+        <div className="summary-divider"></div>
+        <div className="summary-row">
+          <span className="summary-label">Общий урон нефрита (боссы):</span>
+          <span className="summary-value highlight">
+            {formatNumber(results.bossTotalJadeDamage)}
+          </span>
+        </div>
+        <div className="summary-row">
+          <span className="summary-label">Общий урон нефрита (монстры):</span>
+          <span className="summary-value highlight">
+            {formatNumber(results.monsterTotalJadeDamage)}
+          </span>
+        </div>
+      </div>
 
+      <div className="results-grid">
         <ResultCard
           title="Атака"
           value={formatNumber(Math.round(results.finalAttack))}

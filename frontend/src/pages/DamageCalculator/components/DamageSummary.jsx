@@ -2,7 +2,7 @@ import React from "react";
 import { formatNumber } from "../utils/formatUtils";
 
 /**
- * Компонент для отображения итогового урона
+ * Упрощенный компонент для отображения итогового урона
  * @param {Object} props - Свойства компонента
  * @param {Object} props.results - Результаты расчетов
  * @returns {JSX.Element | null} - Элемент компонента или null, если нет результатов
@@ -119,27 +119,6 @@ const DamageSummary = ({ results }) => {
               </span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="summary-info">
-        <div className="info-item">
-          <span className="info-label">Атака:</span>
-          <span className="info-value">
-            {formatNumber(Math.round(results.finalAttack))}
-          </span>
-        </div>
-        <div className="info-item">
-          <span className="info-label">Ледяной взрыв:</span>
-          <span className="info-value">
-            {formatNumber(Math.round(results.iceExplosionDamage))}
-          </span>
-        </div>
-        <div className="info-item">
-          <span className="info-label">Взрыв цветка:</span>
-          <span className="info-value">
-            {formatNumber(Math.round(results.flowerExplosionDamage))}
-          </span>
         </div>
       </div>
     </div>

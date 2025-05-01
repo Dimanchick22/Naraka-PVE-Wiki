@@ -34,6 +34,10 @@ const getJadeColor = (jade) => {
       return 'rgba(45, 197, 14, 0.7)'; // Зеленый для атаки по монстрам
     case "fusion":
       return 'rgba(255, 128, 0, 0.7)'; // Оранжевый для слияния
+    case "absorption":
+      return 'rgba(255, 0, 128, 0.7)'; // Розовый для поглощения
+    case "ignition":
+      return 'rgba(255, 60, 0, 0.7)'; // Ярко-оранжевый для возгорания
     default:
       return 'rgba(212, 175, 55, 0.3)'; // Стандартный золотистый
   }
@@ -48,6 +52,8 @@ const getStatTypeName = (type) => {
     case "fusion": return "Слияние";
     case "boss_attack": return "Урон по боссу";
     case "monster_attack": return "Урон по монстрам";
+    case "absorption": return "Поглощение";
+    case "ignition": return "Возгорание";
     default: return type;
   }
 };
@@ -62,6 +68,20 @@ const getMaxValueForType = (type) => {
     case "fusion": return 50;  // Для слияния используется выпадающий список со своими значениями
     default: return 50;
   }
+};
+
+// Форматирование значения для отображения в карточке нефрита
+const formatDisplayValue = (value) => {
+  if (!value) return "0";
+  // Заменяем точку на запятую для отображения
+  return value.toString().replace('.', ',');
+};
+
+// Нормализация вводимого значения для внутренней обработки
+const normalizeInputValue = (value) => {
+  if (!value) return "0";
+  // Заменяем запятую на точку для корректных расчетов
+  return value.toString().replace(',', '.');
 };
 
 /**
@@ -92,6 +112,8 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     { id: "fusion", name: "Слияние" },
     { id: "boss_attack", name: "Урон по боссу" },
     { id: "monster_attack", name: "Урон по монстрам" },
+    { id: "absorption", name: "Поглощение" },
+    { id: "ignition", name: "Возгорание" },
   ];
 
   // Значения только для статов слияния
@@ -99,6 +121,20 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     { id: "30", name: "30%" },
     { id: "40", name: "40%" },
     { id: "50", name: "50%" }
+  ];
+  
+  // Значения для стата поглощения
+  const absorptionStatValueOptions = [
+    { id: "15", name: "15%" },
+    { id: "20", name: "20%" },
+    { id: "25", name: "25%" }
+  ];
+  
+  // Значения для стата возгорания
+  const ignitionStatValueOptions = [
+    { id: "1", name: "1" },
+    { id: "2", name: "2" },
+    { id: "3", name: "3" }
   ];
 
   // Обновляет нефрит по индексу
@@ -113,9 +149,13 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     const updatedJade = { ...jades[jadeIndex] };
     updatedJade.stats[statIndex].type = type;
 
-    // Если изменился тип на слияние, установим соответствующее значение
+    // Устанавливаем значения по умолчанию в зависимости от типа стата
     if (type === "fusion") {
       updatedJade.stats[statIndex].value = "50";
+    } else if (type === "absorption") {
+      updatedJade.stats[statIndex].value = "25";
+    } else if (type === "ignition") {
+      updatedJade.stats[statIndex].value = "3";
     } else if (type !== "empty") {
       // Для других типов устанавливаем значение по умолчанию
       updatedJade.stats[statIndex].value = type === "ice_explosion" ? "30" : type === "attack" ? "4" : "5";
@@ -135,19 +175,41 @@ const JadesGrid = ({ onJadeBonusChange }) => {
 
   // Обработчик ввода значения для стата
   const handleStatValueInput = (jadeIndex, statIndex, event) => {
-    // Получаем введенное значение
-    let inputValue = event.target.value.replace(/[^\d]/g, ''); // Оставляем только цифры
+    // Получаем введенное значение и заменяем запятую на точку
+    let inputValue = event.target.value;
     
-    // Получаем тип стата
-    const statType = jades[jadeIndex].stats[statIndex].type;
-    // Определяем максимальное значение для данного типа
-    const maxValue = getMaxValueForType(statType);
+    // Оставляем только цифры, точки и запятые
+    inputValue = inputValue.replace(/[^\d.,]/g, '');
     
-    // Ограничиваем значение
+    // Ограничиваем до одного разделителя (точка или запятая)
+    const dotIndex = inputValue.indexOf('.');
+    const commaIndex = inputValue.indexOf(',');
+    
+    if (dotIndex !== -1 && commaIndex !== -1) {
+      // Если есть и точка и запятая, удаляем последний добавленный разделитель
+      const lastSeparatorIndex = Math.max(dotIndex, commaIndex);
+      inputValue = inputValue.substring(0, lastSeparatorIndex) + 
+                   inputValue.charAt(lastSeparatorIndex) + 
+                   inputValue.substring(lastSeparatorIndex + 1).replace(/[.,]/g, '');
+    }
+    
+    // Если значение не пустое, проверяем его против максимума
     if (inputValue !== '') {
-      const numValue = parseInt(inputValue, 10);
-      if (numValue < 1) inputValue = '1';
-      if (numValue > maxValue) inputValue = maxValue.toString();
+      // Нормализуем значение для сравнения (заменяем запятую на точку)
+      const normalizedValue = normalizeInputValue(inputValue);
+      const numValue = parseFloat(normalizedValue);
+      
+      // Получаем тип стата
+      const statType = jades[jadeIndex].stats[statIndex].type;
+      
+      // Определяем максимальное значение для данного типа
+      const maxValue = getMaxValueForType(statType);
+      
+      // Ограничиваем значение минимумом и максимумом
+      if (!isNaN(numValue)) {
+        if (numValue < 0) inputValue = '0';
+        if (numValue > maxValue) inputValue = maxValue.toString();
+      }
     }
 
     const updatedJade = { ...jades[jadeIndex] };
@@ -186,9 +248,9 @@ const JadesGrid = ({ onJadeBonusChange }) => {
       // Вычисляем базовые статы и множитель слияния
       jade.stats.forEach((stat) => {
         if (stat.type === "fusion") {
-          fusionMultiplier += parseFloat(stat.value) / 100;
+          fusionMultiplier += parseFloat(normalizeInputValue(stat.value)) / 100;
         } else if (stat.type !== "empty") {
-          baseStats[stat.type] += parseFloat(stat.value) / 100;
+          baseStats[stat.type] += parseFloat(normalizeInputValue(stat.value)) / 100;
         }
       });
 
@@ -236,8 +298,22 @@ const JadesGrid = ({ onJadeBonusChange }) => {
               {jade.stats.filter(stat => stat.type !== "empty").length > 0 ? (
                 jade.stats.filter(stat => stat.type !== "empty").map((stat, statIndex) => (
                   <div key={statIndex} className="jade-stat-preview">
-                    <span className="stat-type">{getStatTypeName(stat.type)}</span>
-                    <span className="stat-value">+{stat.value}%</span>
+                    <span 
+                      className="stat-type"
+                      style={{
+                        color: ["fusion", "absorption", "ignition"].includes(stat.type) ? 'var(--naraka-primary)' : 'var(--naraka-light)'
+                      }}
+                    >
+                      {getStatTypeName(stat.type)}
+                    </span>
+                    <span 
+                      className="stat-value"
+                      style={{
+                        color: ["fusion", "absorption", "ignition"].includes(stat.type) ? 'var(--naraka-primary)' : 'var(--naraka-light)'
+                      }}
+                    >
+                      +{formatDisplayValue(stat.value)}{stat.type === "ignition" ? "" : "%"}
+                    </span>
                   </div>
                 ))
               ) : (
@@ -271,23 +347,29 @@ const JadesGrid = ({ onJadeBonusChange }) => {
 
                 <div className="jade-stat-value">
                   {stat.type !== "empty" && (
-                    stat.type === "fusion" ? (
+                    ["fusion", "absorption", "ignition"].includes(stat.type) ? (
                       <CustomSelect
-                        options={fusionStatValueOptions}
+                        options={
+                          stat.type === "fusion" 
+                            ? fusionStatValueOptions 
+                            : stat.type === "absorption"
+                              ? absorptionStatValueOptions
+                              : ignitionStatValueOptions
+                        }
                         value={stat.value}
                         onChange={(value) => handleStatValueChange(activeJadeIndex, statIndex, value)}
                         className="stat-select"
                       />
                     ) : (
                       <div className="stat-value-input-container">
-                        <input
+                                                  <input
                           type="text"
                           className="stat-value-input"
                           value={stat.value}
                           onChange={(e) => handleStatValueInput(activeJadeIndex, statIndex, e)}
                           placeholder="0"
                         />
-                        <span className="input-suffix">%</span>
+                        <span className="input-suffix">{stat.type === "ignition" ? "" : "%"}</span>
                       </div>
                     )
                   )}
