@@ -23,6 +23,8 @@ export const useCalculator = () => {
   const [frostSeal, setFrostSeal] = useState(false);
   const [tundraPower, setTundraPower] = useState(false);
   const [frostboundLotus, setFrostboundLotus] = useState(false);
+  const [zipingF, setzipingF] = useState(false);
+  const [zipingUlt, setZipingUlt] = useState(false);
 
   // Мультипликаторы
   const [tessaF, setTessaF] = useState(false);
@@ -50,11 +52,13 @@ export const useCalculator = () => {
     power,
     iceRoot,
     iceFlash,
+    zipingUlt,
     aromaAura,
     frostBloom,
     frostSeal,
     tundraPower,
     frostboundLotus,
+    zipingF,
     tessaF,
     consciousnessMatch,
     witheredGlorySnokha,
@@ -73,11 +77,13 @@ export const useCalculator = () => {
       power,
       iceRoot,
       iceFlash,
+      zipingUlt,
       aromaAura,
       frostBloom,
       frostSeal,
       tundraPower,
       frostboundLotus,
+      zipingF,
       tessaF,
       consciousnessMatch,
       witheredGlorySnokha,
@@ -100,11 +106,13 @@ export const useCalculator = () => {
     setPower(false);
     setIceRoot(false);
     setIceFlash(false);
+    setZipingUlt(false)
     setAromaAura(false);
     setFrostBloom(false);
     setFrostSeal(false);
     setTundraPower(false);
     setFrostboundLotus(false);
+    setzipingF(false)
     setTessaF(false);
     setConsciousnessMatch(false);
     setWitheredGlorySnokha(false);
@@ -126,6 +134,8 @@ export const useCalculator = () => {
     setIceRoot,
     iceFlash,
     setIceFlash,
+    zipingUlt,
+    setZipingUlt,
     aromaAura,
     setAromaAura,
     frostBloom,
@@ -136,6 +146,8 @@ export const useCalculator = () => {
     setTundraPower,
     frostboundLotus,
     setFrostboundLotus,
+    zipingF,
+    setzipingF,
     tessaF,
     setTessaF,
     consciousnessMatch,

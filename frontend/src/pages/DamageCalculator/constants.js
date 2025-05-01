@@ -31,6 +31,8 @@ export const TALENT_VALUES = {
   tessa_f: 1.08,
   consciousness_match: 1.15, // +15% бонус при совпадении уровня сознания
   withered_glory_snokha: 0.5, // +50% к урону цветочного взрыва
+  ziping_f: 0.2,
+  ziping_ult: 1,
 };
 
 // Структура формул для отображения

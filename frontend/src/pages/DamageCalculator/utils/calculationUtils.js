@@ -55,6 +55,7 @@ export const calculateBaseAttackBonus = (
  * @param {boolean} frostSeal - Включен ли талант "Морозная печать"
  * @param {boolean} tundraPower - Включен ли талант "Сила тундры"
  * @param {boolean} frostboundLotus - Включен ли талант "Морозный лотос"
+ * @param {boolean} zipingF - Включен ли талант "F Цзыпин"
  * @returns {number} - Боевой бонус атаки
  */
 export const calculateCombatAttackBonus = (
@@ -63,6 +64,7 @@ export const calculateCombatAttackBonus = (
   frostSeal,
   tundraPower,
   frostboundLotus,
+  zipingF
 ) => {
   let bonus = baseBonus;
 
@@ -70,6 +72,7 @@ export const calculateCombatAttackBonus = (
   if (frostSeal) bonus += TALENT_VALUES.frost_seal;
   if (tundraPower) bonus += TALENT_VALUES.tundra_power;
   if (frostboundLotus) bonus += TALENT_VALUES.frostbound_lotus;
+  if (zipingF) bonus += TALENT_VALUES.ziping_f;
 
   return bonus;
 };
@@ -80,6 +83,7 @@ export const calculateCombatAttackBonus = (
  * @param {boolean} iceFlash - Включен ли талант "Ледяная вспышка"
  * @param {number} jadeIceExplosionBonus - Бонус ледяного взрыва от нефритов
  * @param {boolean} frostBloom - Включен ли талант "Морозный цветок"
+ * @param {boolean} zipingUlt
  * @returns {number} - Процент ледяного взрыва
  */
 export const calculateIceExplosionPercent = (
@@ -87,15 +91,17 @@ export const calculateIceExplosionPercent = (
   iceFlash,
   jadeIceExplosionBonus,
   frostBloom,
+  zipingUlt,
 ) => {
   let percent = 1.0;
 
   if (iceRoot) percent += TALENT_VALUES.ice_root;
   if (iceFlash) percent += TALENT_VALUES.ice_flash;
+  if (frostBloom) percent += TALENT_VALUES.frost_bloom;
+  if (zipingUlt) percent += TALENT_VALUES.ziping_ult;
 
   percent += jadeIceExplosionBonus;
 
-  if (frostBloom) percent += TALENT_VALUES.frost_bloom;
 
   return percent;
 };
@@ -113,11 +119,13 @@ export const calculateDamage = (params) => {
     power,
     iceRoot,
     iceFlash,
+    zipingUlt,
     aromaAura,
     frostBloom,
     frostSeal,
     tundraPower,
     frostboundLotus,
+    zipingF,
     tessaF,
     consciousnessMatch,
     witheredGlorySnokha,
@@ -158,6 +166,7 @@ export const calculateDamage = (params) => {
     iceRoot,
     iceFlash,
     jadeIceExplosionBonus,
+    false,
     false, // frostBloom еще не применяется
   );
   steps.push({
@@ -172,6 +181,7 @@ export const calculateDamage = (params) => {
     frostSeal,
     tundraPower,
     frostboundLotus,
+    zipingF,
   );
   steps.push({
     title: "Расчет боевого бонуса атаки",
@@ -216,6 +226,7 @@ export const calculateDamage = (params) => {
     iceFlash,
     jadeIceExplosionBonus,
     frostBloom,
+    zipingUlt,
   );
   steps.push({
     title: "Расчет финального процента ледяного взрыва",

@@ -32,6 +32,10 @@ const CalculatorForm = ({ calculator }) => {
     setTundraPower,
     frostboundLotus,
     setFrostboundLotus,
+    zipingF,
+    setzipingF,
+    zipingUlt,
+    setZipingUlt,
     tessaF,
     setTessaF,
     consciousnessMatch,
@@ -162,6 +166,24 @@ const CalculatorForm = ({ calculator }) => {
           />
           <label htmlFor="frostboundLotus">Морозный лотос</label>
         </div>
+        <div className="form-group checkbox">
+          <input
+            type="checkbox"
+            id="zipingF"
+            checked={zipingF}
+            onChange={() => setzipingF(!zipingF)}
+          />
+          <label htmlFor="zipingF">F Цзипинь</label>
+        </div>
+        <div className="form-group checkbox">
+          <input
+            type="checkbox"
+            id="zipingUlt"
+            checked={zipingUlt}
+            onChange={() => setZipingUlt(!zipingUlt)}
+          />
+          <label htmlFor="zipingUlt">Ульт Цзипинь</label>
+        </div>
       </FormSection>
 
       <FormSection title="Мультипликаторы">
@@ -196,7 +218,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setWitheredGlorySnokha(!witheredGlorySnokha)}
           />
           <label htmlFor="witheredGlorySnokha">
-            Сноха увядшей славы
+            Чаша увядшей славы
           </label>
         </div>
       </FormSection>
