@@ -1,21 +1,28 @@
-/* Стили для отображения нефритов в виде сетки */
+/* Стили для сетки нефритов */
 
+/* Контейнер сетки нефритов */
 .jades-grid-container {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
     padding: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   
+  /* Сетка нефритов */
   .jades-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
+    grid-template-rows: repeat(2, 1fr);
     gap: 1rem;
     margin-bottom: 1.5rem;
+    flex-grow: 1;
   }
   
+  /* Карточка нефрита */
   .jade-item {
     position: relative;
     border: 2px solid rgba(212, 175, 55, 0.3);
@@ -39,6 +46,7 @@
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
   }
   
+  /* Заголовок нефрита */
   .jade-header {
     margin-bottom: 0.75rem;
     display: flex;
@@ -52,6 +60,7 @@
     color: var(--naraka-secondary);
   }
   
+  /* Предпросмотр статов */
   .jade-stats-preview {
     display: flex;
     flex-direction: column;
@@ -86,118 +95,260 @@
   
   /* Панель редактирования нефрита */
   .jade-edit-panel {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(20, 20, 20, 0.95);
+    border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 1rem;
+    margin-top: 1rem;
   }
   
-  .jade-edit-panel h3 {
-    margin-bottom: 1rem;
-    font-size: 1.125rem;
+  /* Заголовок панели */
+  .jade-edit-title {
     color: var(--naraka-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
   }
   
+  /* Контейнер для строк статов */
   .jade-stats-edit {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .jade-stat-edit {
-    margin-bottom: 0.75rem;
-  }
-  
-  .stat-row {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
   }
   
-  .stat-type-select {
+  /* Строка стата (тип + значение) */
+  .jade-stat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(26, 26, 26, 0.6);
+    border-radius: 4px;
+    border-left: 3px solid var(--naraka-secondary);
+    transition: background-color 0.2s;
+  }
+  
+  .jade-stat-row:hover {
+    background-color: rgba(26, 26, 26, 0.8);
+  }
+  
+  /* Контейнеры для типа и значения */
+  .jade-stat-type {
+    flex: 3;
+    min-width: 0;
+  }
+  
+  .jade-stat-value {
     flex: 2;
+    min-width: 0;
   }
   
-  .stat-value-select {
-    flex: 1;
+  /* Кастомный селект */
+  .custom-select-container {
+    position: relative;
+    width: 100%;
   }
   
-  .stat-type-select,
-  .stat-value-select {
-    background-color: rgba(255, 255, 255, 0.1);
+  .custom-select-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    color: var(--naraka-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 36px;
+  }
+  
+  .custom-select-selected::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid var(--naraka-secondary);
+    border-bottom: 2px solid var(--naraka-secondary);
+    transform: rotate(45deg);
+    margin-left: 0.5rem;
+    transition: transform 0.2s;
+  }
+  
+  .custom-select-selected.open::after {
+    transform: rotate(-135deg);
+  }
+  
+  .custom-select-selected.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .custom-select-selected:hover:not(.disabled) {
+    border-color: var(--naraka-primary);
+  }
+  
+  .custom-select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 15rem;
+    overflow-y: auto;
+    background-color: rgba(26, 26, 26, 0.95);
+    border: 1px solid var(--naraka-secondary);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: none;
+  }
+  
+  .custom-select-container.open .custom-select-options {
+    display: block;
+  }
+  
+  /* Стилизация скроллбара для выпадающего списка */
+  .custom-select-options::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-select-options::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 4px 0;
+  }
+  
+  .custom-select-options::-webkit-scrollbar-thumb {
+    background-color: var(--naraka-primary);
+    border-radius: 3px;
+  }
+  
+  .custom-select-option {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .custom-select-option:hover {
+    background-color: var(--naraka-primary);
+    color: white;
+  }
+  
+  .custom-select-option.selected {
+    background-color: rgba(139, 0, 0, 0.3);
+    color: var(--naraka-secondary);
+  }
+  
+  /* Общие стили для селектов/инпутов */
+  .stat-select .custom-select-selected,
+  .stat-value-input {
+    background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 4px;
-    padding: 0.5rem;
+    padding: 0.4rem 0.6rem;
     color: var(--naraka-light);
+    font-size: 0.875rem;
+    height: 36px;
   }
   
-  .stat-type-select:focus,
-  .stat-value-select:focus {
+  /* Контейнер для инпута значения */
+  .stat-value-input-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Инпут для значения */
+  .stat-value-input {
+    width: 100%;
+    padding-right: 1.5rem;
+  }
+  
+  .stat-value-input:focus {
     outline: none;
     border-color: var(--naraka-secondary);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
   }
   
+  /* Суффикс процента */
+  .input-suffix {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Контейнер для кнопки закрытия */
+  .jade-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  
+  /* Стили для кнопки закрытия */
   .close-edit-button {
-    display: block;
-    margin-left: auto;
+    padding: 0.4rem 1rem;
+    font-size: 0.875rem;
   }
   
-  /* Адаптивность для мобильных устройств */
+  /* Модификаторы для различных типов статов */
+  .jade-stat-row[data-type="attack"] {
+    border-left-color: rgba(139, 0, 0, 0.7);
+  }
+  
+  .jade-stat-row[data-type="ice_explosion"] {
+    border-left-color: rgba(0, 112, 221, 0.7);
+  }
+  
+  .jade-stat-row[data-type="fusion"] {
+    border-left-color: rgba(255, 128, 0, 0.7);
+  }
+  
+  .jade-stat-row[data-type="boss_attack"] {
+    border-left-color: rgba(163, 53, 238, 0.7);
+  }
+  
+  .jade-stat-row[data-type="monster_attack"] {
+    border-left-color: rgba(45, 197, 14, 0.7);
+  }
+  
+  /* Обновляем стили для правой колонки */
+  .calculator-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  /* Адаптивность для планшетов */
   @media (max-width: 768px) {
     .jades-grid {
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: repeat(3, auto);
     }
-    
-    .jade-stats-edit {
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 480px) {
+    .jades-grid {
       grid-template-columns: 1fr;
     }
     
-    .stat-row {
+    .jade-stat-row {
       flex-direction: column;
+      align-items: stretch;
     }
     
-    .stat-type-select,
-    .stat-value-select {
+    .jade-stat-type,
+    .jade-stat-value {
       width: 100%;
     }
-  }
-  
-  /* Стили для отображения бонусов нефритов */
-  .jade-bonuses-display {
-    background-color: rgba(26, 26, 26, 0.8);
-    border: 1px solid var(--naraka-secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-  
-  .bonuses-title {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .bonuses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  .bonus-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-  }
-  
-  .bonus-label {
-    font-weight: bold;
-    color: var(--naraka-light);
-  }
-  
-  .bonus-value {
-    color: var(--naraka-secondary);
-    font-weight: bold;
+    
+    .jade-stat-value {
+      margin-top: 0.25rem;
+    }
   }

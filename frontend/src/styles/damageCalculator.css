@@ -1,4 +1,4 @@
-/* Обновленные стили для калькулятора урона */
+/* Стили для калькулятора урона */
 
 /* Общие стили для калькулятора */
 .calculator-page {
@@ -13,7 +13,7 @@
     opacity: 0.9;
   }
   
-  /* Обновленная схема расположения */
+  /* Схема расположения */
   .calculator-main-layout {
     display: grid;
     grid-template-columns: 1fr;
@@ -27,145 +27,55 @@
     }
   }
   
-  .calculator-left-column,
-  .calculator-right-column {
+  .calculator-left-column {
     display: flex;
     flex-direction: column;
     gap: 2rem;
   }
   
+  .calculator-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
   /* Стили для итогового урона на всю ширину */
   .calculator-results-section {
-    grid-column: 1 / -1;
     margin-top: 2rem;
     width: 100%;
   }
   
-  /* Стили для сетки нефритов */
-  .jades-grid-container {
+  /* Стили для формы калькулятора */
+  .calculator-form {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
     padding: 1.5rem;
   }
   
-  .jades-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 1rem;
+  .form-section {
     margin-bottom: 1.5rem;
   }
   
-  .jade-item {
-    position: relative;
-    border: 2px solid rgba(212, 175, 55, 0.3);
-    border-radius: 8px;
-    padding: 1rem;
-    background-color: rgba(26, 26, 26, 0.6);
-    min-height: 120px;
+  .form-section .section-title {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    color: var(--naraka-secondary);
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
     display: flex;
-    flex-direction: column;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-  
-  .jade-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  .jade-item.active {
-    border-width: 3px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-  }
-  
-  .jade-header {
-    margin-bottom: 0.75rem;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
   }
   
-  .jade-number {
-    font-weight: bold;
-    font-size: 1rem;
-    color: var(--naraka-secondary);
-  }
-  
-  .jade-stats-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .jade-stat-preview {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-  
-  .stat-type {
-    color: var(--naraka-light);
-  }
-  
-  .stat-value {
-    color: var(--naraka-secondary);
-    font-weight: bold;
-  }
-  
-  .jade-empty-message {
-    text-align: center;
-    color: var(--naraka-light);
-    opacity: 0.5;
-    font-style: italic;
-    padding: 1rem 0;
-  }
-  
-  /* Панель редактирования нефрита */
-  .jade-edit-panel {
-    margin-top: 1.5rem;
-    padding: 1.5rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-  }
-  
-  .jade-edit-panel h3 {
-    margin-bottom: 1rem;
-    font-size: 1.125rem;
-    color: var(--naraka-secondary);
-  }
-  
-  .jade-stats-edit {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .jade-stat-edit {
-    margin-bottom: 0.75rem;
-  }
-  
-  .stat-row {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .stat-type-select {
-    flex: 2;
-  }
-  
-  .stat-value-select {
+  .form-group label {
     flex: 1;
+    margin-right: 1rem;
   }
   
-  .stat-type-select,
-  .stat-value-select {
+  .form-group input[type="number"] {
+    width: 120px;
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(212, 175, 55, 0.3);
     border-radius: 4px;
@@ -173,72 +83,340 @@
     color: var(--naraka-light);
   }
   
-  .stat-type-select:focus,
-  .stat-value-select:focus {
+  .form-group input[type="number"]:focus {
     outline: none;
     border-color: var(--naraka-secondary);
   }
   
-  .close-edit-button {
-    display: block;
-    margin-left: auto;
+  .form-group.checkbox {
+    display: flex;
+    align-items: center;
   }
   
-  /* Стили для отображения бонусов нефритов */
-  .jade-bonuses-display {
+  .form-group.checkbox input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  /* Стили для отображения итогового урона */
+  .damage-summary {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
     border-radius: 8px;
     padding: 1.5rem;
   }
   
-  .bonuses-title {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .bonuses-grid {
+  .summary-blocks {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   
-  .bonus-item {
+  .summary-block {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  
+  .summary-block.boss-damage {
+    border-left: 4px solid var(--naraka-primary);
+  }
+  
+  .summary-block.monster-damage {
+    border-left: 4px solid var(--naraka-accent);
+  }
+  
+  .summary-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
   }
   
-  .bonus-label {
+  .summary-label {
     font-weight: bold;
+  }
+  
+  .summary-value {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-value.highlight {
+    color: var(--naraka-primary);
+    font-size: 1.5rem;
+  }
+  
+  .summary-details {
+    margin-top: 1rem;
+  }
+  
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--naraka-light);
+    opacity: 0.9;
+  }
+  
+  .summary-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+    color: var(--naraka-light);
+    opacity: 0.8;
+  }
+  
+  .info-value {
+    font-weight: bold;
+    color: var(--naraka-secondary);
+  }
+  
+  /* Стили для таблицы расчетов */
+  .steps-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  .steps-table th {
+    background-color: rgba(139, 0, 0, 0.3);
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+  
+  .steps-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  }
+  
+  .steps-table .even-row {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .steps-table .odd-row {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Стили для формул */
+  .formula-section {
+    margin-top: 2rem;
+  }
+  
+  .formula-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .formula-card h4 {
+    color: var(--naraka-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .formula {
+    font-family: monospace;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  .formula-explanation {
+    font-size: 0.875rem;
+    color: var(--naraka-light);
+    opacity: 0.8;
+  }
+  
+  /* Стили для вкладок */
+  .calculator-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--naraka-light);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .tab-button:hover {
+    background-color: rgba(139, 0, 0, 0.3);
+  }
+  
+  .tab-button.active {
+    background-color: var(--naraka-primary);
+    color: var(--naraka-light);
+    border-color: var(--naraka-primary);
+  }
+  
+  /* Стили для поля ввода с суффиксом */
+  .input-with-suffix {
+    display: flex;
+    position: relative;
+    width: 120px;
+  }
+  
+  .input-with-suffix input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem;
+    padding-right: 2rem;
     color: var(--naraka-light);
   }
   
-  .bonus-value {
-    color: var(--naraka-secondary);
+  .input-with-suffix input:focus {
+    outline: none;
+    border-color: var(--naraka-secondary);
+  }
+  
+  .input-suffix {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Стили для результатов */
+  .results-container {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .results-summary {
+    grid-column: 1/-1;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .summary-divider {
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    margin: 0.5rem 0;
+  }
+  
+  .result-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .result-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .result-card .value {
+    font-size: 1.25rem;
     font-weight: bold;
+    color: var(--naraka-secondary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .result-card .label {
+    font-size: 0.875rem;
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  .result-card.highlight {
+    border: 1px solid var(--naraka-primary);
+    background-color: rgba(139, 0, 0, 0.1);
+  }
+  
+  .result-card.highlight .value {
+    color: var(--naraka-primary);
+  }
+  
+  /* Стили для сообщения об отсутствии данных */
+  .no-data-message {
+    text-align: center;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    color: var(--naraka-light);
+    opacity: 0.7;
   }
   
   /* Адаптивность для мобильных устройств */
   @media (max-width: 768px) {
-    .jades-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(3, auto);
+    .results-grid {
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
     
-    .jade-stats-edit {
-      grid-template-columns: 1fr;
-    }
-    
-    .stat-row {
+    .form-group {
       flex-direction: column;
+      align-items: flex-start;
     }
     
-    .stat-type-select,
-    .stat-value-select {
+    .form-group label {
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-with-suffix {
       width: 100%;
     }
   }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import CustomSelect from "../../../components/common/CustomSelect";
 
 // Создаем пустой слот нефрита с 4 пустыми статами
 const createEmptyJade = () => ({
@@ -24,15 +25,15 @@ const getJadeColor = (jade) => {
   // Цвета для разных типов статов
   switch (firstStat.type) {
     case "attack":
-      return 'rgba(139, 0, 0, 0.6)'; // Красный для атаки
+      return 'rgba(139, 0, 0, 0.7)'; // Красный для атаки
     case "ice_explosion":
-      return 'rgba(0, 112, 221, 0.6)'; // Синий для ледяного взрыва
+      return 'rgba(0, 112, 221, 0.7)'; // Синий для ледяного взрыва
     case "boss_attack":
-      return 'rgba(163, 53, 238, 0.6)'; // Фиолетовый для атаки по боссам
+      return 'rgba(163, 53, 238, 0.7)'; // Фиолетовый для атаки по боссам
     case "monster_attack":
-      return 'rgba(45, 197, 14, 0.6)'; // Зеленый для атаки по монстрам
+      return 'rgba(45, 197, 14, 0.7)'; // Зеленый для атаки по монстрам
     case "fusion":
-      return 'rgba(255, 128, 0, 0.6)'; // Оранжевый для слияния
+      return 'rgba(255, 128, 0, 0.7)'; // Оранжевый для слияния
     default:
       return 'rgba(212, 175, 55, 0.3)'; // Стандартный золотистый
   }
@@ -71,8 +72,8 @@ const JadesGrid = ({ onJadeBonusChange }) => {
   // Состояние для отслеживания активного нефрита
   const [activeJadeIndex, setActiveJadeIndex] = useState(null);
   
-  // Типы статов нефрита
-  const statTypes = [
+  // Типы статов нефрита для селекта
+  const statTypeOptions = [
     { id: "empty", name: "Пусто" },
     { id: "attack", name: "Атака" },
     { id: "ice_explosion", name: "Лед. взрыв" },
@@ -81,9 +82,12 @@ const JadesGrid = ({ onJadeBonusChange }) => {
     { id: "monster_attack", name: "Атака по монстрам" },
   ];
 
-  // Значения для статов
-  const statValues = ["10", "20", "30", "40", "50"];
-  const fusionValues = ["30", "40", "50"];
+  // Значения для статов слияния (только для слияния используем предопределенные значения)
+  const fusionStatValueOptions = [
+    { id: "30", name: "30%" },
+    { id: "40", name: "40%" },
+    { id: "50", name: "50%" }
+  ];
 
   // Обновляет нефрит по индексу
   const handleJadeChange = (index, updatedJade) => {
@@ -113,6 +117,23 @@ const JadesGrid = ({ onJadeBonusChange }) => {
   const handleStatValueChange = (jadeIndex, statIndex, value) => {
     const updatedJade = { ...jades[jadeIndex] };
     updatedJade.stats[statIndex].value = value;
+    handleJadeChange(jadeIndex, updatedJade);
+  };
+
+  // Обработчик ввода значения для стата
+  const handleStatValueInput = (jadeIndex, statIndex, event) => {
+    // Получаем введенное значение
+    let inputValue = event.target.value.replace(/[^\d]/g, ''); // Оставляем только цифры
+    
+    // Ограничиваем значение от 1 до 99
+    if (inputValue !== '') {
+      const numValue = parseInt(inputValue, 10);
+      if (numValue < 1) inputValue = '1';
+      if (numValue > 99) inputValue = '99';
+    }
+
+    const updatedJade = { ...jades[jadeIndex] };
+    updatedJade.stats[statIndex].value = inputValue;
     handleJadeChange(jadeIndex, updatedJade);
   };
 
@@ -211,51 +232,59 @@ const JadesGrid = ({ onJadeBonusChange }) => {
       {/* Панель редактирования нефрита */}
       {activeJadeIndex !== null && (
         <div className="jade-edit-panel">
-          <h3>Редактирование нефрита {activeJadeIndex + 1}</h3>
+          <h3 className="jade-edit-title">Редактирование нефрита {activeJadeIndex + 1}</h3>
           
           <div className="jade-stats-edit">
             {jades[activeJadeIndex].stats.map((stat, statIndex) => (
-              <div key={statIndex} className="jade-stat-edit">
-                <div className="stat-row">
-                  <select
+              <div 
+                key={statIndex} 
+                className="jade-stat-row"
+                data-type={stat.type}
+              >
+                <div className="jade-stat-type">
+                  <CustomSelect
+                    options={statTypeOptions}
                     value={stat.type}
-                    onChange={(e) => handleStatTypeChange(activeJadeIndex, statIndex, e.target.value)}
-                    className="stat-type-select"
-                  >
-                    {statTypes.map((type) => (
-                      <option key={type.id} value={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(value) => handleStatTypeChange(activeJadeIndex, statIndex, value)}
+                    className="stat-select"
+                  />
+                </div>
 
+                <div className="jade-stat-value">
                   {stat.type !== "empty" && (
-                    <select
-                      value={stat.value}
-                      onChange={(e) => handleStatValueChange(activeJadeIndex, statIndex, e.target.value)}
-                      className="stat-value-select"
-                      disabled={stat.type === "empty"}
-                    >
-                      {(stat.type === "fusion" ? fusionValues : statValues).map(
-                        (val) => (
-                          <option key={val} value={val}>
-                            {val}%
-                          </option>
-                        ),
-                      )}
-                    </select>
+                    stat.type === "fusion" ? (
+                      <CustomSelect
+                        options={fusionStatValueOptions}
+                        value={stat.value}
+                        onChange={(value) => handleStatValueChange(activeJadeIndex, statIndex, value)}
+                        className="stat-select"
+                      />
+                    ) : (
+                      <div className="stat-value-input-container">
+                        <input
+                          type="text"
+                          className="stat-value-input"
+                          value={stat.value}
+                          onChange={(e) => handleStatValueInput(activeJadeIndex, statIndex, e)}
+                          placeholder="0"
+                        />
+                        <span className="input-suffix">%</span>
+                      </div>
+                    )
                   )}
                 </div>
               </div>
             ))}
           </div>
           
-          <button 
-            className="btn btn-secondary close-edit-button"
-            onClick={() => setActiveJadeIndex(null)}
-          >
-            Закрыть
-          </button>
+          <div className="jade-edit-actions">
+            <button 
+              className="btn btn-secondary close-edit-button"
+              onClick={() => setActiveJadeIndex(null)}
+            >
+              Закрыть
+            </button>
+          </div>
         </div>
       )}
     </div>

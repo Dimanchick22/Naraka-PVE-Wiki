@@ -9,7 +9,7 @@ import JadeDetail from "./pages/JadeDetail";
 import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
-import DamageCalculator from "./pages/DamageCalculator";
+import DamageCalculator from "./pages/DamageCalculator/index";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 
@@ -18,8 +18,12 @@ import "./styles/index.css";
 import "./styles/layout.css";
 import "./styles/pages.css";
 import "./styles/components.css";
+import "./styles/damageCalculator.css";
+import "./styles/jadeGrid.css";
+import "./styles/customSelect.css"; // Добавьте эту строку
 
 function App() {
+  // Остальной код без изменений
   return (
     <Router>
       <Routes>

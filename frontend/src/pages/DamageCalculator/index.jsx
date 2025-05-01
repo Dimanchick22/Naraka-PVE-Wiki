@@ -1,13 +1,9 @@
 // pages/DamageCalculator/index.jsx
-import React, { useState } from "react";
+import React from "react";
 import CalculatorForm from "./components/CalculatorForm";
 import DamageSummary from "./components/DamageSummary";
 import JadesGrid from "./components/JadesGrid";
-import JadeBonusesDisplay from "./components/JadeBonusesDisplay";
 import { useCalculator } from "./hooks/useCalculator";
-
-// Импорт стилей
-import "../../styles/damageCalculator.css";
 
 /**
  * Основной компонент страницы калькулятора урона (обновленная версия)
@@ -17,18 +13,8 @@ const DamageCalculator = () => {
   // Получаем состояние калькулятора из хука
   const calculator = useCalculator();
 
-  // Состояние для хранения бонусов нефритов
-  const [jadeBonuses, setJadeBonuses] = useState({
-    attackBonus: 0,
-    iceExplosionBonus: 0,
-    bossAttackBonus: 0,
-    monsterAttackBonus: 0,
-  });
-
   // Обработчик изменения бонусов нефритов
   const handleJadeBonusChange = (bonuses) => {
-    setJadeBonuses(bonuses);
-
     // Обновляем значения в калькуляторе
     calculator.setJadeAttackBonus(bonuses.attackBonus);
     calculator.setJadeIceExplosionBonus(bonuses.iceExplosionBonus);
@@ -42,9 +28,8 @@ const DamageCalculator = () => {
 
       <div className="section-description">
         <p>
-          Этот калькулятор позволяет рассчитать урон на основе параметров
-          персонажа, талантов и нефритов. Настройте нефриты и параметры
-          персонажа для расчета итогового урона.
+          Этот калькулятор позволяет рассчитать урон на основе параметров персонажа, талантов и нефритов.
+          Настройте нефриты и параметры персонажа для расчета итогового урона.
         </p>
       </div>
 
@@ -58,9 +43,6 @@ const DamageCalculator = () => {
         <div className="calculator-right-column">
           {/* Сетка нефритов */}
           <JadesGrid onJadeBonusChange={handleJadeBonusChange} />
-          
-          {/* Отображение суммарных бонусов от нефритов */}
-          <JadeBonusesDisplay bonuses={jadeBonuses} />
         </div>
       </div>
 

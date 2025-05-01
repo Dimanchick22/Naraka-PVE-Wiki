@@ -1,0 +1,174 @@
+/* Стили для кастомного селекта */
+.custom-select-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .custom-select-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    color: var(--naraka-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .custom-select-selected::after {
+    content: "";
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid var(--naraka-secondary);
+    border-bottom: 2px solid var(--naraka-secondary);
+    transform: rotate(45deg);
+    margin-left: 0.5rem;
+    transition: transform 0.2s;
+  }
+  
+  .custom-select-selected.open::after {
+    transform: rotate(-135deg);
+  }
+  
+  .custom-select-selected.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .custom-select-selected:hover:not(.disabled) {
+    border-color: var(--naraka-primary);
+  }
+  
+  .custom-select-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 15rem;
+    overflow-y: auto;
+    background-color: rgba(26, 26, 26, 0.95);
+    border: 1px solid var(--naraka-secondary);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    display: none;
+  }
+  
+  .custom-select-container.open .custom-select-options {
+    display: block;
+  }
+  
+  /* Стилизация скроллбара для выпадающего списка */
+  .custom-select-options::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-select-options::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 4px 0;
+  }
+  
+  .custom-select-options::-webkit-scrollbar-thumb {
+    background-color: var(--naraka-primary);
+    border-radius: 3px;
+  }
+  
+  .custom-select-option {
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .custom-select-option:hover {
+    background-color: var(--naraka-primary);
+    color: white;
+  }
+  
+  .custom-select-option.selected {
+    background-color: rgba(139, 0, 0, 0.3);
+    color: var(--naraka-secondary);
+  }
+  
+  /* Стили для кастомного селекта в контексте калькулятора нефритов */
+  .stat-type-select .custom-select-selected,
+  .stat-value-select .custom-select-selected {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  
+  .stat-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .stat-type-select {
+    flex: 2;
+  }
+  
+  .stat-value-select {
+    flex: 1;
+  }
+
+  /* Стили для поля ввода значения стата */
+.stat-value-input-container {
+    position: relative;
+    flex: 1;
+  }
+  
+  .stat-value-input {
+    width: 100%;
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem 0.5rem 0.75rem;
+    color: var(--naraka-light);
+    font-size: 0.875rem;
+  }
+  
+  .stat-value-input:focus {
+    outline: none;
+    border-color: var(--naraka-secondary);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  }
+  
+  .stat-value-input-container .input-suffix {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Стили для мобильных устройств */
+  @media (max-width: 768px) {
+    .stat-row {
+      flex-direction: column;
+    }
+    
+    .stat-type-select,
+    .stat-value-input-container {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  /* Адаптивные стили для мобильных устройств */
+  @media (max-width: 768px) {
+    .stat-row {
+      flex-direction: column;
+    }
+    
+    .stat-type-select,
+    .stat-value-select {
+      width: 100%;
+    }
+    
+    .custom-select-options {
+      max-height: 10rem;
+    }
+  }
