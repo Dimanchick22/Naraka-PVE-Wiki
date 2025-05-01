@@ -76,7 +76,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setUntouchableTalent(!untouchableTalent)}
           />
           <label htmlFor="untouchableTalent">
-            Неприкасаемый талант (+8% к атаке)
+            Талант неприкасновенности 
           </label>
         </div>
         <div className="form-group checkbox">
@@ -86,7 +86,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={power}
             onChange={() => setPower(!power)}
           />
-          <label htmlFor="power">Сила (+4.5% к атаке)</label>
+          <label htmlFor="power">Сила</label>
         </div>
         <div className="form-group checkbox">
           <input
@@ -96,7 +96,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setIceRoot(!iceRoot)}
           />
           <label htmlFor="iceRoot">
-            Ледяной корень (+40% к ледяному взрыву)
+            Ледяной корень
           </label>
         </div>
         <div className="form-group checkbox">
@@ -107,7 +107,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setIceFlash(!iceFlash)}
           />
           <label htmlFor="iceFlash">
-            Ледяная вспышка (+35% к ледяному взрыву)
+            Ледяная вспышка
           </label>
         </div>
       </FormSection>
@@ -120,7 +120,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={aromaAura}
             onChange={() => setAromaAura(!aromaAura)}
           />
-          <label htmlFor="aromaAura">Аромат ауры (+10% к атаке)</label>
+          <label htmlFor="aromaAura">Аромат ауры</label>
         </div>
         <div className="form-group checkbox">
           <input
@@ -130,7 +130,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setFrostBloom(!frostBloom)}
           />
           <label htmlFor="frostBloom">
-            Морозный цветок (+45% к ледяному взрыву)
+            Морозный цветок
           </label>
         </div>
         <div className="form-group checkbox">
@@ -140,7 +140,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={frostSeal}
             onChange={() => setFrostSeal(!frostSeal)}
           />
-          <label htmlFor="frostSeal">Морозная печать (+20% к атаке)</label>
+          <label htmlFor="frostSeal">Морозная печать</label>
         </div>
         <div className="form-group checkbox">
           <input
@@ -149,7 +149,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={tundraPower}
             onChange={() => setTundraPower(!tundraPower)}
           />
-          <label htmlFor="tundraPower">Сила тундры (+15% к атаке)</label>
+          <label htmlFor="tundraPower">Сила тундры</label>
         </div>
         <div className="form-group checkbox">
           <input
@@ -158,7 +158,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={frostboundLotus}
             onChange={() => setFrostboundLotus(!frostboundLotus)}
           />
-          <label htmlFor="frostboundLotus">Морозный лотос (+25% к атаке)</label>
+          <label htmlFor="frostboundLotus">Морозный лотос</label>
         </div>
       </FormSection>
 
@@ -170,7 +170,7 @@ const CalculatorForm = ({ calculator }) => {
             checked={tessaF}
             onChange={() => setTessaF(!tessaF)}
           />
-          <label htmlFor="tessaF">Тесса (+8% мультипликатор)</label>
+          <label htmlFor="tessaF">F Тесса</label>
         </div>
         <div className="form-group checkbox">
           <input
@@ -180,7 +180,7 @@ const CalculatorForm = ({ calculator }) => {
             onChange={() => setConsciousnessMatch(!consciousnessMatch)}
           />
           <label htmlFor="consciousnessMatch">
-            Совпадение сознания (+15% мультипликатор)
+            Совпадение сознания
           </label>
         </div>
       </FormSection>

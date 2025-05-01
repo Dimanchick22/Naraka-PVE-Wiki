@@ -6,6 +6,7 @@ import Characters from "./pages/Characters";
 import CharacterDetail from "./pages/CharacterDetail";
 import Jades from "./pages/Jades";
 import JadeDetail from "./pages/JadeDetail";
+import Rarities from "./pages/Rarities"; // New component for Rarities
 import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
@@ -32,6 +33,7 @@ function App() {
           <Route path="characters/:characterId" element={<CharacterDetail />} />
           <Route path="jades" element={<Jades />} />
           <Route path="jades/:jadeId" element={<JadeDetail />} />
+          <Route path="rarities" element={<Rarities />} />
           <Route path="enemies" element={<Enemies />} />
           <Route path="enemies/:enemyId" element={<EnemyDetail />} />
           <Route path="pve-modes" element={<PveModes />} />

@@ -27,6 +27,13 @@ const DamageSummary = ({ results }) => {
           <h3 className="summary-title">Урон по боссам</h3>
 
           <div className="summary-item">
+            <div className="summary-label">% урона по боссам:</div>
+            <div className="summary-value">
+              {bossDamagePercent}%
+            </div>
+          </div>
+
+          <div className="summary-item">
             <div className="summary-label">Атака:</div>
             <div className="summary-value">
               {formatNumber(Math.round(results.finalAttack))}
@@ -115,6 +122,13 @@ const DamageSummary = ({ results }) => {
           <h3 className="summary-title">Урон по монстрам</h3>
 
           <div className="summary-item">
+            <div className="summary-label">% урона по монстрам:</div>
+            <div className="summary-value">
+              {monsterDamagePercent}%
+            </div>
+          </div>
+
+          <div className="summary-item">
             <div className="summary-label">Атака:</div>
             <div className="summary-value">
               {formatNumber(Math.round(results.finalAttack))}
@@ -197,19 +211,6 @@ const DamageSummary = ({ results }) => {
               </span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="summary-info">
-
-        <div className="info-item">
-          <div className="info-label">% урона по боссам</div>
-          <div className="info-value">{bossDamagePercent}%</div>
-        </div>
-
-        <div className="info-item">
-          <div className="info-label">% урона по монстрам</div>
-          <div className="info-value">{monsterDamagePercent}%</div>
         </div>
       </div>
     </div>

@@ -1,16 +1,16 @@
 // data/guides.js
 
 export const guidesData = [
-  // {
-  //   id: "beginner-guide",
-  //   category: "beginner",
-  //   title: "Руководство для новичков в Naraka Bladepoint PVE",
-  //   author: "Admin",
-  //   date: "20 апреля 2025",
-  //   thumbnail: null, // Placeholder
-  //   summary:
-  //     "Всё, что нужно знать начинающим игрокам о PVE режиме в Naraka Bladepoint.",
-  // },
+  {
+    id: "beginner-guide",
+    category: "beginner",
+    title: "Руководство для новичков в Naraka Bladepoint PVE",
+    author: "Admin",
+    date: "20 апреля 2025",
+    thumbnail: null, // Placeholder
+    summary:
+      "Всё, что нужно знать начинающим игрокам о PVE режиме в Naraka Bladepoint.",
+  },
   // {
   //   id: "jade-optimization",
   //   category: "advanced",

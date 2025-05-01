@@ -9,6 +9,7 @@ const Header = () => {
     { name: "Главная", path: "/" },
     { name: "Персонажи", path: "/characters" },
     { name: "Нефриты", path: "/jades" },
+    { name: "Диковинки", path: "/rarities" },
     { name: "Враги", path: "/enemies" },
     { name: "PVE режимы", path: "/pve-modes" },
     { name: "Калькулятор урона", path: "/damage-calculator" },
