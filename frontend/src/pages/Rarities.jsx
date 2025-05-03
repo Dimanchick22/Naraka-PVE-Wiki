@@ -16,8 +16,7 @@ const raritiesData = [
     for_character: "Тесса",
     effects: [
       "Увеличивает урон духа лисы на 200%",
-      "Активируется от различных типов атак",
-      "Шанс активации: 100%"
+      "Активируется от различных типов атак"
     ],
     cloudinaryId: "nine-tailed-chime-mythic_j8pxhp.png",
   },
@@ -30,8 +29,7 @@ const raritiesData = [
     for_character: "Тесса",
     effects: [
       "Увеличивает урон духа лисы на 100%",
-      "Активируется от различных типов атак",
-      "Шанс активации: 75%"
+      "Активируется от различных типов атак"
     ],
     cloudinaryId: "nine-tailed-chime-mythic_j8pxhp.png",
   },
@@ -44,8 +42,7 @@ const raritiesData = [
     for_character: "Тесса",
     effects: [
       "Позволяет призвать дух лисы для дополнительного удара",
-      "Активируется от различных типов атак",
-      "Шанс активации: 50%"
+      "Активируется от различных типов атак"
     ],
     cloudinaryId: "nine-tailed-chime-mythic_j8pxhp.png",
   },
@@ -56,11 +53,10 @@ const raritiesData = [
     name: "Чаша увядшей славы",
     type: "yin", // Инь
     rarity: "mythic",
-    description: "Увеличивает урон цветочного взрыва на 100%. Эффект активируется после применения морозного цветка и сохраняется в течение 20 секунд.",
+    description: "Увеличивает урон цветочного взрыва на 50%.",
     for_character: "Цзыпин",
     effects: [
-      "Увеличивает урон цветочного взрыва на 100%",
-      "Длительность эффекта: 20 секунд",
+      "Увеличивает урон цветочного взрыва на 50%",
       "Также увеличивает радиус взрыва на 30%"
     ],
     cloudinaryId: "withered-glory-mythic_zds2gn.png",
@@ -70,11 +66,10 @@ const raritiesData = [
     name: "Чаша увядшей славы",
     type: "yin", // Инь
     rarity: "legendary",
-    description: "Увеличивает урон цветочного взрыва на 50%. Эффект активируется после применения морозного цветка и сохраняется в течение 15 секунд.",
+    description: "Увеличивает урон цветочного взрыва на 30%.",
     for_character: "Цзыпин",
     effects: [
-      "Увеличивает урон цветочного взрыва на 50%",
-      "Длительность эффекта: 15 секунд",
+      "Увеличивает урон цветочного взрыва на 30%",
       "Также увеличивает радиус взрыва на 15%"
     ],
     cloudinaryId: "withered-glory-mythic_zds2gn.png",
@@ -84,11 +79,10 @@ const raritiesData = [
     name: "Чаша увядшей славы",
     type: "yin", // Инь
     rarity: "epic",
-    description: "Увеличивает урон цветочного взрыва на 25%. Эффект активируется после применения морозного цветка и сохраняется в течение 10 секунд.",
+    description: "Увеличивает урон цветочного взрыва на 10%.",
     for_character: "Цзыпин",
     effects: [
-      "Увеличивает урон цветочного взрыва на 25%",
-      "Длительность эффекта: 10 секунд",
+      "Увеличивает урон цветочного взрыва на 10%",
       "Не увеличивает радиус взрыва"
     ],
     cloudinaryId: "withered-glory-mythic_zds2gn.png",
@@ -316,25 +310,23 @@ const Rarities = () => {
                     overflow: "hidden" // Добавлено для обрезки изображений, выходящих за пределы контейнера
                   }}>
                     {rarity.cloudinaryId ? (
-                        <CloudinaryImage 
+                    <CloudinaryImage 
                         publicId={`${rarity.cloudinaryId}`} 
                         alt={rarity.name}
                         style={{
-                          maxWidth: "100px",
-                          maxHeight: "100px",
-                          width: "auto",
-                          height: "auto"
+                        maxWidth: "100%",
+                        maxHeight: "100%"
                         }}
                         transformations={{
-                          width: 100,
-                          height: 100,
-                          crop: "scale" // Используем scale для изменения размера без обрезки
+                        width: 100,
+                        height: 100,
+                        crop: "fill" // Use 'fill' to maintain aspect ratio
                         }}
-                        />
+                    />
                     ) : (
-                        <div style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
+                    <div style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
                         {rarity.type === "yin" ? "阴" : "阳"}
-                        </div>
+                    </div>
                     )}
                 </div>
 
