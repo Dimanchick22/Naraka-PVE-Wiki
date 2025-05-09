@@ -6,12 +6,12 @@ import Characters from "./pages/Characters";
 import CharacterDetail from "./pages/CharacterDetail";
 import Jades from "./pages/Jades";
 import JadeDetail from "./pages/JadeDetail";
-import Rarities from "./pages/Rarities"; // New component for Rarities
+import Rarities from "./pages/Rarities"; 
 import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
-import DamageCalculator from "./pages/DamageCalculator.jsx";
-import DamageCalculatorv1 from "./pages/DamageCalculator/index.jsx";
+import DamageCalculator from "./pages/DamageCalculator";
+import DamageCalculatorv1 from "./pages/DamageCalculator/index";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 
@@ -20,10 +20,10 @@ import "./styles/index.css";
 import "./styles/layout.css";
 import "./styles/pages.css";
 import "./styles/components.css";
-import "./styles/damageCalculator.css"; // Обновленные стили калькулятора
-import "./styles/jadeGrid.css";         // Стили для сетки нефритов
-import "./styles/customSelect.css";     // Стили для кастомного селекта
-import "./styles/tabbedCalculator.css"; // Новые стили для калькулятора с вкладками
+import "./styles/damageCalculator.css";
+import "./styles/jadeGrid.css";
+import "./styles/customSelect.css";
+import "./styles/tabbedCalculator.css"; // Обновленные стили для калькулятора
 
 function App() {
   return (

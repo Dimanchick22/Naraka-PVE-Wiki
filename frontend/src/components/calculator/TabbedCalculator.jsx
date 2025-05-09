@@ -1,17 +1,14 @@
 // src/components/calculator/TabbedCalculator.jsx
 import { useState } from 'react';
 import JadeGrid from './JadeGrid';
-import JadeStats from './JadeStats';
 import RaritiesPanel from './RaritiesPanel';
 import { TabType } from '../../utils/constants';
 
 /**
- * Компонент с вкладками для калькулятора урона
+ * Обновленный компонент с вкладками для калькулятора урона
  * @param {Object} props - Свойства компонента
  * @param {Array} props.jades - Массив с выбранными нефритами
  * @param {Function} props.onJadeChange - Функция обработки изменения нефрита
- * @param {Array} props.jadeStats - Массив с кастомными статами нефритов
- * @param {Function} props.onJadeStatsChange - Функция обработки изменения статов нефрита
  * @param {Object} props.yinRarity - Выбранная диковинка типа Инь
  * @param {Object} props.yangRarity - Выбранная диковинка типа Ян
  * @param {Function} props.onRarityChange - Функция обработки изменения диковинки
@@ -21,8 +18,6 @@ import { TabType } from '../../utils/constants';
 const TabbedCalculator = ({ 
   jades = [], 
   onJadeChange,
-  jadeStats = [],
-  onJadeStatsChange,
   yinRarity,
   yangRarity,
   onRarityChange,
@@ -52,20 +47,10 @@ const TabbedCalculator = ({
       {/* Содержимое вкладки "Нефриты" */}
       {activeTab === TabType.JADES && (
         <div className="tab-content">
-          <div className="jades-container">
-            <div className="jades-stats-panel">
-              <JadeStats 
-                jadeStats={jadeStats}
-                onJadeStatsChange={onJadeStatsChange}
-              />
-            </div>
-            <div className="jades-grid-panel">
-              <JadeGrid 
-                jades={jades}
-                onJadeChange={onJadeChange}
-              />
-            </div>
-          </div>
+          <JadeGrid 
+            jades={jades}
+            onJadeChange={onJadeChange}
+          />
         </div>
       )}
 

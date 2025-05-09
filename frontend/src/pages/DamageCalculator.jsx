@@ -11,12 +11,6 @@ const DamageCalculatorPage = () => {
   const [consciousness, setConsciousness] = useState(1120);
   const [heroLevel, setHeroLevel] = useState(20);
   const [selectedJades, setSelectedJades] = useState(Array(6).fill(null));
-  const [jadeStats, setJadeStats] = useState([
-    { type: 'attack', value: 0 },
-    { type: 'ice_explosion', value: 0 },
-    { type: 'boss_attack', value: 0 },
-    { type: 'monster_attack', value: 0 }
-  ]);
   const [yinRarity, setYinRarity] = useState(null);
   const [yangRarity, setYangRarity] = useState(null);
   
@@ -122,28 +116,6 @@ const DamageCalculatorPage = () => {
     selectedJades.forEach(jade => {
       if (jade) {
         calculator.addJade(jade);
-      }
-    });
-    
-    // Добавление дополнительных статов
-    jadeStats.forEach(stat => {
-      if (stat.value > 0) {
-        // Создаем имитацию нефрита с выбранным статом
-        const customJade = {
-          id: `custom_${stat.type}_${stat.value}`,
-          name: `Пользовательский ${stat.type}`,
-          type: stat.type,
-          stats: [
-            {
-              id: `custom_stat_${stat.type}`,
-              name: stat.type,
-              type: 'percentage',
-              target: stat.type,
-              value: stat.value
-            }
-          ]
-        };
-        calculator.addJade(customJade);
       }
     });
     
@@ -297,8 +269,6 @@ const DamageCalculatorPage = () => {
           <TabbedCalculator 
             jades={selectedJades}
             onJadeChange={setSelectedJades}
-            jadeStats={jadeStats}
-            onJadeStatsChange={setJadeStats}
             yinRarity={yinRarity}
             yangRarity={yangRarity}
             onRarityChange={handleRarityChange}
@@ -445,7 +415,7 @@ const DamageCalculatorPage = () => {
                       <span className="summary-value">{results.bossJadeThirdBlastDamage}</span>
                     </div>
                     <div className="summary-item">
-                    <span className="summary-label">Общий урон:</span>
+                      <span className="summary-label">Общий урон:</span>
                       <span className="summary-value highlight">{results.bossJadeTotalBlastDamage}</span>
                     </div>
                   </div>
@@ -513,11 +483,23 @@ const DamageCalculatorPage = () => {
               <div 
                 className="section-toggle" 
                 onClick={() => setShowDetailedCalc(!showDetailedCalc)}
+                style={{
+                  padding: '0.75rem',
+                  marginTop: '1.5rem',
+                  textAlign: 'center',
+                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
               >
                 <span>
                   {showDetailedCalc ? 'Скрыть подробный расчет' : 'Показать подробный расчет'}
-                  <span>{showDetailedCalc ? '▲' : '▼'}</span>
                 </span>
+                <span>{showDetailedCalc ? '▲' : '▼'}</span>
               </div>
               
               {showDetailedCalc && (
