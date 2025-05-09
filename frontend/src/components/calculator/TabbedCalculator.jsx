@@ -1,7 +1,7 @@
 // src/components/calculator/TabbedCalculator.jsx
 import { useState } from 'react';
-import JadeGrid from './JadeGrid';
-import RaritiesPanel from './RaritiesPanel';
+import JadeGrid from './jade/JadeGrid';
+import RaritiesPanel from './rarity/RaritiesPanel';
 import { TabType } from '../../utils/constants';
 
 /**

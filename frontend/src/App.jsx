@@ -10,8 +10,7 @@ import Rarities from "./pages/Rarities";
 import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
-import DamageCalculator from "./pages/DamageCalculator";
-import DamageCalculatorv1 from "./pages/DamageCalculator/index";
+import DamageCalculator from "./pages/DamageCalculator/index";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 
@@ -40,7 +39,6 @@ function App() {
           <Route path="enemies/:enemyId" element={<EnemyDetail />} />
           <Route path="pve-modes" element={<PveModes />} />
           <Route path="damage-calculator" element={<DamageCalculator />} />
-          <Route path="damage-calculatorv1" element={<DamageCalculatorv1 />} />
           <Route path="guides" element={<Guides />} />
           <Route path="about" element={<About />} />
         </Route>
