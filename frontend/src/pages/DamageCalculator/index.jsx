@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { charactersData } from '../../data/characters';
 import { RarityType } from '../../data/rarities';
+import { ModifierType } from '../../data/jades';
 import DamageCalculator from '../../utils/DamageCalculator';
 import TabbedCalculator from '../../components/calculator/TabbedCalculator';
 import CharacterSelect from './CharacterSelect';
@@ -17,6 +18,31 @@ const DamageCalculatorPage = () => {
   const [selectedJades, setSelectedJades] = useState(Array(6).fill(null));
   const [yinRarity, setYinRarity] = useState(null);
   const [yangRarity, setYangRarity] = useState(null);
+  
+  // Состояние для пользовательских статов нефритов
+  const [customJadeStats, setCustomJadeStats] = useState(
+    Array(6).fill(null).map(() => [
+      { type: '', value: 0 },
+      { type: '', value: 0 },
+      { type: '', value: 0 },
+      { type: '', value: 0 }
+    ])
+  );
+  
+  // Состояние для пользовательских статов диковинок
+  const [yinRarityStats, setYinRarityStats] = useState([
+    { type: '', value: 0 },
+    { type: '', value: 0 },
+    { type: '', value: 0 },
+    { type: '', value: 0 }
+  ]);
+  
+  const [yangRarityStats, setYangRarityStats] = useState([
+    { type: '', value: 0 },
+    { type: '', value: 0 },
+    { type: '', value: 0 },
+    { type: '', value: 0 }
+  ]);
   
   // Состояние талантов
   const [baseTalents, setBaseTalents] = useState({
@@ -66,6 +92,54 @@ const DamageCalculatorPage = () => {
     }
   }, [character]);
   
+  // Обработчики для обновления пользовательских статов
+  const handleJadeStatsChange = (jadeIndex, statIndex, type, value) => {
+    const updatedStats = [...customJadeStats];
+    if (type !== undefined) updatedStats[jadeIndex][statIndex].type = type;
+    if (value !== undefined) updatedStats[jadeIndex][statIndex].value = value;
+    setCustomJadeStats(updatedStats);
+    
+    // Обновляем нефрит с новыми статами
+    if (selectedJades[jadeIndex]) {
+      const updatedJades = [...selectedJades];
+      updatedJades[jadeIndex] = {
+        ...selectedJades[jadeIndex],
+        customStats: updatedStats[jadeIndex]
+      };
+      setSelectedJades(updatedJades);
+    }
+  };
+  
+  const handleYinRarityStatsChange = (statIndex, type, value) => {
+    const updatedStats = [...yinRarityStats];
+    if (type !== undefined) updatedStats[statIndex].type = type;
+    if (value !== undefined) updatedStats[statIndex].value = value;
+    setYinRarityStats(updatedStats);
+    
+    // Обновляем диковинку с новыми статами
+    if (yinRarity) {
+      setYinRarity({
+        ...yinRarity,
+        customStats: updatedStats
+      });
+    }
+  };
+  
+  const handleYangRarityStatsChange = (statIndex, type, value) => {
+    const updatedStats = [...yangRarityStats];
+    if (type !== undefined) updatedStats[statIndex].type = type;
+    if (value !== undefined) updatedStats[statIndex].value = value;
+    setYangRarityStats(updatedStats);
+    
+    // Обновляем диковинку с новыми статами
+    if (yangRarity) {
+      setYangRarity({
+        ...yangRarity,
+        customStats: updatedStats
+      });
+    }
+  };
+  
   // Обработчик изменения базового таланта
   const handleBaseTalentChange = (talentId) => {
     setBaseTalents(prev => ({
@@ -88,6 +162,26 @@ const DamageCalculatorPage = () => {
       setYinRarity(rarity);
     } else if (type === RarityType.YANG) {
       setYangRarity(rarity);
+    }
+  };
+  
+  // Вспомогательная функция для получения отображаемого имени стата
+  const getStatDisplayName = (statType) => {
+    switch (statType) {
+      case 'attack':
+        return 'Атака';
+      case 'ice_explosion':
+        return 'Лед. взрыв';
+      case 'boss_attack':
+        return 'Атака по боссам';
+      case 'monster_attack':
+        return 'Атака по монстрам';
+      case 'fusion':
+        return 'Слияние';
+      case '':
+        return 'Пусто';
+      default:
+        return statType;
     }
   };
   
@@ -115,19 +209,67 @@ const DamageCalculatorPage = () => {
     });
     
     // Добавление нефритов
-    selectedJades.forEach(jade => {
+    selectedJades.forEach((jade, index) => {
       if (jade) {
-        calculator.addJade(jade);
+        // Создаем копию нефрита с пользовательскими статами
+        const jadeWithStats = { ...jade };
+        
+        // Добавляем пользовательские статы
+        const stats = customJadeStats[index].filter(stat => stat.type !== '');
+        if (stats.length > 0) {
+          // Преобразуем пользовательские статы в формат, понятный калькулятору
+          const calculatorStats = stats.map(stat => ({
+            id: `custom_${stat.type}_${Math.random()}`,
+            name: getStatDisplayName(stat.type),
+            type: ModifierType.PERCENTAGE,
+            target: stat.type,
+            value: stat.value,
+            condition: null
+          }));
+          
+          // Добавляем статы к нефриту
+          jadeWithStats.stats = [...(jadeWithStats.stats || []), ...calculatorStats];
+        }
+        
+        calculator.addJade(jadeWithStats);
       }
     });
     
-    // Установка диковинок
+    // Установка диковинок с пользовательскими статами
     if (yinRarity) {
-      calculator.setRarity(yinRarity);
+      const yinRarityWithStats = { ...yinRarity };
+      // Добавляем пользовательские статы для диковинки Инь
+      const yinStats = yinRarityStats.filter(stat => stat.type !== '');
+      if (yinStats.length > 0) {
+        const calculatorStats = yinStats.map(stat => ({
+          id: `custom_${stat.type}_${Math.random()}`,
+          description: getStatDisplayName(stat.type),
+          type: ModifierType.PERCENTAGE,
+          target: stat.type,
+          value: stat.value
+        }));
+        
+        yinRarityWithStats.effects = [...(yinRarityWithStats.effects || []), ...calculatorStats];
+      }
+      calculator.setRarity(yinRarityWithStats);
     }
     
     if (yangRarity) {
-      calculator.setRarity(yangRarity);
+      const yangRarityWithStats = { ...yangRarity };
+      // Добавляем пользовательские статы для диковинки Ян
+      const yangStats = yangRarityStats.filter(stat => stat.type !== '');
+      if (yangStats.length > 0) {
+        const calculatorStats = yangStats.map(stat => ({
+          id: `custom_${stat.type}_${Math.random()}`,
+          description: getStatDisplayName(stat.type),
+          type: ModifierType.PERCENTAGE,
+          target: stat.type,
+          value: stat.value
+        }));
+        
+        yangRarityWithStats.effects = [...(yangRarityWithStats.effects || []), ...calculatorStats];
+      }
+      calculator.setRarity(yangRarityWithStats);
     }
     
     // Выполнение расчета
@@ -204,6 +346,13 @@ const DamageCalculatorPage = () => {
             yangRarity={yangRarity}
             onRarityChange={handleRarityChange}
             character={character}
+            // Передаем новые пропсы для статов
+            customJadeStats={customJadeStats}
+            onJadeStatsChange={handleJadeStatsChange}
+            yinRarityStats={yinRarityStats}
+            onYinRarityStatsChange={handleYinRarityStatsChange}
+            yangRarityStats={yangRarityStats}
+            onYangRarityStatsChange={handleYangRarityStatsChange}
           />
         </div>
       </div>

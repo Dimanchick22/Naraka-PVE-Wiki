@@ -13,6 +13,12 @@ import { TabType } from '../../utils/constants';
  * @param {Object} props.yangRarity - Выбранная диковинка типа Ян
  * @param {Function} props.onRarityChange - Функция обработки изменения диковинки
  * @param {Object} props.character - Выбранный персонаж
+ * @param {Array} props.customJadeStats - Пользовательские статы нефритов
+ * @param {Function} props.onJadeStatsChange - Функция изменения статов нефритов
+ * @param {Array} props.yinRarityStats - Статы диковинки типа Инь
+ * @param {Function} props.onYinRarityStatsChange - Функция изменения статов диковинки Инь
+ * @param {Array} props.yangRarityStats - Статы диковинки типа Ян
+ * @param {Function} props.onYangRarityStatsChange - Функция изменения статов диковинки Ян
  * @returns {JSX.Element} - React компонент
  */
 const TabbedCalculator = ({ 
@@ -21,7 +27,14 @@ const TabbedCalculator = ({
   yinRarity,
   yangRarity,
   onRarityChange,
-  character 
+  character,
+  // Новые пропсы для статов
+  customJadeStats,
+  onJadeStatsChange,
+  yinRarityStats,
+  onYinRarityStatsChange,
+  yangRarityStats,
+  onYangRarityStatsChange
 }) => {
   // Активная вкладка (JADES или RARITIES)
   const [activeTab, setActiveTab] = useState(TabType.JADES);
@@ -50,6 +63,8 @@ const TabbedCalculator = ({
           <JadeGrid 
             jades={jades}
             onJadeChange={onJadeChange}
+            customJadeStats={customJadeStats}
+            onJadeStatsChange={onJadeStatsChange}
           />
         </div>
       )}
@@ -62,6 +77,10 @@ const TabbedCalculator = ({
             yangRarity={yangRarity}
             onRarityChange={onRarityChange}
             character={character}
+            yinRarityStats={yinRarityStats}
+            onYinRarityStatsChange={onYinRarityStatsChange}
+            yangRarityStats={yangRarityStats}
+            onYangRarityStatsChange={onYangRarityStatsChange}
           />
         </div>
       )}

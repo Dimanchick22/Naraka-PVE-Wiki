@@ -1,27 +1,21 @@
 // src/components/calculator/rarity/RaritiesPanel.jsx
 import { useState } from 'react';
-import { RarityType } from '../../../data/rarities';
+import { RarityType, raritiesData } from '../../../data/rarities';
 import RaritySlot from './RaritySlot';
 import RarityEditor from './RarityEditor';
 
-const RaritiesPanel = ({ yinRarity, yangRarity, onRarityChange, character }) => {
+const RaritiesPanel = ({ 
+  yinRarity, 
+  yangRarity, 
+  onRarityChange, 
+  character,
+  yinRarityStats,
+  onYinRarityStatsChange,
+  yangRarityStats,
+  onYangRarityStatsChange
+}) => {
   // Состояние для отслеживания выбранной диковинки
   const [selectedType, setSelectedType] = useState(null); // 'yin' или 'yang'
-  
-  // Состояние для пользовательских статов диковинок
-  const [yinRarityStats, setYinRarityStats] = useState([
-    { type: '', value: 0 },
-    { type: '', value: 0 },
-    { type: '', value: 0 },
-    { type: '', value: 0 }
-  ]);
-  
-  const [yangRarityStats, setYangRarityStats] = useState([
-    { type: '', value: 0 },
-    { type: '', value: 0 },
-    { type: '', value: 0 },
-    { type: '', value: 0 }
-  ]);
   
   // Если персонаж не выбран, показываем сообщение
   if (!character) {
@@ -42,20 +36,46 @@ const RaritiesPanel = ({ yinRarity, yangRarity, onRarityChange, character }) => 
 
   // Обработчик изменения диковинки
   const handleRarityChange = (rarityId, type) => {
-    // Логика изменения диковинки
-    // ...
+    // Если rarityId пустой, удаляем диковинку
+    if (!rarityId) {
+      if (type === RarityType.YIN) {
+        onRarityChange(null, type);
+      } else if (type === RarityType.YANG) {
+        onRarityChange(null, type);
+      }
+      return;
+    }
+    
+    // Находим выбранную диковинку в импортированных данных
+    const selectedRarity = raritiesData.find(r => r.id === rarityId);
+    if (selectedRarity) {
+      // Создаем копию со статами
+      const rarityWithStats = {
+        ...selectedRarity,
+        customStats: type === RarityType.YIN ? yinRarityStats : yangRarityStats
+      };
+      
+      // Обновляем состояние
+      onRarityChange(rarityWithStats, type);
+    }
   };
   
   // Обработчик изменения типа стата
   const handleStatTypeChange = (statIndex, statType) => {
-    // Логика изменения типа стата
-    // ...
+    if (selectedType === RarityType.YIN) {
+      onYinRarityStatsChange(statIndex, statType, undefined);
+    } else if (selectedType === RarityType.YANG) {
+      onYangRarityStatsChange(statIndex, statType, undefined);
+    }
   };
   
   // Обработчик изменения значения стата
   const handleStatValueChange = (statIndex, value) => {
-    // Логика изменения значения стата
-    // ...
+    if (selectedType === RarityType.YIN) {
+      onYinRarityStatsChange(statIndex, undefined, value);
+    } else if (selectedType === RarityType.YANG) {
+      onYangRarityStatsChange(statIndex, undefined, value);
+    }
   };
 
   return (
