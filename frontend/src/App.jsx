@@ -10,7 +10,7 @@ import Rarities from "./pages/Rarities"; // New component for Rarities
 import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
-import DamageCalculator from "./pages/DamageCalculator";
+import DamageCalculator from "./pages/DamageCalculator.jsx";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 

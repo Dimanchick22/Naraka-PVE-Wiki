@@ -1,214 +1,403 @@
-// data/characters.js
+// src/data/characters.js
 
+import { ModifierType } from './jades';
+
+// Цели модификаторов для талантов
+export const TalentModifierTarget = {
+  ATTACK: 'attack',
+  ICE_EXPLOSION: 'ice_explosion',
+  DEFENSE: 'defense',
+  AROMA_AURA: 'aroma_aura',
+  FROST_SEAL: 'frost_seal',
+  TUNDRA_POWER: 'tundra_power',
+  FROST_BLOOM: 'frost_bloom',
+  FROSTBOUND_LOTUS: 'frostbound_lotus',
+  TESSA_F: 'tessa_f',
+  CONSCIOUSNESS_MATCH: 'consciousness_match'
+};
+
+// Роли персонажей
+export const CharacterRole = {
+  TANK: 'tank',
+  SUPPORT: 'support',
+  FIGHTER: 'fighter',
+  ASSASSIN: 'assassin'
+};
+
+// Данные о персонажах
 export const charactersData = [
-  // {
-  //   id: "tian-hai",
-  //   name: "Тянь Хай",
-  //   role: "Танк",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Могучий боец, защищающий союзников своим щитом. Тянь Хай превосходен в сдерживании врагов и поглощении урона благодаря его могучей защите и навыкам контроля толпы.",
-  //   stats: {
-  //     health: 1200,
-  //     defense: 85,
-  //     attack: 60,
-  //     mobility: 40,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Каменная кожа",
-  //       description:
-  //         "Тянь Хай получает временный щит, блокирующий определенное количество урона и увеличивающий его защиту.",
-  //       cooldown: "18 секунд",
-  //     },
-  //     {
-  //       name: "Удар земли",
-  //       description:
-  //         "Мощный удар в землю, наносящий урон всем врагам вокруг и оглушающий их на короткое время.",
-  //       cooldown: "25 секунд",
-  //     },
-  //     {
-  //       name: "Непоколебимость",
-  //       description:
-  //         "Пассивный навык, снижающий получаемый урон на 15% при здоровье ниже 50%.",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["iron-heart", "guardian-shield", "resilience"],
-  // },
-  // {
-  //   id: "valda-cui",
-  //   name: "Валда Цуй",
-  //   role: "Поддержка",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Валда - искусный целитель, способный восстанавливать здоровье союзников и усиливать их в бою. Её способности позволяют команде выживать в самых сложных ситуациях.",
-  //   stats: {
-  //     health: 850,
-  //     defense: 60,
-  //     attack: 50,
-  //     mobility: 75,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Дыхание жизни",
-  //       description:
-  //         "Валда испускает волну исцеляющей энергии, восстанавливающую здоровье всем союзникам в определенном радиусе.",
-  //       cooldown: "20 секунд",
-  //     },
-  //     {
-  //       name: "Энергетический барьер",
-  //       description:
-  //         "Создает защитный барьер вокруг выбранного союзника, поглощающий урон и увеличивающий его атаку.",
-  //       cooldown: "30 секунд",
-  //     },
-  //     {
-  //       name: "Усиление чи",
-  //       description:
-  //         "Пассивный навык, периодически восстанавливающий энергию всем союзникам поблизости.",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["healing-touch", "energy-flow", "harmony"],
-  // },
-  // {
-  //   id: "yueshan",
-  //   name: "Юши Каданоджи",
-  //   role: "Боец",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Юши - мастер ближнего боя, наносящий огромный урон одиночным целям. Его техники боевых искусств позволяют быстро уничтожать врагов и избегать атак.",
-  //   stats: {
-  //     health: 950,
-  //     defense: 65,
-  //     attack: 90,
-  //     mobility: 70,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Разрывающий удар",
-  //       description:
-  //         "Мощный удар, наносящий огромный урон и оглушающий цель на короткое время.",
-  //       cooldown: "15 секунд",
-  //     },
-  //     {
-  //       name: "Танец клинков",
-  //       description:
-  //         "Юши входит в боевой транс, значительно увеличивая скорость атаки и уклонения на короткое время.",
-  //       cooldown: "40 секунд",
-  //     },
-  //     {
-  //       name: "Боевая ярость",
-  //       description:
-  //         "Пассивный навык, увеличивающий урон на 10% за каждого поверженного врага (складывается до 3 раз).",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["blade-master", "swift-strikes", "fury"],
-  // },
-  // {
-  //   id: "matari",
-  //   name: "Матари",
-  //   role: "Убийца",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Матари - смертоносная убийца, использующая скорость и скрытность для уничтожения противников. Её способность быстро перемещаться и наносить удары из тени делает её идеальным охотником.",
-  //   stats: {
-  //     health: 800,
-  //     defense: 50,
-  //     attack: 85,
-  //     mobility: 95,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Телепорт",
-  //       description:
-  //         "Матари мгновенно перемещается на короткое расстояние, проходя сквозь врагов и препятствия.",
-  //       cooldown: "12 секунд",
-  //     },
-  //     {
-  //       name: "Покров тени",
-  //       description:
-  //         "Матари становится невидимой на короткое время, а её следующая атака наносит дополнительный урон.",
-  //       cooldown: "35 секунд",
-  //     },
-  //     {
-  //       name: "Ловкость",
-  //       description:
-  //         "Пассивный навык, увеличивающий скорость передвижения и шанс критической атаки.",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["shadow-walker", "precision", "swift-strikes"],
-  // },
-  // {
-  //   id: "kurumi",
-  //   name: "Куруми",
-  //   role: "Поддержка",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Куруми - могущественная жрица, способная как лечить союзников, так и наносить урон противникам. Её универсальные способности делают её ценным дополнением к любой команде.",
-  //   stats: {
-  //     health: 900,
-  //     defense: 65,
-  //     attack: 70,
-  //     mobility: 60,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Исцеляющий тотем",
-  //       description:
-  //         "Куруми размещает тотем, который периодически восстанавливает здоровье всем союзникам в области действия.",
-  //       cooldown: "30 секунд",
-  //     },
-  //     {
-  //       name: "Духовная волна",
-  //       description:
-  //         "Испускает волну духовной энергии, наносящую урон врагам и усиливающую союзников.",
-  //       cooldown: "25 секунд",
-  //     },
-  //     {
-  //       name: "Духовная связь",
-  //       description:
-  //         "Пассивный навык, позволяющий Куруми получать небольшое количество здоровья при лечении союзников.",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["healing-touch", "spiritual-power", "resilience"],
-  // },
-  // {
-  //   id: "temulch",
-  //   name: "Темульч",
-  //   role: "Контроль",
-  //   thumbnail: null, // Placeholder
-  //   description:
-  //     "Темульч - мастер управления ветром, способный манипулировать полем боя и контролировать движения врагов. Его способности отлично подходят для поддержки команды и нарушения планов противников.",
-  //   stats: {
-  //     health: 920,
-  //     defense: 70,
-  //     attack: 65,
-  //     mobility: 75,
-  //   },
-  //   skills: [
-  //     {
-  //       name: "Вихрь",
-  //       description:
-  //         "Темульч создает мощный вихрь, отбрасывающий врагов и блокирующий снаряды.",
-  //       cooldown: "20 секунд",
-  //     },
-  //     {
-  //       name: "Стена ветра",
-  //       description:
-  //         "Создает стену ветра, замедляющую врагов, проходящих через неё, и увеличивающую скорость союзников.",
-  //       cooldown: "25 секунд",
-  //     },
-  //     {
-  //       name: "Дуновение ветра",
-  //       description:
-  //         "Пассивный навык, периодически увеличивающий скорость передвижения Темульча и ближайших союзников.",
-  //       cooldown: "Пассивный",
-  //     },
-  //   ],
-  //   recommended_jades: ["wind-walker", "control-master", "endurance"],
-  // },
+  {
+    id: "tian-hai",
+    name: "Тянь Хай",
+    role: CharacterRole.TANK,
+    thumbnail: null,
+    description: "Могучий боец, защищающий союзников своим щитом. Тянь Хай превосходен в сдерживании врагов и поглощении урона благодаря его могучей защите и навыкам контроля толпы.",
+    stats: {
+      health: 1200,
+      defense: 85,
+      attack: 60,
+      mobility: 40,
+      base_attack: 140, // Базовая атака для расчетов
+    },
+    talents: [
+      {
+        id: "untouchable_talent",
+        name: "Неуязвимость",
+        description: "Увеличивает базовую атаку на 8%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 8
+          }
+        ],
+        isBase: true // Базовый талант, влияющий на основные характеристики
+      },
+      {
+        id: "power",
+        name: "Сила",
+        description: "Увеличивает базовую атаку на 4.5%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 4.5
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_root",
+        name: "Ледяной корень",
+        description: "Увеличивает урон ледяного взрыва на 40%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 40
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_flash",
+        name: "Ледяная вспышка",
+        description: "Увеличивает урон ледяного взрыва на 35%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 35
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "aroma_aura",
+        name: "Аура аромата",
+        description: "Увеличивает атаку на 10% в бою",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.AROMA_AURA,
+            value: 10
+          }
+        ],
+        isBase: false
+      },
+      {
+        id: "frost_seal",
+        name: "Печать мороза",
+        description: "Увеличивает атаку на 20% в бою",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.FROST_SEAL,
+            value: 20
+          }
+        ],
+        isBase: false
+      }
+    ],
+    skills: [
+      {
+        name: "Каменная кожа",
+        description: "Тянь Хай получает временный щит, блокирующий определенное количество урона и увеличивающий его защиту.",
+        cooldown: "18 секунд",
+      },
+      {
+        name: "Удар земли",
+        description: "Мощный удар в землю, наносящий урон всем врагам вокруг и оглушающий их на короткое время.",
+        cooldown: "25 секунд",
+      },
+      {
+        name: "Непоколебимость",
+        description: "Пассивный навык, снижающий получаемый урон на 15% при здоровье ниже 50%.",
+        cooldown: "Пассивный",
+      },
+    ],
+    recommended_jades: ["iron-heart", "guardian-shield", "resilience"],
+  },
+  {
+    id: "ziping",
+    name: "Цзыпин",
+    role: CharacterRole.FIGHTER,
+    thumbnail: null,
+    description: "Мастер ледяной магии, специализирующаяся на управлении полем боя и нанесении массового урона с помощью ледяных взрывов и цветочных заклинаний.",
+    stats: {
+      health: 950,
+      defense: 65,
+      attack: 75,
+      mobility: 60,
+      base_attack: 140, // Базовая атака для расчетов
+    },
+    talents: [
+      {
+        id: "untouchable_talent",
+        name: "Неуязвимость",
+        description: "Увеличивает базовую атаку на 8%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 8
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "power",
+        name: "Сила",
+        description: "Увеличивает базовую атаку на 4.5%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 4.5
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_root",
+        name: "Ледяной корень",
+        description: "Увеличивает урон ледяного взрыва на 40%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 40
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_flash",
+        name: "Ледяная вспышка",
+        description: "Увеличивает урон ледяного взрыва на 35%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 35
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "tundra_power",
+        name: "Сила тундры",
+        description: "Увеличивает атаку на 15% в бою",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.TUNDRA_POWER,
+            value: 15
+          }
+        ],
+        isBase: false
+      },
+      {
+        id: "frostbound_lotus",
+        name: "Ледяной лотос",
+        description: "Увеличивает атаку на 25% в бою",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.FROSTBOUND_LOTUS,
+            value: 25
+          }
+        ],
+        isBase: false
+      },
+      {
+        id: "frost_bloom",
+        name: "Морозный цветок",
+        description: "Увеличивает урон ледяного взрыва на 45% в бою",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.FROST_BLOOM,
+            value: 45
+          }
+        ],
+        isBase: false
+      }
+    ],
+    skills: [
+      {
+        name: "Ледяной взрыв",
+        description: "Создает область ледяного взрыва, наносящая урон всем врагам в зоне действия.",
+        cooldown: "12 секунд",
+      },
+      {
+        name: "Цветочная магия",
+        description: "Призывает ледяной цветок, который взрывается, нанося урон и замедляя врагов.",
+        cooldown: "15 секунд",
+      },
+      {
+        name: "Зимняя стужа",
+        description: "Пассивный навык, увеличивающий урон ледяных атак при последовательных попаданиях.",
+        cooldown: "Пассивный",
+      },
+    ],
+    recommended_jades: ["jade_ice_blast", "jade_fusion_core", "jade_dual_effect"],
+  },
+  {
+    id: "tessa",
+    name: "Тесса",
+    role: CharacterRole.ASSASSIN,
+    thumbnail: null,
+    description: "Быстрая и смертоносная охотница на демонов, использующая духов лисы для нанесения дополнительного урона.",
+    stats: {
+      health: 880,
+      defense: 55,
+      attack: 85,
+      mobility: 95,
+      base_attack: 140, // Базовая атака для расчетов
+    },
+    talents: [
+      {
+        id: "untouchable_talent",
+        name: "Неуязвимость",
+        description: "Увеличивает базовую атаку на 8%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 8
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "power",
+        name: "Сила",
+        description: "Увеличивает базовую атаку на 4.5%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ATTACK,
+            value: 4.5
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_root",
+        name: "Ледяной корень",
+        description: "Увеличивает урон ледяного взрыва на 40%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 40
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "ice_flash",
+        name: "Ледяная вспышка",
+        description: "Увеличивает урон ледяного взрыва на 35%",
+        effects: [
+          {
+            type: ModifierType.PERCENTAGE,
+            target: TalentModifierTarget.ICE_EXPLOSION,
+            value: 35
+          }
+        ],
+        isBase: true
+      },
+      {
+        id: "tessa_f",
+        name: "Духовная связь",
+        description: "Увеличивает общий урон на 8%",
+        effects: [
+          {
+            type: ModifierType.MULTIPLICATIVE,
+            target: TalentModifierTarget.TESSA_F,
+            value: 8
+          }
+        ],
+        isBase: false
+      },
+      {
+        id: "consciousness_match",
+        name: "Гармония сознания",
+        description: "Увеличивает урон на 15% при совпадении уровня сознания",
+        effects: [
+          {
+            type: ModifierType.MULTIPLICATIVE,
+            target: TalentModifierTarget.CONSCIOUSNESS_MATCH,
+            value: 15
+          }
+        ],
+        isBase: false
+      }
+    ],
+    skills: [
+      {
+        name: "Зачарование: Приключение",
+        description: "Активирует духовную сущность лисы, которая может наносить дополнительные удары.",
+        cooldown: "25 секунд",
+      },
+      {
+        name: "Удар хвостом",
+        description: "Быстрый удар с возможностью призыва духа лисы для дополнительного урона.",
+        cooldown: "10 секунд",
+      },
+      {
+        name: "Духовное зрение",
+        description: "Пассивный навык, позволяющий видеть скрытых врагов и получать бонус к критическому урону.",
+        cooldown: "Пассивный",
+      },
+    ],
+    recommended_jades: ["jade_frozen_lotos", "jade_dual_effect", "jade_boss_hunter"],
+  }
 ];
+
+// Функция для получения персонажа по ID
+export function getCharacterById(id) {
+  return charactersData.find(character => character.id === id) || null;
+}
+
+// Функция для получения таланта персонажа по ID
+export function getCharacterTalent(characterId, talentId) {
+  const character = getCharacterById(characterId);
+  if (!character) return null;
+  
+  return character.talents.find(talent => talent.id === talentId) || null;
+}
+
+// Функция для фильтрации персонажей
+export function filterCharacters({ role, searchTerm }) {
+  return charactersData.filter(character => {
+    const matchesRole = !role || role === "all" || character.role === role;
+    const matchesSearch = !searchTerm || 
+      character.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      character.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesRole && matchesSearch;
+  });
+}
