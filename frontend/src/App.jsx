@@ -11,6 +11,7 @@ import Enemies from "./pages/Enemies";
 import EnemyDetail from "./pages/EnemyDetail";
 import PveModes from "./pages/PveModes";
 import DamageCalculator from "./pages/DamageCalculator.jsx";
+import DamageCalculatorv1 from "./pages/DamageCalculator/index.jsx";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 
@@ -22,6 +23,7 @@ import "./styles/components.css";
 import "./styles/damageCalculator.css"; // Обновленные стили калькулятора
 import "./styles/jadeGrid.css";         // Стили для сетки нефритов
 import "./styles/customSelect.css";     // Стили для кастомного селекта
+import "./styles/tabbedCalculator.css"; // Новые стили для калькулятора с вкладками
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
           <Route path="enemies/:enemyId" element={<EnemyDetail />} />
           <Route path="pve-modes" element={<PveModes />} />
           <Route path="damage-calculator" element={<DamageCalculator />} />
+          <Route path="damage-calculatorv1" element={<DamageCalculatorv1 />} />
           <Route path="guides" element={<Guides />} />
           <Route path="about" element={<About />} />
         </Route>

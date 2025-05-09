@@ -36,9 +36,18 @@ const JadeGrid = ({ jades = [], onJadeChange }) => {
     return getJadeRarityColor(jade.rarity);
   };
 
+  // Вспомогательная функция для сокращения длинного названия
+  const truncateText = (text, maxLength = 20) => {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  };
+
   return (
     <div className="jade-grid-container">
-      <h3 className="section-title">Нефриты</h3>
+      <h3 className="section-title">Выбор нефритов</h3>
+      <p className="section-subtitle">
+        Выберите нефриты, которые будут использоваться в расчете. Вы можете выбрать до 6 нефритов разного типа.
+      </p>
       
       <div className="jades-grid">
         {Array(6).fill(null).map((_, index) => {
@@ -53,17 +62,26 @@ const JadeGrid = ({ jades = [], onJadeChange }) => {
               style={{ borderColor: getJadeColor(jade) }}
             >
               <div className="jade-header">
-                <span className="jade-number">{index + 1}</span>
+                <span className="jade-number">#{index + 1}</span>
+                {jade && (
+                  <span className="jade-rarity" style={{ color: getJadeColor(jade) }}>
+                    {jade.rarity.toUpperCase()}
+                  </span>
+                )}
               </div>
               
               {jade ? (
                 <div className="jade-stats-preview">
-                  {jade.stats.map((stat, statIndex) => (
-                    <div key={statIndex} className="jade-stat-preview">
-                      <span className="stat-type">{stat.name}</span>
-                      <span className="stat-value">{stat.value}%</span>
-                    </div>
-                  ))}
+                  <div className="jade-name">{truncateText(jade.name)}</div>
+                  <div className="jade-type">Тип: {jade.type}</div>
+                  <div className="jade-stats-list">
+                    {jade.stats.map((stat, statIndex) => (
+                      <div key={statIndex} className="jade-stat-preview">
+                        <span className="stat-type">{stat.name}</span>
+                        <span className="stat-value">{stat.value}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ) : (
                 <div className="jade-empty-message">
@@ -86,16 +104,60 @@ const JadeGrid = ({ jades = [], onJadeChange }) => {
                   className="jade-select"
                   value={jades[activeJadeIndex]?.id || ''}
                   onChange={(e) => handleJadeSelect(e.target.value, activeJadeIndex)}
+                  style={{ width: '100%', padding: '0.5rem', backgroundColor: 'rgba(26, 26, 26, 0.8)', color: 'var(--naraka-light)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '4px' }}
                 >
                   <option value="">Нет нефрита</option>
-                  {jadesData.map(jade => (
-                    <option key={jade.id} value={jade.id}>
-                      {jade.name} ({jade.rarity})
-                    </option>
-                  ))}
+                  <optgroup label="Атака">
+                    {jadesData.filter(jade => jade.type === 'attack').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Ледяной взрыв">
+                    {jadesData.filter(jade => jade.type === 'ice_explosion').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Атака по боссам">
+                    {jadesData.filter(jade => jade.type === 'boss_attack').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Атака по монстрам">
+                    {jadesData.filter(jade => jade.type === 'monster_attack').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Слияние">
+                    {jadesData.filter(jade => jade.type === 'fusion').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Смешанные">
+                    {jadesData.filter(jade => jade.type === 'mixed').map(jade => (
+                      <option key={jade.id} value={jade.id}>
+                        {jade.name} ({jade.rarity})
+                      </option>
+                    ))}
+                  </optgroup>
                 </select>
               </div>
             </div>
+            
+            {jades[activeJadeIndex] && (
+              <div className="jade-description" style={{ marginTop: '1rem', fontSize: '0.875rem', color: 'var(--naraka-light)', opacity: 0.8 }}>
+                <p>{jades[activeJadeIndex].description}</p>
+              </div>
+            )}
           </div>
           
           <div className="jade-edit-actions">

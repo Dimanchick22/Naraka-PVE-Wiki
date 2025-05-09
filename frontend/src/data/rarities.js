@@ -98,14 +98,14 @@ export const raritiesData = [
     cloudinaryId: "nine-tailed-chime-mythic_j8pxhp.png",
   },
   
-  // Чаша увядшей славы - три варианта редкости
+  // Чаша увядшей славы - три варианта редкости (доступны для всех персонажей)
   {
     id: "withered-glory-mythic",
     name: "Чаша увядшей славы",
     type: RarityType.YIN,
     rarity: RarityLevel.MYTHIC,
-    description: "Увеличивает урон цветочного взрыва на 50%.",
-    for_character: "Цзыпин",
+    description: "Увеличивает урон цветочного взрыва на 50%. Также увеличивает радиус взрыва на 30%.",
+    for_character: null, // Убрано ограничение на конкретный персонаж
     effects: [
       {
         id: "flower_explosion_damage_50",
@@ -129,8 +129,8 @@ export const raritiesData = [
     name: "Чаша увядшей славы",
     type: RarityType.YIN,
     rarity: RarityLevel.LEGENDARY,
-    description: "Увеличивает урон цветочного взрыва на 30%.",
-    for_character: "Цзыпин",
+    description: "Увеличивает урон цветочного взрыва на 30%. Также увеличивает радиус взрыва на 15%.",
+    for_character: null, // Убрано ограничение на конкретный персонаж
     effects: [
       {
         id: "flower_explosion_damage_30",
@@ -155,7 +155,7 @@ export const raritiesData = [
     type: RarityType.YIN,
     rarity: RarityLevel.EPIC,
     description: "Увеличивает урон цветочного взрыва на 10%.",
-    for_character: "Цзыпин",
+    for_character: null, // Убрано ограничение на конкретный персонаж
     effects: [
       {
         id: "flower_explosion_damage_10",
@@ -166,7 +166,9 @@ export const raritiesData = [
       }
     ],
     cloudinaryId: "withered-glory-mythic_zds2gn.png",
-  }
+  },
+  
+  // Дополните этот массив своими диковинками при необходимости
 ];
 
 // Функция для получения цвета диковинки по редкости

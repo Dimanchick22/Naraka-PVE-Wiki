@@ -1,259 +1,348 @@
-/* Стили для сетки нефритов */
+/* src/styles/jadeGrid.css */
 
 /* Контейнер сетки нефритов */
 .jades-grid-container {
-    background-color: rgba(26, 26, 26, 0.8);
-    border: 1px solid var(--naraka-secondary);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Заголовок блока */
-  .jades-grid-container .section-title {
-    margin-bottom: 1.25rem;
-  }
-  
-  /* Сетка нефритов с фиксированной высотой */
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid var(--naraka-secondary);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Заголовок блока */
+.jades-grid-container .section-title {
+  margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  color: var(--naraka-light);
+  opacity: 0.8;
+  margin-bottom: 1.25rem;
+}
+
+/* Сетка нефритов с фиксированной высотой */
+.jades-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  /* Фиксированная высота сетки - но не слишком большая */
+  min-height: 300px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
   .jades-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    /* Фиксированная высота сетки - увеличена */
-    height: 400px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .jades-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: minmax(150px, auto);
+  }
+}
+
+/* Карточка нефрита с увеличенной высотой */
+.jade-item {
+  position: relative;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: rgba(26, 26, 26, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  height: 100%;
+}
+
+.jade-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.jade-item.active {
+  border-width: 3px;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* Заголовок нефрита */
+.jade-header {
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.jade-number {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--naraka-secondary);
+}
+
+.jade-rarity {
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Имя и тип нефрита */
+.jade-name {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: var(--naraka-light);
+}
+
+.jade-type {
+  font-size: 0.75rem;
+  color: var(--naraka-light);
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+/* Предпросмотр статов - без скроллбара */
+.jade-stats-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex-grow: 1;
+}
+
+.jade-stats-list {
+  margin-top: 0.5rem;
+}
+
+.jade-stat-preview {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+}
+
+.stat-type {
+  color: var(--naraka-light);
+}
+
+.stat-value {
+  color: var(--naraka-secondary);
+  font-weight: bold;
+}
+
+.jade-empty-message {
+  text-align: center;
+  color: var(--naraka-light);
+  opacity: 0.5;
+  font-style: italic;
+  padding: 1rem 0;
+  /* Центрирование сообщения внутри нефрита */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* Панель редактирования нефрита */
+.jade-edit-panel {
+  background-color: rgba(20, 20, 20, 0.95);
+  border: 1px solid var(--naraka-secondary);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+/* Заголовок панели */
+.jade-edit-title {
+  color: var(--naraka-secondary);
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  text-align: center;
+}
+
+/* Контейнер для строк статов */
+.jade-stats-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Строка стата (тип + значение) */
+.jade-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(26, 26, 26, 0.6);
+  border-radius: 4px;
+  border-left: 3px solid var(--naraka-secondary);
+  transition: background-color 0.2s;
+}
+
+.jade-stat-row:hover {
+  background-color: rgba(26, 26, 26, 0.8);
+}
+
+/* Контейнеры для типа и значения */
+.jade-stat-type {
+  flex: 3;
+  min-width: 0;
+}
+
+.jade-stat-value {
+  flex: 2;
+  min-width: 0;
+}
+
+/* Описание нефрита */
+.jade-description {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Стили для поля ввода значения */
+.stat-value-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.stat-value-input {
+  width: 100%;
+  padding-right: 1.5rem;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--naraka-light);
+  font-size: 0.875rem;
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.stat-value-input:focus {
+  outline: none;
+  border-color: var(--naraka-secondary);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Суффикс процента */
+.input-suffix {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--naraka-light);
+  opacity: 0.7;
+}
+
+/* Кнопка закрытия */
+.jade-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.close-edit-button {
+  padding: 0.4rem 1rem;
+  font-size: 0.875rem;
+}
+
+/* Стили для селекта нефритов */
+.jade-select {
+  width: 100%;
+  background-color: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  padding: 0.5rem;
+  color: var(--naraka-light);
+  font-size: 0.875rem;
+}
+
+.jade-select:focus {
+  outline: none;
+  border-color: var(--naraka-secondary);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+.jade-select option,
+.jade-select optgroup {
+  background-color: #1a1a1a;
+  color: var(--naraka-light);
+}
+
+.jade-select optgroup {
+  font-weight: bold;
+  color: var(--naraka-secondary);
+}
+
+/* Модификаторы для различных типов статов */
+.jade-stat-row[data-type="attack"] {
+  border-left-color: rgba(139, 0, 0, 0.7);
+}
+
+.jade-stat-row[data-type="ice_explosion"] {
+  border-left-color: rgba(0, 112, 221, 0.7);
+}
+
+.jade-stat-row[data-type="fusion"] {
+  border-left-color: rgba(255, 128, 0, 0.7);
+}
+
+.jade-stat-row[data-type="boss_attack"] {
+  border-left-color: rgba(163, 53, 238, 0.7);
+}
+
+.jade-stat-row[data-type="monster_attack"] {
+  border-left-color: rgba(45, 197, 14, 0.7);
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 768px) {
+  .jades-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 150px);
+    height: auto;
   }
   
-  /* Карточка нефрита с увеличенной высотой */
   .jade-item {
-    position: relative;
-    border: 2px solid rgba(212, 175, 55, 0.3);
-    border-radius: 8px;
-    padding: 1rem;
-    background-color: rgba(26, 26, 26, 0.6);
-    height: 200px; /* Увеличенная высота каждого нефрита */
-    display: flex;
-    flex-direction: column;
-    transition: all 0.2s ease;
-    cursor: pointer;
+    height: 150px;
+  }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+  .jades-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 150px);
   }
   
-  .jade-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  }
-  
-  .jade-item.active {
-    border-width: 3px;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-  }
-  
-  /* Заголовок нефрита */
-  .jade-header {
-    margin-bottom: 0.75rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .jade-number {
-    font-weight: bold;
-    font-size: 1rem;
-    color: var(--naraka-secondary);
-  }
-  
-  /* Предпросмотр статов - без скроллбара */
-  .jade-stats-preview {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    flex-grow: 1;
-  }
-  
-  .jade-stat-preview {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.875rem;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-  }
-  
-  .stat-type {
-    color: var(--naraka-light);
-  }
-  
-  .stat-value {
-    color: var(--naraka-secondary);
-    font-weight: bold;
-  }
-  
-  .jade-empty-message {
-    text-align: center;
-    color: var(--naraka-light);
-    opacity: 0.5;
-    font-style: italic;
-    padding: 1rem 0;
-    /* Центрирование сообщения внутри нефрита */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  
-  /* Панель редактирования нефрита */
-  .jade-edit-panel {
-    background-color: rgba(20, 20, 20, 0.95);
-    border: 1px solid var(--naraka-secondary);
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 1rem;
-  }
-  
-  /* Заголовок панели */
-  .jade-edit-title {
-    color: var(--naraka-secondary);
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-    text-align: center;
-  }
-  
-  /* Контейнер для строк статов */
-  .jade-stats-edit {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  /* Строка стата (тип + значение) */
   .jade-stat-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    background-color: rgba(26, 26, 26, 0.6);
-    border-radius: 4px;
-    border-left: 3px solid var(--naraka-secondary);
-    transition: background-color 0.2s;
+    flex-direction: column;
+    align-items: stretch;
   }
   
-  .jade-stat-row:hover {
-    background-color: rgba(26, 26, 26, 0.8);
-  }
-  
-  /* Контейнеры для типа и значения */
-  .jade-stat-type {
-    flex: 3;
-    min-width: 0;
+  .jade-stat-type,
+  .jade-stat-value {
+    width: 100%;
   }
   
   .jade-stat-value {
-    flex: 2;
-    min-width: 0;
+    margin-top: 0.25rem;
   }
-  
-  /* Стили для поля ввода значения */
-  .stat-value-input-container {
-    position: relative;
-    width: 100%;
-  }
-  
-  .stat-value-input {
-    width: 100%;
-    padding-right: 1.5rem;
-    background-color: rgba(26, 26, 26, 0.8);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: 4px;
-    padding: 0.5rem;
-    color: var(--naraka-light);
-    font-size: 0.875rem;
-    height: 36px;
-    box-sizing: border-box;
-  }
-  
-  .stat-value-input:focus {
-    outline: none;
-    border-color: var(--naraka-secondary);
-    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-  }
-  
-  /* Суффикс процента */
-  .input-suffix {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--naraka-light);
-    opacity: 0.7;
-  }
-  
-  /* Кнопка закрытия */
-  .jade-edit-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 1rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid rgba(212, 175, 55, 0.3);
-  }
-  
-  .close-edit-button {
-    padding: 0.4rem 1rem;
-    font-size: 0.875rem;
-  }
-  
-  /* Модификаторы для различных типов статов */
-  .jade-stat-row[data-type="attack"] {
-    border-left-color: rgba(139, 0, 0, 0.7);
-  }
-  
-  .jade-stat-row[data-type="ice_explosion"] {
-    border-left-color: rgba(0, 112, 221, 0.7);
-  }
-  
-  .jade-stat-row[data-type="fusion"] {
-    border-left-color: rgba(255, 128, 0, 0.7);
-  }
-  
-  .jade-stat-row[data-type="boss_attack"] {
-    border-left-color: rgba(163, 53, 238, 0.7);
-  }
-  
-  .jade-stat-row[data-type="monster_attack"] {
-    border-left-color: rgba(45, 197, 14, 0.7);
-  }
-  
-  /* Адаптивность для планшетов */
-  @media (max-width: 768px) {
-    .jades-grid {
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(3, 180px);
-      height: auto;
-    }
-  }
-  
-  /* Адаптивность для мобильных устройств */
-  @media (max-width: 480px) {
-    .jades-grid {
-      grid-template-columns: 1fr;
-      grid-template-rows: repeat(6, 180px);
-    }
-    
-    .jade-stat-row {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    
-    .jade-stat-type,
-    .jade-stat-value {
-      width: 100%;
-    }
-    
-    .jade-stat-value {
-      margin-top: 0.25rem;
-    }
-  }
+}

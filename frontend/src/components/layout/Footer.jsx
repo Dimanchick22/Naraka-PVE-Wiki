@@ -28,6 +28,9 @@ const Footer = () => {
             <Link to="/damage-calculator" className="header-nav-link">
               Калькулятор урона
             </Link>
+            <Link to="/damage-calculatorv1" className="header-nav-link">
+              Калькулятор урона
+            </Link>
           </nav>
         </div>
 

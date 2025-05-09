@@ -13,6 +13,7 @@ const Header = () => {
     { name: "Враги", path: "/enemies" },
     { name: "PVE режимы", path: "/pve-modes" },
     { name: "Калькулятор урона", path: "/damage-calculator" },
+    { name: "Калькулятор урона", path: "/damage-calculatorv1" },
     { name: "Гайды", path: "/guides" },
     { name: "О проекте", path: "/about" },
   ];

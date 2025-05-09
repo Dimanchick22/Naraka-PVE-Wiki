@@ -1,9 +1,9 @@
 // src/pages/DamageCalculator.jsx
 import { useState, useEffect } from 'react';
-import JadeGrid from '../components/calculator/JadeGrid';
 import { charactersData } from '../data/characters';
-import { raritiesData, getRarityTypeName, getRarityName } from '../data/rarities';
+import { raritiesData, RarityType } from '../data/rarities';
 import DamageCalculator from '../utils/DamageCalculator';
+import TabbedCalculator from '../components/calculator/TabbedCalculator';
 
 const DamageCalculatorPage = () => {
   // Состояние калькулятора
@@ -11,7 +11,14 @@ const DamageCalculatorPage = () => {
   const [consciousness, setConsciousness] = useState(1120);
   const [heroLevel, setHeroLevel] = useState(20);
   const [selectedJades, setSelectedJades] = useState(Array(6).fill(null));
-  const [selectedRarity, setSelectedRarity] = useState(null);
+  const [jadeStats, setJadeStats] = useState([
+    { type: 'attack', value: 0 },
+    { type: 'ice_explosion', value: 0 },
+    { type: 'boss_attack', value: 0 },
+    { type: 'monster_attack', value: 0 }
+  ]);
+  const [yinRarity, setYinRarity] = useState(null);
+  const [yangRarity, setYangRarity] = useState(null);
   
   // Состояние талантов
   const [baseTalents, setBaseTalents] = useState({
@@ -56,6 +63,10 @@ const DamageCalculatorPage = () => {
         tessa_f: false,
         consciousness_match: false
       });
+      
+      // Также сбрасываем выбранные диковинки
+      setYinRarity(null);
+      setYangRarity(null);
     }
   }, [character]);
   
@@ -73,6 +84,15 @@ const DamageCalculatorPage = () => {
       ...prev,
       [talentId]: !prev[talentId]
     }));
+  };
+  
+  // Обработчик изменения диковинки
+  const handleRarityChange = (rarity, type) => {
+    if (type === RarityType.YIN) {
+      setYinRarity(rarity);
+    } else if (type === RarityType.YANG) {
+      setYangRarity(rarity);
+    }
   };
   
   // Обработчик расчета урона
@@ -105,9 +125,35 @@ const DamageCalculatorPage = () => {
       }
     });
     
-    // Установка диковинки
-    if (selectedRarity) {
-      calculator.setRarity(selectedRarity);
+    // Добавление дополнительных статов
+    jadeStats.forEach(stat => {
+      if (stat.value > 0) {
+        // Создаем имитацию нефрита с выбранным статом
+        const customJade = {
+          id: `custom_${stat.type}_${stat.value}`,
+          name: `Пользовательский ${stat.type}`,
+          type: stat.type,
+          stats: [
+            {
+              id: `custom_stat_${stat.type}`,
+              name: stat.type,
+              type: 'percentage',
+              target: stat.type,
+              value: stat.value
+            }
+          ]
+        };
+        calculator.addJade(customJade);
+      }
+    });
+    
+    // Установка диковинок
+    if (yinRarity) {
+      calculator.setRarity(yinRarity);
+    }
+    
+    if (yangRarity) {
+      calculator.setRarity(yangRarity);
     }
     
     // Выполнение расчета
@@ -123,11 +169,6 @@ const DamageCalculatorPage = () => {
     }, 100);
   };
   
-  // Отфильтрованные диковинки для выбранного персонажа
-  const filteredRarities = character 
-    ? raritiesData.filter(r => !r.for_character || r.for_character === character.name)
-    : [];
-  
   return (
     <div className="page-container">
       <h1 className="page-title">Калькулятор урона</h1>
@@ -140,9 +181,9 @@ const DamageCalculatorPage = () => {
       </div>
       
       {/* Главная часть с настройками */}
-      <div className="calculator-main-layout" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+      <div className="calculator-main-layout">
         {/* Левая колонка - настройки персонажа */}
-        <div className="calculator-left-column" style={{ flex: '1', minWidth: '300px' }}>
+        <div className="calculator-left-column">
           <div className="calculator-form">
             {/* Выбор персонажа */}
             <div className="form-section">
@@ -198,16 +239,15 @@ const DamageCalculatorPage = () => {
             {character && (
               <div className="form-section">
                 <h3 className="section-title">Базовые таланты</h3>
-                <div className="talents-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div className="talents-grid">
                   {character.talents.filter(talent => talent.isBase).map(talent => (
                     <div key={talent.id} className="form-group checkbox">
-                      <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <label>
                         <input 
                           type="checkbox" 
                           id={talent.id}
                           checked={baseTalents[talent.id] || false}
                           onChange={() => handleBaseTalentChange(talent.id)}
-                          style={{ marginRight: '0.5rem' }}
                         />
                         {talent.name} ({talent.description})
                       </label>
@@ -221,16 +261,15 @@ const DamageCalculatorPage = () => {
             {character && (
               <div className="form-section">
                 <h3 className="section-title">Боевые таланты</h3>
-                <div className="talents-grid" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div className="talents-grid">
                   {character.talents.filter(talent => !talent.isBase).map(talent => (
                     <div key={talent.id} className="form-group checkbox">
-                      <label style={{ display: 'flex', alignItems: 'center' }}>
+                      <label>
                         <input 
                           type="checkbox" 
                           id={talent.id}
                           checked={combatTalents[talent.id] || false}
                           onChange={() => handleCombatTalentChange(talent.id)}
-                          style={{ marginRight: '0.5rem' }}
                         />
                         {talent.name} ({talent.description})
                       </label>
@@ -240,46 +279,12 @@ const DamageCalculatorPage = () => {
               </div>
             )}
             
-            {/* Выбор диковинки */}
-            {character && (
-              <div className="form-section">
-                <h3 className="section-title">Диковинка</h3>
-                <div className="form-group">
-                  <select
-                    value={selectedRarity?.id || ''}
-                    onChange={(e) => {
-                      const selected = raritiesData.find(r => r.id === e.target.value);
-                      setSelectedRarity(selected || null);
-                    }}
-                    style={{ width: '100%', padding: '0.5rem' }}
-                  >
-                    <option value="">Нет диковинки</option>
-                    {filteredRarities.map(rarity => (
-                      <option key={rarity.id} value={rarity.id}>
-                        {rarity.name} ({getRarityTypeName(rarity.type)}, {getRarityName(rarity.rarity)})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-            
             {/* Кнопка расчета */}
-            <div className="form-actions" style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <div className="form-actions">
               <button 
                 className="btn btn-primary"
                 onClick={calculateDamage}
                 disabled={!character}
-                style={{ 
-                  background: '#8b0000', 
-                  color: 'white', 
-                  padding: '0.75rem 2rem',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '1rem',
-                  cursor: !character ? 'not-allowed' : 'pointer',
-                  opacity: !character ? 0.7 : 1
-                }}
               >
                 Рассчитать
               </button>
@@ -287,74 +292,44 @@ const DamageCalculatorPage = () => {
           </div>
         </div>
         
-        {/* Правая колонка - настройка нефритов */}
-        <div className="calculator-right-column" style={{ flex: '1', minWidth: '300px' }}>
-          <JadeGrid 
+        {/* Правая колонка - настройка нефритов и диковинок */}
+        <div className="calculator-right-column">
+          <TabbedCalculator 
             jades={selectedJades}
             onJadeChange={setSelectedJades}
+            jadeStats={jadeStats}
+            onJadeStatsChange={setJadeStats}
+            yinRarity={yinRarity}
+            yangRarity={yangRarity}
+            onRarityChange={handleRarityChange}
+            character={character}
           />
         </div>
       </div>
       
       {/* Результаты расчета - отображаются под настройками */}
       {results && (
-        <div id="calculation-results" className="calculator-results" style={{ marginTop: '3rem' }}>
-          <div className="damage-summary" style={{ 
-            backgroundColor: 'rgba(26, 26, 26, 0.8)', 
-            border: '1px solid #d4af37', 
-            borderRadius: '8px', 
-            padding: '1.5rem' 
-          }}>
-            <h3 className="summary-title" style={{ color: '#d4af37', marginBottom: '1.5rem', textAlign: 'center' }}>
-              Результаты расчета
-            </h3>
+        <div id="calculation-results" className="calculator-results">
+          <div className="damage-summary">
+            <h3 className="summary-title">Результаты расчета</h3>
             
             {/* Вкладки для переключения между типами урона */}
-            <div className="calculator-tabs" style={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
-              marginBottom: '1.5rem', 
-              gap: '0.5rem' 
-            }}>
+            <div className="calculator-tabs">
               <button 
                 className={`tab-button ${activeTab === 'normal' ? 'active' : ''}`}
                 onClick={() => setActiveTab('normal')}
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  borderRadius: '4px',
-                  backgroundColor: activeTab === 'normal' ? '#8b0000' : 'rgba(0, 0, 0, 0.2)',
-                  color: 'white',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
-                  cursor: 'pointer'
-                }}
               >
                 Обычный урон
               </button>
               <button 
                 className={`tab-button ${activeTab === 'boss' ? 'active' : ''}`}
                 onClick={() => setActiveTab('boss')}
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  borderRadius: '4px',
-                  backgroundColor: activeTab === 'boss' ? '#8b0000' : 'rgba(0, 0, 0, 0.2)',
-                  color: 'white',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
-                  cursor: 'pointer'
-                }}
               >
                 Урон по боссам
               </button>
               <button 
                 className={`tab-button ${activeTab === 'monster' ? 'active' : ''}`}
                 onClick={() => setActiveTab('monster')}
-                style={{ 
-                  padding: '0.5rem 1rem', 
-                  borderRadius: '4px',
-                  backgroundColor: activeTab === 'monster' ? '#8b0000' : 'rgba(0, 0, 0, 0.2)',
-                  color: 'white',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
-                  cursor: 'pointer'
-                }}
               >
                 Урон по монстрам
               </button>
@@ -363,60 +338,60 @@ const DamageCalculatorPage = () => {
             {/* Вкладка с обычным уроном */}
             {activeTab === 'normal' && (
               <div className="tab-content">
-                <div className="summary-blocks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                  <div className="summary-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '8px', padding: '1.5rem' }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Базовые характеристики</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Базовая атака:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.baseAttack)}</span>
+                <div className="summary-blocks">
+                  <div className="summary-block">
+                    <h4 className="summary-title">Базовые характеристики</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Базовая атака:</span>
+                      <span className="summary-value">{Math.round(results.baseAttack)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Финальная атака:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{Math.round(results.finalAttack)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Финальная атака:</span>
+                      <span className="summary-value highlight">{Math.round(results.finalAttack)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Базовый % лед. взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.iceExplosionPercent * 100)}%</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Базовый % лед. взрыва:</span>
+                      <span className="summary-value">{Math.round(results.iceExplosionPercent * 100)}%</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Финальный % лед. взрыва:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{Math.round(results.finalIceExplosionPercent * 100)}%</span>
-                    </div>
-                  </div>
-                  
-                  <div className="summary-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '8px', padding: '1.5rem' }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон по обычным целям</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Физический урон:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.physicalDamage)}</span>
-                    </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон лед. взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.iceExplosionDamage)}</span>
-                    </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон цветочного взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.flowerExplosionDamage)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Финальный % лед. взрыва:</span>
+                      <span className="summary-value highlight">{Math.round(results.finalIceExplosionPercent * 100)}%</span>
                     </div>
                   </div>
                   
-                  <div className="summary-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '8px', padding: '1.5rem' }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон от последовательности нефрита</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Первый взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.jadeFirstBlastDamage}</span>
+                  <div className="summary-block">
+                    <h4 className="summary-title">Урон по обычным целям</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Физический урон:</span>
+                      <span className="summary-value">{Math.round(results.physicalDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Второй взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.jadeSecondBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон лед. взрыва:</span>
+                      <span className="summary-value">{Math.round(results.iceExplosionDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Третий взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.jadeThirdBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон цветочного взрыва:</span>
+                      <span className="summary-value">{Math.round(results.flowerExplosionDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Общий урон:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{results.jadeTotalBlastDamage}</span>
+                  </div>
+                  
+                  <div className="summary-block">
+                    <h4 className="summary-title">Урон от последовательности нефрита</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Первый взрыв:</span>
+                      <span className="summary-value">{results.jadeFirstBlastDamage}</span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Второй взрыв:</span>
+                      <span className="summary-value">{results.jadeSecondBlastDamage}</span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Третий взрыв:</span>
+                      <span className="summary-value">{results.jadeThirdBlastDamage}</span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Общий урон:</span>
+                      <span className="summary-value highlight">{results.jadeTotalBlastDamage}</span>
                     </div>
                   </div>
                 </div>
@@ -426,67 +401,52 @@ const DamageCalculatorPage = () => {
             {/* Вкладка с уроном по боссам */}
             {activeTab === 'boss' && (
               <div className="tab-content">
-                <div className="summary-blocks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                  <div className="summary-block boss-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #8b0000'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Бонусы против боссов</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Бонус атаки по боссам:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.bossAttackPercent * 100)}%</span>
+                <div className="summary-blocks">
+                  <div className="summary-block boss-damage">
+                    <h4 className="summary-title">Бонусы против боссов</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Бонус атаки по боссам:</span>
+                      <span className="summary-value">{Math.round(results.bossAttackPercent * 100)}%</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>% лед. взрыва по боссам:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{Math.round(results.bossIceExplosionPercent * 100)}%</span>
+                    <div className="summary-item">
+                      <span className="summary-label">% лед. взрыва по боссам:</span>
+                      <span className="summary-value highlight">{Math.round(results.bossIceExplosionPercent * 100)}%</span>
                     </div>
                   </div>
                   
-                  <div className="summary-block boss-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #8b0000'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон по боссам</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Физический урон:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.bossPhysicalDamage)}</span>
+                  <div className="summary-block boss-damage">
+                    <h4 className="summary-title">Урон по боссам</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Физический урон:</span>
+                      <span className="summary-value">{Math.round(results.bossPhysicalDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон лед. взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.bossIceExplosionDamage)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон лед. взрыва:</span>
+                      <span className="summary-value">{Math.round(results.bossIceExplosionDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон цветочного взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.bossFlowerExplosionDamage)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон цветочного взрыва:</span>
+                      <span className="summary-value">{Math.round(results.bossFlowerExplosionDamage)}</span>
                     </div>
                   </div>
                   
-                  <div className="summary-block boss-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #8b0000'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон нефрита по боссам</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Первый взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.bossJadeFirstBlastDamage}</span>
+                  <div className="summary-block boss-damage">
+                    <h4 className="summary-title">Урон нефрита по боссам</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Первый взрыв:</span>
+                      <span className="summary-value">{results.bossJadeFirstBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Второй взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.bossJadeSecondBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Второй взрыв:</span>
+                      <span className="summary-value">{results.bossJadeSecondBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Третий взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.bossJadeThirdBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Третий взрыв:</span>
+                      <span className="summary-value">{results.bossJadeThirdBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                    <span className="summary-label" style={{ fontWeight: 'bold' }}>Общий урон:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{results.bossJadeTotalBlastDamage}</span>
+                    <div className="summary-item">
+                    <span className="summary-label">Общий урон:</span>
+                      <span className="summary-value highlight">{results.bossJadeTotalBlastDamage}</span>
                     </div>
                   </div>
                 </div>
@@ -496,67 +456,52 @@ const DamageCalculatorPage = () => {
             {/* Вкладка с уроном по монстрам */}
             {activeTab === 'monster' && (
               <div className="tab-content">
-                <div className="summary-blocks" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                  <div className="summary-block monster-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #4b0082'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Бонусы против монстров</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Бонус атаки по монстрам:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.monsterAttackPercent * 100)}%</span>
+                <div className="summary-blocks">
+                  <div className="summary-block monster-damage">
+                    <h4 className="summary-title">Бонусы против монстров</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Бонус атаки по монстрам:</span>
+                      <span className="summary-value">{Math.round(results.monsterAttackPercent * 100)}%</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>% лед. взрыва по монстрам:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{Math.round(results.monsterIceExplosionPercent * 100)}%</span>
+                    <div className="summary-item">
+                      <span className="summary-label">% лед. взрыва по монстрам:</span>
+                      <span className="summary-value highlight">{Math.round(results.monsterIceExplosionPercent * 100)}%</span>
                     </div>
                   </div>
                   
-                  <div className="summary-block monster-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #4b0082'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон по монстрам</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Физический урон:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.monsterPhysicalDamage)}</span>
+                  <div className="summary-block monster-damage">
+                    <h4 className="summary-title">Урон по монстрам</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Физический урон:</span>
+                      <span className="summary-value">{Math.round(results.monsterPhysicalDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон лед. взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.monsterIceExplosionDamage)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон лед. взрыва:</span>
+                      <span className="summary-value">{Math.round(results.monsterIceExplosionDamage)}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Урон цветочного взрыва:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{Math.round(results.monsterFlowerExplosionDamage)}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Урон цветочного взрыва:</span>
+                      <span className="summary-value">{Math.round(results.monsterFlowerExplosionDamage)}</span>
                     </div>
                   </div>
                   
-                  <div className="summary-block monster-damage" style={{ 
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-                    borderRadius: '8px', 
-                    padding: '1.5rem',
-                    borderLeft: '4px solid #4b0082'
-                  }}>
-                    <h4 className="summary-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Урон нефрита по монстрам</h4>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Первый взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.monsterJadeFirstBlastDamage}</span>
+                  <div className="summary-block monster-damage">
+                    <h4 className="summary-title">Урон нефрита по монстрам</h4>
+                    <div className="summary-item">
+                      <span className="summary-label">Первый взрыв:</span>
+                      <span className="summary-value">{results.monsterJadeFirstBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Второй взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.monsterJadeSecondBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Второй взрыв:</span>
+                      <span className="summary-value">{results.monsterJadeSecondBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Третий взрыв:</span>
-                      <span className="summary-value" style={{ color: '#d4af37', fontWeight: 'bold' }}>{results.monsterJadeThirdBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Третий взрыв:</span>
+                      <span className="summary-value">{results.monsterJadeThirdBlastDamage}</span>
                     </div>
-                    <div className="summary-item" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid rgba(212, 175, 55, 0.3)', paddingBottom: '0.75rem' }}>
-                      <span className="summary-label" style={{ fontWeight: 'bold' }}>Общий урон:</span>
-                      <span className="summary-value highlight" style={{ color: '#ff6b6b', fontWeight: 'bold', fontSize: '1.25rem' }}>{results.monsterJadeTotalBlastDamage}</span>
+                    <div className="summary-item">
+                      <span className="summary-label">Общий урон:</span>
+                      <span className="summary-value highlight">{results.monsterJadeTotalBlastDamage}</span>
                     </div>
                   </div>
                 </div>
@@ -564,51 +509,37 @@ const DamageCalculatorPage = () => {
             )}
             
             {/* Секция для подробного расчета с возможностью скрытия/показа */}
-            <div className="detailed-calc-section" style={{ marginTop: '2rem' }}>
+            <div className="detailed-calc-section">
               <div 
                 className="section-toggle" 
                 onClick={() => setShowDetailedCalc(!showDetailedCalc)}
-                style={{
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  padding: '0.75rem',
-                  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                  borderRadius: '4px',
-                  marginBottom: showDetailedCalc ? '1rem' : 0
-                }}
               >
-                <span style={{ 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#d4af37',
-                  fontWeight: 'bold'
-                }}>
+                <span>
                   {showDetailedCalc ? 'Скрыть подробный расчет' : 'Показать подробный расчет'}
-                  <span style={{ marginLeft: '0.5rem' }}>{showDetailedCalc ? '▲' : '▼'}</span>
+                  <span>{showDetailedCalc ? '▲' : '▼'}</span>
                 </span>
               </div>
               
               {showDetailedCalc && (
                 <div className="calculator-results-section">
-                  <h3 className="section-title" style={{ color: '#d4af37', marginBottom: '1rem' }}>Подробный расчет</h3>
-                  <div className="steps-container" style={{ overflowX: 'auto' }}>
-                    <table className="steps-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <h3 className="section-title">Подробный расчет</h3>
+                  <div className="steps-container">
+                    <table className="steps-table">
                       <thead>
                         <tr>
-                          <th style={{ backgroundColor: 'rgba(139, 0, 0, 0.3)', padding: '0.75rem 1rem', textAlign: 'left', borderBottom: '1px solid rgba(212, 175, 55, 0.3)' }}>Шаг</th>
-                          <th style={{ backgroundColor: 'rgba(139, 0, 0, 0.3)', padding: '0.75rem 1rem', textAlign: 'left', borderBottom: '1px solid rgba(212, 175, 55, 0.3)' }}>Формула</th>
-                          <th style={{ backgroundColor: 'rgba(139, 0, 0, 0.3)', padding: '0.75rem 1rem', textAlign: 'left', borderBottom: '1px solid rgba(212, 175, 55, 0.3)' }}>Расчет</th>
-                          <th style={{ backgroundColor: 'rgba(139, 0, 0, 0.3)', padding: '0.75rem 1rem', textAlign: 'left', borderBottom: '1px solid rgba(212, 175, 55, 0.3)' }}>Результат</th>
+                          <th>Шаг</th>
+                          <th>Формула</th>
+                          <th>Расчет</th>
+                          <th>Результат</th>
                         </tr>
                       </thead>
                       <tbody>
                         {results.calculationSteps.map((step, index) => (
-                          <tr key={index} style={{ backgroundColor: index % 2 === 0 ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.2)' }}>
-                            <td style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>{step.name}</td>
-                            <td style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>{step.formula}</td>
-                            <td style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>{step.calculation}</td>
-                            <td style={{ padding: '0.75rem 1rem', borderBottom: '1px solid rgba(212, 175, 55, 0.1)' }}>{step.result}</td>
+                          <tr key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+                            <td>{step.name}</td>
+                            <td>{step.formula}</td>
+                            <td>{step.calculation}</td>
+                            <td>{step.result}</td>
                           </tr>
                         ))}
                       </tbody>
