@@ -57,4 +57,25 @@
     --z-index-dropdown: 100;
     --z-index-modal: 1000;
     --z-index-tooltip: 500;
+    
+    /* Медиа-запросы - новые переменные */
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    
+    /* Прозрачности */
+    --opacity-low: 0.3;
+    --opacity-medium: 0.5;
+    --opacity-high: 0.8;
+    
+    /* Фоны с прозрачностью */
+    --bg-overlay-light: rgba(255, 255, 255, 0.1);
+    --bg-overlay-dark: rgba(0, 0, 0, 0.2);
+    --bg-overlay-darker: rgba(0, 0, 0, 0.3);
+    
+    /* Основные рамки */
+    --border-light: 1px solid rgba(212, 175, 55, 0.3);
+    --border-medium: 2px solid rgba(212, 175, 55, 0.3);
+    --border-emphasis: 3px solid var(--naraka-secondary);
   }
