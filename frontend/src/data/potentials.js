@@ -27,7 +27,6 @@ export const POTENTIAL_VALUES = {
   UNTOUCHABLE_TALENT: 0.08,  // +8% к атаке
   POWER: 0.045,              // +4.5% к атаке
   ICE_ROOT: 0.4,             // +40% к лед. взрыву
-  ICE_FLASH: 0.35,           // +35% к лед. взрыву
   AROMA_AURA: 0.1,           // +10% к атаке в бою
   FROST_BLOOM: 0.45,         // +45% к лед. взрыву в бою
   CONSCIOUSNESS_MATCH: 1.15  // +15% множитель при совпадении сознания
@@ -75,19 +74,6 @@ export const potentialsData = [
         type: ModifierType.PERCENTAGE,
         target: PotentialModifierTarget.ICE_EXPLOSION,
         value: POTENTIAL_VALUES.ICE_ROOT * 100 // 40%
-      }
-    ]
-  },
-  {
-    id: "ice_flash",
-    name: "Ледяная вспышка",
-    description: "Увеличивает урон ледяного взрыва на 35%",
-    type: PotentialType.BASE,
-    effects: [
-      {
-        type: ModifierType.PERCENTAGE,
-        target: PotentialModifierTarget.ICE_EXPLOSION,
-        value: POTENTIAL_VALUES.ICE_FLASH * 100 // 35%
       }
     ]
   },

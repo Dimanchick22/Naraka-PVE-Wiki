@@ -16,6 +16,13 @@ export const SkillEffectType = {
     DEBUFF: 'debuff'                      // Ослабление
 };
 
+// Типы значений эффектов
+export const EffectValueType = {
+  FLAT: 'flat',           // Прямое значение (например, +50)
+  PERCENTAGE: 'percentage', // Процентное значение (например, 15%)
+  MULTIPLIER: 'multiplier'  // Множитель (например, ×1.08)
+};
+
 // Роли персонажей
 export const CharacterRole = {
   TANK: 'tank',
@@ -122,8 +129,9 @@ export const charactersData = [
         effectType: SkillEffectType.ATTACK_BOOST,
         effects: [
           {
-            description: "Наносит 8% от базовой атаки в качестве урона",
-            value: 8
+            description: "Увеличивает атаку на 8%",
+            value: 8,
+            valueType: EffectValueType.PERCENTAGE
           }
         ],
         isActive: false
@@ -131,13 +139,14 @@ export const charactersData = [
       {
         id: "tessa_f",
         name: "Духовная связь",
-        description: "Увеличивает общий урон на 8%",
-        cooldown: "20 секунд", 
+        description: "Увеличивает общий урон на 8%", 
+        cooldown: "20 секунд",
         effectType: SkillEffectType.ATTACK_BOOST,
         effects: [
           {
             description: "Увеличивает общий урон на 8%",
-            value: 8
+            value: 8,
+            valueType: EffectValueType.MULTIPLIER
           }
         ],
         isActive: false
@@ -176,56 +185,59 @@ export function getCharacterBaseStats(characterId) {
  */
 export function getCharacterDamageBoosts(characterId, activeSkills) {
   const character = getCharacterById(characterId);
-  if (!character) return {
-    attackBoost: 0,
-    iceExplosionBoost: 0,
-    critRateBoost: 0,
-    critDamageBoost: 0
-  };
+  if (!character) {
+    return {
+      attackBoost: 0,
+      iceExplosionBoost: 0,
+      critRateBoost: 0,
+      critDamageBoost: 0,
+      multipliers: []
+    };
+  }
   
   const damageBoosts = {
     attackBoost: 0,
     iceExplosionBoost: 0,
     critRateBoost: 0,
     critDamageBoost: 0,
-    multipliers: [] // Для хранения мультипликативных бонусов
+    multipliers: []
   };
   
-  // Проходим по активным навыкам
-  character.skills.forEach(skill => {
-    // Проверяем, активен ли навык
-    if (activeSkills && activeSkills[skill.id]) {
-      if (skill.effectType === SkillEffectType.ATTACK_BOOST) {
-        // Если навык влияет на атаку
-        skill.effects.forEach(effect => {
-          if (effect.multiplier) {
-            // Если есть множитель, добавляем его в список множителей
-            damageBoosts.multipliers.push(effect.multiplier);
-          } else if (effect.description.includes('атак')) {
-            // Иначе суммируем процентный бонус
-            damageBoosts.attackBoost += effect.value;
-          }
-        });
-      } else if (skill.effectType === SkillEffectType.ICE_EXPLOSION_BOOST) {
-        // Если навык влияет на ледяной взрыв
-        skill.effects.forEach(effect => {
-          if (effect.description.includes('лед')) {
-            damageBoosts.iceExplosionBoost += effect.value;
-          }
-        });
-      } else if (skill.effectType === SkillEffectType.BUFF) {
-        // Если навык дает бафф
-        skill.effects.forEach(effect => {
-          if (effect.description.includes('критического удара')) {
-            damageBoosts.critRateBoost += effect.value;
-          }
-          if (effect.description.includes('критический урон')) {
-            damageBoosts.critDamageBoost += effect.value;
-          }
-        });
-      }
-    }
-  });
+  // Если нет активных навыков, возвращаем базовые значения
+  if (!activeSkills) return damageBoosts;
+  
+  // Обрабатываем только активные навыки
+  character.skills
+    .filter(skill => activeSkills[skill.id])
+    .forEach(skill => {
+      // Обрабатываем эффекты в зависимости от типа навыка
+      skill.effects.forEach(effect => {
+        switch (skill.effectType) {
+          case SkillEffectType.ATTACK_BOOST:
+            if (effect.valueType === EffectValueType.MULTIPLIER) {
+              // Преобразуем процентный бонус в множитель (например, 8% -> 1.08)
+              damageBoosts.multipliers.push(1 + (effect.value / 100));
+            } else if (effect.valueType === EffectValueType.PERCENTAGE) {
+              damageBoosts.attackBoost += effect.value;
+            }
+            break;
+            
+          case SkillEffectType.ICE_EXPLOSION_BOOST:
+            if (effect.valueType === EffectValueType.PERCENTAGE) {
+              damageBoosts.iceExplosionBoost += effect.value;
+            }
+            break;
+            
+          case SkillEffectType.BUFF:
+            if (effect.buffType === 'critRate' && effect.valueType === EffectValueType.PERCENTAGE) {
+              damageBoosts.critRateBoost += effect.value;
+            } else if (effect.buffType === 'critDamage' && effect.valueType === EffectValueType.PERCENTAGE) {
+              damageBoosts.critDamageBoost += effect.value;
+            }
+            break;
+        }
+      });
+    });
   
   return damageBoosts;
 }
