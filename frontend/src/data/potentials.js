@@ -1,4 +1,4 @@
-// src/data/potentials.js
+// Обновленный src/data/potentials.js
 import { ModifierType } from './jades';
 
 /**
@@ -17,11 +17,6 @@ export const PotentialModifierTarget = {
   ICE_EXPLOSION: 'ice_explosion',
   DEFENSE: 'defense',
   AROMA_AURA: 'aroma_aura',
-  FROST_SEAL: 'frost_seal',
-  TUNDRA_POWER: 'tundra_power',
-  FROST_BLOOM: 'frost_bloom',
-  FROSTBOUND_LOTUS: 'frostbound_lotus',
-  TESSA_F: 'tessa_f',
   CONSCIOUSNESS_MATCH: 'consciousness_match'
 };
 
@@ -34,11 +29,7 @@ export const POTENTIAL_VALUES = {
   ICE_ROOT: 0.4,             // +40% к лед. взрыву
   ICE_FLASH: 0.35,           // +35% к лед. взрыву
   AROMA_AURA: 0.1,           // +10% к атаке в бою
-  FROST_SEAL: 0.2,           // +20% к атаке в бою
-  TUNDRA_POWER: 0.15,        // +15% к атаке в бою
-  FROSTBOUND_LOTUS: 0.25,    // +25% к атаке в бою
   FROST_BLOOM: 0.45,         // +45% к лед. взрыву в бою
-  TESSA_F: 1.08,             // +8% множитель урона
   CONSCIOUSNESS_MATCH: 1.15  // +15% множитель при совпадении сознания
 };
 
@@ -116,45 +107,6 @@ export const potentialsData = [
     ]
   },
   {
-    id: "frost_seal",
-    name: "Печать мороза",
-    description: "Увеличивает атаку на 20% в бою",
-    type: PotentialType.COMBAT,
-    effects: [
-      {
-        type: ModifierType.PERCENTAGE,
-        target: PotentialModifierTarget.FROST_SEAL,
-        value: POTENTIAL_VALUES.FROST_SEAL * 100 // 20%
-      }
-    ]
-  },
-  {
-    id: "tundra_power",
-    name: "Сила тундры",
-    description: "Увеличивает атаку на 15% в бою",
-    type: PotentialType.COMBAT,
-    effects: [
-      {
-        type: ModifierType.PERCENTAGE,
-        target: PotentialModifierTarget.TUNDRA_POWER,
-        value: POTENTIAL_VALUES.TUNDRA_POWER * 100 // 15%
-      }
-    ]
-  },
-  {
-    id: "frostbound_lotus",
-    name: "Ледяной лотос",
-    description: "Увеличивает атаку на 25% в бою",
-    type: PotentialType.COMBAT,
-    effects: [
-      {
-        type: ModifierType.PERCENTAGE,
-        target: PotentialModifierTarget.FROSTBOUND_LOTUS,
-        value: POTENTIAL_VALUES.FROSTBOUND_LOTUS * 100 // 25%
-      }
-    ]
-  },
-  {
     id: "frost_bloom",
     name: "Морозный цветок",
     description: "Увеличивает урон ледяного взрыва на 45% в бою",
@@ -164,19 +116,6 @@ export const potentialsData = [
         type: ModifierType.PERCENTAGE,
         target: PotentialModifierTarget.FROST_BLOOM,
         value: POTENTIAL_VALUES.FROST_BLOOM * 100 // 45%
-      }
-    ]
-  },
-  {
-    id: "tessa_f",
-    name: "Духовная связь",
-    description: "Увеличивает общий урон на 8%",
-    type: PotentialType.COMBAT,
-    effects: [
-      {
-        type: ModifierType.MULTIPLICATIVE,
-        target: PotentialModifierTarget.TESSA_F,
-        value: (POTENTIAL_VALUES.TESSA_F - 1) * 100 // 8%
       }
     ]
   },
@@ -195,27 +134,4 @@ export const potentialsData = [
   }
 ];
 
-/**
- * Получить все базовые потенциалы
- * @returns {Array} - Массив базовых потенциалов
- */
-export function getBasePotentials() {
-  return potentialsData.filter(potential => potential.type === PotentialType.BASE);
-}
-
-/**
- * Получить все боевые потенциалы
- * @returns {Array} - Массив боевых потенциалов
- */
-export function getCombatPotentials() {
-  return potentialsData.filter(potential => potential.type === PotentialType.COMBAT);
-}
-
-/**
- * Получить потенциал по ID
- * @param {string} id - ID потенциала
- * @returns {Object|null} - Объект потенциала или null
- */
-export function getPotentialById(id) {
-  return potentialsData.find(potential => potential.id === id) || null;
-}
+// Остальные функции остаются без изменений

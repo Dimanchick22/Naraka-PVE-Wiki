@@ -9,6 +9,7 @@ import TabbedCalculator from '../../components/calculator/TabbedCalculator';
 import CharacterSelect from './CharacterSelect';
 import BasicParameters from './BasicParameters';
 import PotentialSelection from './PotentialSelection';
+import SkillSelection from './SkillSelection';
 import ResultsSection from './ResultsSection';
 import Button from '../../components/ui/Button';
 
@@ -20,6 +21,9 @@ const DamageCalculatorPage = () => {
   const [selectedJades, setSelectedJades] = useState(Array(6).fill(null));
   const [yinRarity, setYinRarity] = useState(null);
   const [yangRarity, setYangRarity] = useState(null);
+  
+  // Состояние для активных навыков персонажа
+  const [activeSkills, setActiveSkills] = useState({});
   
   // Состояние для пользовательских статов нефритов
   const [customJadeStats, setCustomJadeStats] = useState(
@@ -56,11 +60,7 @@ const DamageCalculatorPage = () => {
   
   const [combatPotentials, setCombatPotentials] = useState({
     aroma_aura: false,
-    frost_seal: false,
-    tundra_power: false,
-    frostbound_lotus: false,
     frost_bloom: false,
-    tessa_f: false,
     consciousness_match: false
   });
   
@@ -69,7 +69,7 @@ const DamageCalculatorPage = () => {
   const [activeTab, setActiveTab] = useState('normal'); // 'normal', 'boss', 'monster'
   const [showDetailedCalc, setShowDetailedCalc] = useState(false);
 
-  // Эффект при изменении персонажа - сброс потенциалов
+  // Эффект при изменении персонажа - сброс потенциалов и навыков
   useEffect(() => {
     if (character) {
       setBasePotentials({
@@ -81,16 +81,15 @@ const DamageCalculatorPage = () => {
       
       setCombatPotentials({
         aroma_aura: false,
-        frost_seal: false,
-        tundra_power: false,
-        frostbound_lotus: false,
         frost_bloom: false,
-        tessa_f: false,
         consciousness_match: false
       });
       
       setYinRarity(null);
       setYangRarity(null);
+      
+      // Сброс активных навыков
+      setActiveSkills({});
     }
   }, [character]);
   
@@ -158,6 +157,14 @@ const DamageCalculatorPage = () => {
     }));
   };
   
+  // Обработчик изменения активного навыка
+  const handleSkillChange = (skillId) => {
+    setActiveSkills(prev => ({
+      ...prev,
+      [skillId]: !prev[skillId]
+    }));
+  };
+  
   // Обработчик изменения диковинки
   const handleRarityChange = (rarity, type) => {
     if (type === RarityType.YIN) {
@@ -198,7 +205,8 @@ const DamageCalculatorPage = () => {
     const calculator = new DamageCalculator()
       .setCharacter(character)
       .setConsciousness(consciousness)
-      .setHeroLevel(heroLevel);
+      .setHeroLevel(heroLevel)
+      .setActiveSkills(activeSkills); // Устанавливаем активные навыки
     
     // Установка базовых потенциалов
     Object.keys(basePotentials).forEach(potentialId => {
@@ -294,7 +302,7 @@ const DamageCalculatorPage = () => {
       <div className="section-description">
         <p>
           Этот калькулятор позволяет рассчитать урон персонажа на основе различных параметров, 
-          включая сознание, уровень героя, нефриты, диковинки и активные потенциалы.
+          включая сознание, уровень героя, нефриты, диковинки, активные потенциалы и навыки.
         </p>
       </div>
       
@@ -317,12 +325,21 @@ const DamageCalculatorPage = () => {
             />
             
             {character && (
-              <PotentialSelection
-                basePotentials={basePotentials}
-                combatPotentials={combatPotentials}
-                onBasePotentialChange={handleBasePotentialChange}
-                onCombatPotentialChange={handleCombatPotentialChange}
-              />
+              <>
+                {/* Добавляем выбор навыков персонажа */}
+                <SkillSelection
+                  character={character}
+                  activeSkills={activeSkills}
+                  onSkillChange={handleSkillChange}
+                />
+                
+                <PotentialSelection
+                  basePotentials={basePotentials}
+                  combatPotentials={combatPotentials}
+                  onBasePotentialChange={handleBasePotentialChange}
+                  onCombatPotentialChange={handleCombatPotentialChange}
+                />
+              </>
             )}
             
             {/* Кнопка расчета */}

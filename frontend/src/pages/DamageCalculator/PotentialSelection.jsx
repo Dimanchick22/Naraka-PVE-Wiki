@@ -1,6 +1,6 @@
 // src/pages/DamageCalculator/PotentialSelection.jsx
 import React from 'react';
-import { getBasePotentials, getCombatPotentials } from '../../data/potentials';
+import { potentialsData, PotentialType } from '../../data/potentials';
 
 const PotentialSelection = ({ 
   basePotentials, 
@@ -9,8 +9,8 @@ const PotentialSelection = ({
   onCombatPotentialChange
 }) => {
   // Получаем все доступные потенциалы
-  const allBasePotentials = getBasePotentials();
-  const allCombatPotentials = getCombatPotentials();
+  const allBasePotentials = potentialsData.filter(potential => potential.type === PotentialType.BASE);
+  const allCombatPotentials = potentialsData.filter(potential => potential.type === PotentialType.COMBAT);
   
   return (
     <>
