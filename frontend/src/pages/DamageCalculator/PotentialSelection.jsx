@@ -1,4 +1,5 @@
 // src/pages/DamageCalculator/PotentialSelection.jsx
+import React from 'react';
 import { getBasePotentials, getCombatPotentials } from '../../data/potentials';
 
 const PotentialSelection = ({ 
@@ -18,14 +19,17 @@ const PotentialSelection = ({
         <div className="potentials-grid">
           {allBasePotentials.map(potential => (
             <div key={potential.id} className="form-group checkbox">
-              <label>
+              <label className="flex items-start">
                 <input 
                   type="checkbox" 
                   id={potential.id}
+                  className="mt-1 mr-2"
                   checked={basePotentials[potential.id] || false}
                   onChange={() => onBasePotentialChange(potential.id)}
                 />
-                {potential.name} ({potential.description})
+                <span>
+                  <strong>{potential.name}</strong> ({potential.description})
+                </span>
               </label>
             </div>
           ))}
@@ -37,14 +41,17 @@ const PotentialSelection = ({
         <div className="potentials-grid">
           {allCombatPotentials.map(potential => (
             <div key={potential.id} className="form-group checkbox">
-              <label>
+              <label className="flex items-start">
                 <input 
                   type="checkbox" 
                   id={potential.id}
+                  className="mt-1 mr-2"
                   checked={combatPotentials[potential.id] || false}
                   onChange={() => onCombatPotentialChange(potential.id)}
                 />
-                {potential.name} ({potential.description})
+                <span>
+                  <strong>{potential.name}</strong> ({potential.description})
+                </span>
               </label>
             </div>
           ))}

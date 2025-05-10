@@ -1,0 +1,111 @@
+/* src/styles/components/forms.css */
+/* Группы форм */
+.form-group {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+    color: var(--naraka-light);
+  }
+  
+  /* Поля ввода */
+  .form-control {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--naraka-light);
+    font-size: var(--font-size-base);
+    transition: var(--transition-base);
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--naraka-secondary);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+  }
+  
+  .form-control::placeholder {
+    color: rgba(245, 245, 245, 0.5);
+  }
+  
+  .form-control:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Чекбоксы и радио кнопки */
+  .form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .form-check-input {
+    margin-right: var(--spacing-sm);
+  }
+  
+  .form-check-label {
+    cursor: pointer;
+  }
+  
+  /* Действия формы */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+  }
+  
+  /* Группа с иконкой */
+  .form-group-icon {
+    position: relative;
+  }
+  
+  .form-group-icon .form-control {
+    padding-left: calc(var(--spacing-md) * 2);
+  }
+  
+  .form-group-icon .icon {
+    position: absolute;
+    left: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Инпут с суффиксом */
+  .input-with-suffix {
+    position: relative;
+  }
+  
+  .input-with-suffix .form-control {
+    padding-right: calc(var(--spacing-md) * 2);
+  }
+  
+  .input-suffix {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Формы на страницах */
+  .form-section {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .form-section-title {
+    font-size: var(--font-size-lg);
+    color: var(--naraka-secondary);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }

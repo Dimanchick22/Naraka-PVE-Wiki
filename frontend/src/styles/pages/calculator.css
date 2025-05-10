@@ -1,0 +1,204 @@
+/* src/styles/pages/calculator.css */
+/* Страница калькулятора урона */
+.calculator-page {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+  
+  /* Основной макет калькулятора */
+  .calculator-main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .calculator-left-column,
+  .calculator-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    min-height: 600px;
+  }
+  
+  /* Форма калькулятора */
+  .calculator-form {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    height: 100%;
+    overflow-y: auto;
+  }
+  
+  /* Секции формы */
+  .form-section {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .form-section .section-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* Поля формы */
+  .form-group {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-group label {
+    flex: 1;
+    margin-right: var(--spacing-md);
+  }
+  
+  .form-group input[type="number"] {
+    width: 120px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    color: var(--naraka-light);
+  }
+  
+  .form-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--naraka-secondary);
+  }
+  
+  /* Чекбоксы */
+  .form-group.checkbox {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-group.checkbox input[type="checkbox"] {
+    margin-right: var(--spacing-sm);
+  }
+  
+  /* Результаты расчета */
+  .calculator-results-section {
+    margin-top: var(--spacing-xl);
+    width: 100%;
+  }
+  
+  /* Итоговый урон */
+  .damage-summary {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+  }
+  
+  .summary-blocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .summary-block {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+  }
+  
+  .summary-block.boss-damage {
+    border-left: 4px solid var(--naraka-primary);
+  }
+  
+  .summary-block.monster-damage {
+    border-left: 4px solid var(--naraka-accent);
+  }
+  
+  .summary-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  
+  .summary-label {
+    font-weight: bold;
+  }
+  
+  .summary-value {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-value.highlight {
+    color: var(--naraka-primary);
+    font-size: var(--font-size-xl);
+  }
+  
+  /* Подробный расчет */
+  .detailed-calc-section {
+    margin-top: var(--spacing-lg);
+  }
+  
+  .section-toggle {
+    cursor: pointer;
+    transition: var(--transition-base);
+  }
+  
+  .section-toggle:hover {
+    background-color: rgba(139, 0, 0, 0.2);
+  }
+  
+  /* Таблица расчетов */
+  .steps-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--spacing-md);
+  }
+  
+  .steps-table th {
+    background-color: rgba(139, 0, 0, 0.3);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+  }
+  
+  .steps-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+  }
+  
+  .steps-table .even-row {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .steps-table .odd-row {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (min-width: 1024px) {
+    .calculator-main-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .form-group {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .form-group label {
+      margin-bottom: var(--spacing-sm);
+      margin-right: 0;
+    }
+    
+    .summary-blocks {
+      grid-template-columns: 1fr;
+    }
+  }

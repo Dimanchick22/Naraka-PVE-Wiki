@@ -1,5 +1,5 @@
 // src/components/calculator/rarity/RaritiesPanel.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { RarityType, raritiesData } from '../../../data/rarities';
 import RaritySlot from './RaritySlot';
 import RarityEditor from './RarityEditor';
@@ -22,7 +22,7 @@ const RaritiesPanel = ({
     return (
       <div className="rarities-panel">
         <h3 className="section-title">Диковинки</h3>
-        <div className="no-character-message">
+        <div className="p-4 text-center text-gray-400">
           Выберите персонажа, чтобы настроить диковинки
         </div>
       </div>
@@ -119,7 +119,7 @@ const RaritiesPanel = ({
         />
       )}
       
-      <div className="stat-help" style={{ marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--naraka-light)', opacity: '0.7', borderTop: '1px solid rgba(212, 175, 55, 0.2)', paddingTop: '1rem' }}>
+      <div className="p-4 text-sm text-gray-400 border-t border-yellow-900 border-opacity-20 mt-4">
         <p>
           <strong>Примечание:</strong> Все версии диковинки "Чаша увядшей славы" доступны для всех персонажей.
           Остальные диковинки доступны только персонажам, для которых они предназначены.

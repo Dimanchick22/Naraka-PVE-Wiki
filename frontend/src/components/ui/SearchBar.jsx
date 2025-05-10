@@ -1,8 +1,13 @@
 // components/ui/SearchBar.jsx
-import { useState } from "react";
+import React, { useState } from 'react';
 
-const SearchBar = ({ onSearch, placeholder = "Поиск..." }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+const SearchBar = ({ 
+  onSearch, 
+  placeholder = "Поиск...",
+  className = "", 
+  initialValue = ""
+}) => {
+  const [searchTerm, setSearchTerm] = useState(initialValue);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -10,10 +15,10 @@ const SearchBar = ({ onSearch, placeholder = "Поиск..." }) => {
   };
 
   return (
-    <form className="search-bar" onSubmit={handleSubmit}>
+    <form className={`search-bar ${className}`} onSubmit={handleSubmit}>
       <input
         type="text"
-        className="search-input"
+        className="form-control"
         placeholder={placeholder}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}

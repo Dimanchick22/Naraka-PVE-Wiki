@@ -1,23 +1,14 @@
+// components/ui/CustomSelect.jsx
 import React, { useState, useRef, useEffect } from 'react';
 
-/**
- * Улучшенный компонент выпадающего списка
- * @param {Object} props - Свойства компонента
- * @param {Array} props.options - Массив опций [{id: string, name: string}]
- * @param {string} props.value - Текущее выбранное значение (id)
- * @param {Function} props.onChange - Функция обработчик изменений
- * @param {string} props.placeholder - Текст плейсхолдера
- * @param {string} props.className - Дополнительные классы
- * @param {boolean} props.disabled - Флаг блокировки селекта
- * @returns {JSX.Element} - Элемент компонента
- */
 const CustomSelect = ({ 
   options, 
   value, 
   onChange, 
   placeholder = "Выберите...", 
   className = "",
-  disabled = false
+  disabled = false,
+  error = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState(
@@ -103,14 +94,17 @@ const CustomSelect = ({
     }
   };
 
+  const containerClasses = `custom-select-container ${isOpen ? 'open' : ''} ${className}`;
+  const selectedClasses = `custom-select-selected ${isOpen ? 'open' : ''} ${disabled ? 'disabled' : ''} ${error ? 'error' : ''}`;
+
   return (
     <div 
       ref={selectRef} 
-      className={`custom-select-container ${isOpen ? 'open' : ''} ${className}`}
+      className={containerClasses}
       onKeyDown={handleKeyDown}
     >
       <div 
-        className={`custom-select-selected ${isOpen ? 'open' : ''} ${disabled ? 'disabled' : ''}`}
+        className={selectedClasses}
         onClick={toggleDropdown}
         tabIndex={disabled ? -1 : 0}
         role="combobox"

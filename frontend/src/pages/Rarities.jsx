@@ -1,8 +1,9 @@
-// pages/Rarities.jsx
-import { useState } from "react";
-import SearchBar from "../components/ui/SearchBar";
+// src/pages/Rarities.jsx
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import SearchBar from "../components/ui/SearchBar";
 import CloudinaryImage from "../components/common/CloudinaryImage";
+import { getRarityColor, getRarityName, getRarityTypeName } from "../data/rarities";
 
 // Данные о диковинках
 const raritiesData = [
@@ -129,54 +130,6 @@ const Rarities = () => {
     setFilteredRarities(filtered);
   };
 
-  // Получение цвета в зависимости от редкости
-  const getRarityColor = (rarity) => {
-    switch (rarity.toLowerCase()) {
-      case "mythic":
-        return "#990000"; // Приглушенный красный для мифического
-      case "legendary":
-        return "#cc6600"; // Приглушенный оранжевый для легендарного
-      case "epic":
-        return "#7a1fa5"; // Приглушенный фиолетовый для эпического
-      case "rare":
-        return "#004a8f"; // Приглушенный синий для редкого
-      case "uncommon":
-        return "#1f7a1f"; // Приглушенный зеленый для необычного
-      default:
-        return "#555555"; // Темно-серый для обычного
-    }
-  };
-
-  // Получение названия редкости
-  const getRarityName = (rarity) => {
-    switch (rarity.toLowerCase()) {
-      case "mythic":
-        return "Мифический";
-      case "legendary":
-        return "Легендарный";
-      case "epic":
-        return "Эпический";
-      case "rare":
-        return "Редкий";
-      case "uncommon":
-        return "Необычный";
-      default:
-        return "Обычный";
-    }
-  };
-
-  // Получение названия типа
-  const getTypeName = (type) => {
-    switch (type.toLowerCase()) {
-      case "yin":
-        return "Инь";
-      case "yang":
-        return "Ян";
-      default:
-        return type;
-    }
-  };
-
   return (
     <div className="page-container">
       <h1 className="page-title">Диковинки</h1>
@@ -189,36 +142,24 @@ const Rarities = () => {
         </p>
       </div>
 
-      <div className="filters-container" style={{ maxWidth: "800px", margin: "0 auto 2rem auto" }}>
-        <div className="search-filter" style={{ marginBottom: "1rem" }}>
-          <SearchBar onSearch={handleSearch} placeholder="Поиск диковинок..." />
+      <div className="filters-container">
+        <div className="search-filter">
+          <SearchBar 
+            onSearch={handleSearch} 
+            placeholder="Поиск диковинок..." 
+            initialValue={searchTerm}
+          />
         </div>
 
-        <div style={{ 
-          display: "flex", 
-          flexWrap: "wrap", 
-          gap: "1rem", 
-          justifyContent: "center" 
-        }}>
+        <div className="filter-group">
           {/* Фильтр по редкости */}
           <div className="filter-section">
-            <span style={{ marginRight: "0.5rem", alignSelf: "center" }}>Редкость:</span>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <span className="filter-label">Редкость:</span>
+            <div className="filter-options">
               {["all", "mythic", "legendary", "epic"].map((rarity) => (
                 <button
                   key={rarity}
-                  style={{
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "4px",
-                    fontSize: "0.875rem",
-                    border: "none",
-                    backgroundColor:
-                      selectedRarity === rarity
-                        ? (rarity === "all" ? "#8b0000" : getRarityColor(rarity))
-                        : "rgba(50, 50, 50, 0.7)",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
+                  className={`filter-btn ${selectedRarity === rarity ? "active" : ""}`}
                   onClick={() => handleRarityChange(rarity)}
                 >
                   {rarity === "all"
@@ -231,29 +172,23 @@ const Rarities = () => {
 
           {/* Фильтр по типу */}
           <div className="filter-section">
-            <span style={{ marginRight: "0.5rem", alignSelf: "center" }}>Тип:</span>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <span className="filter-label">Тип:</span>
+            <div className="filter-options">
               {["all", "yin", "yang"].map((type) => (
                 <button
                   key={type}
-                  style={{
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "4px",
-                    fontSize: "0.875rem",
-                    border: "none",
-                    backgroundColor:
-                      selectedType === type
-                        ? (type === "all" ? "#8b0000" : 
-                           type === "yin" ? "#1e4e8a" : "#8a1e1e")
-                        : "rgba(50, 50, 50, 0.7)",
-                    color: "white",
-                    cursor: "pointer",
-                  }}
+                  className={`filter-btn ${selectedType === type ? "active" : ""}`}
                   onClick={() => handleTypeChange(type)}
+                  style={{
+                    backgroundColor: selectedType === type 
+                      ? (type === "all" ? "var(--naraka-primary)" : 
+                         type === "yin" ? "#1e4e8a" : "#8a1e1e")
+                      : undefined
+                  }}
                 >
                   {type === "all"
                     ? "Все"
-                    : getTypeName(type)}
+                    : getRarityTypeName(type)}
                 </button>
               ))}
             </div>
@@ -262,96 +197,55 @@ const Rarities = () => {
       </div>
 
       {filteredRarities.length === 0 ? (
-        <div className="text-center" style={{ padding: "2rem" }}>
+        <div className="empty-result">
           <p>По запросу "{searchTerm}" ничего не найдено.</p>
         </div>
       ) : (
-        <div className="rarities-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))", gap: "1.5rem" }}>
+        <div className="rarities-grid">
           {filteredRarities.map((rarity) => (
             <div 
               key={rarity.id}
               className="rarity-card"
               style={{
-                backgroundColor: "rgba(20, 20, 20, 0.9)",
-                borderRadius: "8px",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                border: `2px solid ${getRarityColor(rarity.rarity)}50`,
-                boxShadow: `0 0 15px ${getRarityColor(rarity.rarity)}30`
+                borderColor: `${getRarityColor(rarity.rarity)}50`
               }}
             >
-              {/* Заголовок карточки с фоном соответствующего цвета */}
+              {/* Заголовок карточки */}
               <div 
                 className="rarity-header"
                 style={{
-                  backgroundColor: getRarityColor(rarity.rarity),
-                  color: "white",
-                  padding: "1rem",
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "1rem"
+                  backgroundColor: getRarityColor(rarity.rarity)
                 }}
               >
-                {/* Место для иконки */}
-                <div
-                  className="rarity-icon"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    backgroundColor: "rgba(0, 0, 0, 0.3)",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                    overflow: "hidden" // Добавлено для обрезки изображений, выходящих за пределы контейнера
-                  }}>
-                    {rarity.cloudinaryId ? (
+                <div className="rarity-icon">
+                  {rarity.cloudinaryId ? (
                     <CloudinaryImage 
-                        publicId={`${rarity.cloudinaryId}`} 
-                        alt={rarity.name}
-                        style={{
-                        maxWidth: "100%",
-                        maxHeight: "100%"
-                        }}
-                        transformations={{
-                        width: 100,
-                        height: 100,
-                        crop: "fill" // Use 'fill' to maintain aspect ratio
-                        }}
+                      publicId={rarity.cloudinaryId} 
+                      alt={rarity.name}
+                      width={100}
+                      height={100}
+                      fit="fill"
                     />
-                    ) : (
-                    <div style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
-                        {rarity.type === "yin" ? "阴" : "阳"}
+                  ) : (
+                    <div className="rarity-icon-placeholder text-2xl font-bold">
+                      {rarity.type === "yin" ? "阴" : "阳"}
                     </div>
-                    )}
+                  )}
                 </div>
 
-                {/* Информация о диковинке */}
-                <div className="rarity-header-info" style={{ flex: 1 }}>
-                  <h3 style={{ 
-                    margin: 0, 
-                    fontSize: "1.25rem", 
-                    fontWeight: "bold",
-                    color: "white",
-                  }}>
+                <div className="rarity-header-info">
+                  <h3 className="text-xl font-bold text-white m-0">
                     {rarity.name}
                   </h3>
                   
-                  <div style={{ 
-                    marginTop: "0.25rem", 
-                    fontSize: "0.875rem"
-                  }}>
-                    <span style={{ fontWeight: "bold" }}>
-                      {getTypeName(rarity.type)}|{getRarityName(rarity.rarity)}
+                  <div className="mt-1 text-sm">
+                    <span className="font-bold">
+                      {getRarityTypeName(rarity.type)}|{getRarityName(rarity.rarity)}
                     </span>
                   </div>
                   
                   {rarity.for_character && (
-                    <div style={{ marginTop: "0.25rem", fontSize: "0.875rem" }}>
+                    <div className="mt-1 text-sm">
                       Только для {rarity.for_character}
                     </div>
                   )}
@@ -359,32 +253,16 @@ const Rarities = () => {
               </div>
 
               {/* Основное содержимое карточки */}
-              <div className="rarity-content" style={{ 
-                padding: "1rem",
-                flex: 1,
-                backgroundColor: "#1a1a1a",
-                color: "#e0e0e0"
-              }}>
-                <p style={{ margin: "0 0 1rem 0" }}>{rarity.description}</p>
+              <div className="rarity-content p-4 bg-opacity-50 flex-1">
+                <p className="mb-4">{rarity.description}</p>
                 
                 <div className="rarity-effects">
-                  <h4 style={{ 
-                    fontSize: "1rem", 
-                    marginBottom: "0.5rem",
-                    color: "#cccccc"
-                  }}>
+                  <h4 className="text-base mb-2 text-gray-300">
                     Эффекты:
                   </h4>
-                  <ul style={{ 
-                    paddingLeft: "1.5rem", 
-                    fontSize: "0.875rem",
-                    margin: 0,
-                    color: "#cccccc"
-                  }}>
+                  <ul className="pl-6 text-sm m-0 text-gray-300">
                     {rarity.effects.map((effect, index) => (
-                      <li key={index} style={{ 
-                        marginBottom: "0.25rem" 
-                      }}>
+                      <li key={index} className="mb-1">
                         {effect}
                       </li>
                     ))}
@@ -392,25 +270,16 @@ const Rarities = () => {
                 </div>
               </div>
 
-              {/* Футер карточки с кнопкой "Подробнее" */}
-              <div style={{
-                padding: "0.75rem",
-                display: "flex",
-                justifyContent: "flex-end",
-                backgroundImage: `linear-gradient(to left, rgba(${rarity.rarity === "mythic" ? "153, 0, 0" : rarity.rarity === "legendary" ? "255, 128, 0" : "163, 53, 238"}, 0.25), rgba(26, 26, 26, 0.8))`,
-                borderTop: "1px solid #2a2a2a"
-              }}>
+              {/* Футер карточки */}
+              <div className="p-3 flex justify-end"
+                style={{
+                  backgroundImage: `linear-gradient(to left, rgba(${rarity.rarity === "mythic" ? "153, 0, 0" : rarity.rarity === "legendary" ? "255, 128, 0" : "163, 53, 238"}, 0.25), rgba(26, 26, 26, 0.8))`,
+                  borderTop: "1px solid #2a2a2a"
+                }}
+              >
                 <Link 
                   to={`/rarities/${rarity.id}`} 
-                  style={{
-                    backgroundColor: "#d4af37",
-                    color: "#000000",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "4px",
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    fontSize: "0.875rem"
-                  }}
+                  className="btn btn-secondary btn-small"
                 >
                   Подробнее
                 </Link>

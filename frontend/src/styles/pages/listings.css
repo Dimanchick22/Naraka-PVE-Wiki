@@ -1,0 +1,192 @@
+/* src/styles/pages/listings.css */
+/* Страницы со списками предметов */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  /* Фильтры */
+  .filters-container {
+    max-width: 800px;
+    margin: 0 auto var(--spacing-xl) auto;
+  }
+  
+  .search-filter {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .filter-group {
+    margin-top: var(--spacing-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+  }
+  
+  .filter-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .filter-label {
+    margin-right: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+  }
+  
+  .filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+  
+  .filter-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-sm);
+    border: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--naraka-light);
+    cursor: pointer;
+  }
+  
+  .filter-btn.active {
+    background-color: var(--naraka-primary);
+    color: white;
+  }
+  
+  .filter-btn:hover:not(.active) {
+    background-color: rgba(139, 0, 0, 0.3);
+  }
+  
+  /* Сообщение о пустом результате */
+  .empty-result {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Разделы списков */
+  .list-section {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .list-section-title {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--naraka-secondary);
+  }
+  
+  /* Страницы персонажей */
+  .character-listing .item-card {
+    border-left: 3px solid var(--naraka-primary);
+  }
+  
+  /* Страницы нефритов */
+  .jade-listing .item-card {
+    border-left: 3px solid var(--naraka-accent);
+  }
+  
+  /* Страницы врагов */
+  .enemy-listing .item-card {
+    border-left: 3px solid var(--naraka-secondary);
+  }
+  
+  /* Страницы гайдов */
+  .guides-listing .item-card {
+    border-left: 3px solid var(--rarity-epic);
+  }
+  
+  /* Страницы диковинок */
+  .rarities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  .rarity-card {
+    background-color: rgba(20, 20, 20, 0.9);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: var(--transition-slow);
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+  }
+  
+  .rarity-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-lg);
+  }
+  
+  .rarity-header {
+    padding: var(--spacing-md);
+    color: white;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+  
+  .rarity-icon {
+    width: 100px;
+    height: 100px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  
+  .rarity-header-info {
+    flex: 1;
+  }
+  
+  .rarity-content {
+    padding: var(--spacing-md);
+    flex: 1;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+  }
+  
+  .rarity-effects {
+    margin-top: var(--spacing-md);
+  }
+  
+  .rarity-stat {
+    font-size: var(--font-size-sm);
+    color: var(--naraka-light);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 3px;
+    margin-bottom: 2px;
+    display: inline-block;
+    margin-right: var(--spacing-xs);
+  }
+  
+  @media (max-width: 768px) {
+    .filter-group {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .filter-section {
+      width: 100%;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .filter-options {
+      justify-content: flex-start;
+    }
+    
+    .rarities-grid {
+      grid-template-columns: 1fr;
+    }
+  }

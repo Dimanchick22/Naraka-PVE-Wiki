@@ -77,7 +77,7 @@ const Home = () => {
           Найдите информацию о персонажах, нефритах, врагах, режимах и
           стратегиях для успешного прохождения.
         </p>
-        <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+        <div className="flex justify-center gap-3">
           <Link to="/guides/beginner" className="btn btn-primary">
             Гайд для новичков
           </Link>
@@ -88,9 +88,7 @@ const Home = () => {
       </section>
 
       <section className="page-section">
-        <h2 className="section-title" style={{ textAlign: "center" }}>
-          Разделы
-        </h2>
+        <h2 className="section-title text-center">Разделы</h2>
         <div className="features-grid">
           {featuredSections.map((section, index) => (
             <Link to={section.path} key={index} className="feature-card">
@@ -112,7 +110,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="page-section latest-news">
+      <section className="page-section">
         <h2 className="section-title">Последние обновления</h2>
         <div className="card">
           {latestNews.map((news) => (

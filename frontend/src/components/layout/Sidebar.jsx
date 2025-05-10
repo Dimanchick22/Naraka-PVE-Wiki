@@ -22,9 +22,9 @@ const Sidebar = () => {
       case "/characters":
         return [
           { name: "Тянь Хай", path: "/characters/tian-hai" },
-          { name: "Валда Цуй", path: "/characters/valda-cui" },
-          { name: "Юши Каданоджи", path: "/characters/yueshan" },
-          // Добавьте других персонажей
+          { name: "Цзыпин", path: "/characters/ziping" },
+          { name: "Тесса", path: "/characters/tessa" },
+          // Можно добавить других персонажей
         ];
       case "/jades":
         return [
@@ -66,12 +66,13 @@ const Sidebar = () => {
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="sidebar-toggle-button"
+          aria-label={isCollapsed ? "Развернуть боковую панель" : "Свернуть боковую панель"}
         >
           {isCollapsed ? ">" : "<"}
         </button>
       </div>
 
-      <nav className="sidebar-nav">
+      <nav className="sidebar-nav" aria-label="Главная навигация">
         <ul className="sidebar-nav-list">
           {sidebarItems.map((item) => (
             <li key={item.path}>

@@ -1,4 +1,5 @@
 // src/components/calculator/rarity/RarityEditor.jsx
+import React from 'react';
 import { raritiesData } from '../../../data/rarities';
 import RarityStatRow from './RarityStatRow';
 
@@ -33,22 +34,12 @@ const RarityEditor = ({
         Настройка диковинки {type === 'yin' ? 'Инь' : 'Ян'}
       </h4>
 
-      <div className="rarity-selection" style={{ marginBottom: '1rem' }}>
-        <label style={{ marginBottom: '0.5rem', display: 'block' }}>
-          Выберите диковинку:
-        </label>
+      <div className="form-group">
+        <label className="block mb-2">Выберите диковинку:</label>
         <select
-          className="rarity-select"
+          className="form-control"
           value={rarity?.id || ''}
           onChange={(e) => onRarityChange(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '0.5rem',
-            backgroundColor: 'rgba(26, 26, 26, 0.8)',
-            color: 'var(--naraka-light)',
-            border: '1px solid rgba(212, 175, 55, 0.3)',
-            borderRadius: '4px'
-          }}
         >
           <option value="">Без диковинки</option>
           <optgroup label="Мифические">
@@ -78,13 +69,8 @@ const RarityEditor = ({
       {/* Настройка статов диковинки */}
       {rarity && (
         <div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginBottom: '0.75rem' 
-          }}>
-            <h5 style={{ margin: 0 }}>Статы диковинки</h5>
+          <div className="flex justify-between items-center mb-3">
+            <h5 className="m-0">Статы диковинки</h5>
           </div>
           
           <div className="rarity-stats-list">
@@ -100,27 +86,14 @@ const RarityEditor = ({
           </div>
           
           {/* Описание диковинки */}
-          <div className="rarity-description" style={{ 
-            marginTop: '1rem', 
-            padding: '0.75rem', 
-            backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-            borderRadius: '4px', 
-            fontSize: '0.875rem' 
-          }}>
+          <div className="p-3 bg-black bg-opacity-20 rounded-md mt-4 text-sm">
             <p>{rarity.description}</p>
           </div>
           
           {/* Информация о персонаже, для которого предназначена диковинка */}
           {rarity.for_character && (
-            <div className="rarity-character-info" style={{ 
-              marginTop: '0.75rem', 
-              padding: '0.75rem', 
-              backgroundColor: 'rgba(75, 0, 130, 0.1)', 
-              borderRadius: '4px', 
-              fontSize: '0.875rem',
-              borderLeft: '3px solid rgba(75, 0, 130, 0.5)'
-            }}>
-              <p style={{ margin: 0 }}>
+            <div className="mt-3 p-3 bg-purple-900 bg-opacity-10 rounded-md text-sm border-l-3 border-purple-900 border-opacity-50">
+              <p className="m-0">
                 <strong>Предназначена для:</strong> {rarity.for_character}
               </p>
             </div>
@@ -128,11 +101,10 @@ const RarityEditor = ({
         </div>
       )}
       
-      <div className="rarity-edit-actions" style={{ marginTop: '1rem', textAlign: 'right' }}>
+      <div className="flex justify-end mt-4 pt-2 border-t border-opacity-30 border-yellow-600">
         <button 
-          className="btn btn-secondary"
+          className="btn btn-secondary btn-small"
           onClick={onClose}
-          style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
         >
           Закрыть
         </button>

@@ -1,4 +1,5 @@
 // src/components/calculator/jade/JadeEditor.jsx
+import React from 'react';
 import { jadesData } from '../../../data/jades';
 import JadeStatRow from './JadeStatRow';
 
@@ -15,13 +16,12 @@ const JadeEditor = ({
     <div className="jade-edit-panel">
       <h4 className="jade-edit-title">Настройка нефрита #{jadeIndex + 1}</h4>
       
-      <div className="jade-type-selection" style={{ marginBottom: '1rem' }}>
-        <label style={{ marginBottom: '0.5rem', display: 'block' }}>Выберите тип нефрита:</label>
+      <div className="form-group">
+        <label className="mb-2 block">Выберите тип нефрита:</label>
         <select 
-          className="jade-select"
+          className="form-control"
           value={jade?.id || ''}
           onChange={(e) => onJadeSelect(e.target.value)}
-          style={{ width: '100%', padding: '0.5rem', backgroundColor: 'rgba(26, 26, 26, 0.8)', color: 'var(--naraka-light)', border: '1px solid rgba(212, 175, 55, 0.3)', borderRadius: '4px' }}
         >
           <option value="">Нет нефрита</option>
           <optgroup label="Атака">
@@ -72,13 +72,8 @@ const JadeEditor = ({
       {/* Настройка статов нефрита - максимум 4 стата */}
       {jade && (
         <div>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            marginBottom: '0.75rem' 
-          }}>
-            <h5 style={{ margin: 0 }}>Статы нефрита</h5>
+          <div className="flex justify-between items-center mb-3">
+            <h5 className="m-0">Статы нефрита</h5>
           </div>
           
           <div className="jade-stats-list">
@@ -93,7 +88,7 @@ const JadeEditor = ({
             ))}
           </div>
           
-          <div className="jade-description" style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '4px', fontSize: '0.875rem' }}>
+          <div className="p-3 bg-black bg-opacity-20 rounded-md mt-4 text-sm">
             <p>{jade.description}</p>
           </div>
         </div>
@@ -101,7 +96,7 @@ const JadeEditor = ({
       
       <div className="jade-edit-actions">
         <button 
-          className="btn btn-secondary close-edit-button"
+          className="btn btn-secondary btn-small"
           onClick={onClose}
         >
           Закрыть

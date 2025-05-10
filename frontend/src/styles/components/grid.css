@@ -1,0 +1,107 @@
+/* src/styles/components/grid.css */
+/* Базовая сетка */
+.grid {
+    display: grid;
+    gap: var(--spacing-md);
+  }
+  
+  /* Предопределенные сетки по количеству колонок */
+  .grid-cols-1 { grid-template-columns: 1fr; }
+  .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+  
+  /* Автоматические сетки */
+  .grid-cols-auto-fit { 
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  }
+  
+  .grid-cols-auto-fill { 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+  }
+  
+  /* Сетки с разными размерами ячеек */
+  .grid-cols-1-2 { grid-template-columns: 1fr 2fr; }
+  .grid-cols-2-1 { grid-template-columns: 2fr 1fr; }
+  .grid-cols-1-1-2 { grid-template-columns: 1fr 1fr 2fr; }
+  
+  /* Различные размеры отступов */
+  .grid-gap-1 { gap: var(--spacing-xs); }
+  .grid-gap-2 { gap: var(--spacing-sm); }
+  .grid-gap-3 { gap: var(--spacing-md); }
+  .grid-gap-4 { gap: var(--spacing-lg); }
+  .grid-gap-6 { gap: var(--spacing-xl); }
+  
+  /* Сетки для специфических компонентов */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    width: 100%;
+  }
+  
+  .jades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 150px);
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .rarities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .calculator-main-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  /* Медиа-запросы для адаптивности */
+  @media (min-width: 768px) {
+    .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .md\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .md\:grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+    
+    .jades-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 150px);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .lg\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .lg\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .lg\:grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
+    
+    .calculator-main-layout {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .jades-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 150px);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .jades-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(6, 150px);
+    }
+    
+    .rarities-grid {
+      grid-template-columns: 1fr;
+      grid-auto-rows: auto;
+    }
+  }

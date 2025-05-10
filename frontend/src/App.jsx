@@ -14,15 +14,8 @@ import DamageCalculator from "./pages/DamageCalculator/index";
 import Guides from "./pages/Guides";
 import About from "./pages/About";
 
-// Импортируем стили
-import "./styles/index.css";
-import "./styles/layout.css";
-import "./styles/pages.css";
-import "./styles/components.css";
-import "./styles/damageCalculator.css";
-import "./styles/jadeGrid.css";
-import "./styles/customSelect.css";
-import "./styles/tabbedCalculator.css"; // Обновленные стили для калькулятора
+// Импорт новой единой системы стилей
+import "./styles/main.css";
 
 function App() {
   return (

@@ -1,5 +1,5 @@
 // src/components/calculator/jade/JadeGrid.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 import JadeItem from './JadeItem';
 import JadeEditor from './JadeEditor';
 import { jadesData } from '../../../data/jades';
@@ -50,7 +50,7 @@ const JadeGrid = ({
   };
   
   return (
-    <div className="jade-grid-container">
+    <div className="jades-grid-container">
       <h3 className="section-title">Выбор нефритов</h3>
       <p className="section-subtitle">
         Выберите до 6 нефритов для расчета. Нажмите на нефрит, чтобы настроить его статы.

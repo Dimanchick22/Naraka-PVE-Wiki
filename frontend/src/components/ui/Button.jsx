@@ -1,30 +1,37 @@
 // components/ui/Button.jsx
+import React from 'react';
 
 const Button = ({
   children,
   onClick,
   variant = "primary",
-  size = "medium",
+  size = "default",
   className = "",
+  disabled = false,
+  type = "button",
+  block = false,
+  icon = null,
   ...rest
 }) => {
-  const getSizeClass = () => {
-    switch (size) {
-      case "small":
-        return "btn-small";
-      case "large":
-        return "btn-large";
-      default:
-        return "";
-    }
-  };
+  const buttonClasses = [
+    'btn',
+    `btn-${variant}`,
+    size !== 'default' ? `btn-${size}` : '',
+    block ? 'btn-block' : '',
+    icon ? 'btn-icon' : '',
+    disabled ? 'btn-disabled' : '',
+    className
+  ].filter(Boolean).join(' ');
 
   return (
     <button
-      className={`btn btn-${variant} ${getSizeClass()} ${className}`}
+      className={buttonClasses}
       onClick={onClick}
+      disabled={disabled}
+      type={type}
       {...rest}
     >
+      {icon && <span className="btn-icon-wrapper">{icon}</span>}
       {children}
     </button>
   );

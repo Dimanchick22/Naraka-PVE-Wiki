@@ -1,0 +1,95 @@
+/* src/styles/layouts/header.css */
+/* Шапка сайта */
+.header {
+    background-color: var(--naraka-dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid var(--naraka-secondary);
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+  }
+  
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .header-brand-text {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--naraka-secondary);
+    font-family: var(--font-heading);
+  }
+  
+  /* Десктопная навигация */
+  .header-nav {
+    display: none;
+  }
+  
+  .header-nav-list {
+    display: flex;
+    gap: var(--spacing-lg);
+  }
+  
+  .header-nav-link {
+    color: var(--naraka-light);
+    transition: color 0.2s;
+    padding: var(--spacing-xs) 0;
+    position: relative;
+  }
+  
+  .header-nav-link:hover {
+    color: var(--naraka-secondary);
+  }
+  
+  .header-nav-link.active {
+    color: var(--naraka-secondary);
+  }
+  
+  .header-nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--naraka-secondary);
+  }
+  
+  /* Кнопка мобильного меню */
+  .header-menu-button {
+    color: var(--naraka-light);
+    font-size: var(--font-size-xl);
+  }
+  
+  .header-menu-button:hover {
+    color: var(--naraka-secondary);
+  }
+  
+  /* Мобильная навигация */
+  .header-mobile-nav {
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid var(--naraka-secondary);
+  }
+  
+  .header-mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  /* Медиа-запросы */
+  @media (min-width: 768px) {
+    .header-nav {
+      display: flex;
+    }
+  
+    .header-menu-button {
+      display: none;
+    }
+  }

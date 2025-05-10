@@ -1,5 +1,5 @@
 // src/pages/DamageCalculator/index.jsx
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { charactersData } from '../../data/characters';
 import { RarityType } from '../../data/rarities';
 import { ModifierType } from '../../data/jades';
@@ -10,6 +10,7 @@ import CharacterSelect from './CharacterSelect';
 import BasicParameters from './BasicParameters';
 import PotentialSelection from './PotentialSelection';
 import ResultsSection from './ResultsSection';
+import Button from '../../components/ui/Button';
 
 const DamageCalculatorPage = () => {
   // Состояние калькулятора
@@ -287,7 +288,7 @@ const DamageCalculatorPage = () => {
   };
   
   return (
-    <div className="page-container">
+    <div className="page-container calculator-page">
       <h1 className="page-title">Калькулятор урона</h1>
       
       <div className="section-description">
@@ -326,13 +327,13 @@ const DamageCalculatorPage = () => {
             
             {/* Кнопка расчета */}
             <div className="form-actions">
-              <button 
-                className="btn btn-primary"
+              <Button 
+                variant="primary"
                 onClick={calculateDamage}
                 disabled={!character}
               >
                 Рассчитать
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -346,7 +347,6 @@ const DamageCalculatorPage = () => {
             yangRarity={yangRarity}
             onRarityChange={handleRarityChange}
             character={character}
-            // Передаем новые пропсы для статов
             customJadeStats={customJadeStats}
             onJadeStatsChange={handleJadeStatsChange}
             yinRarityStats={yinRarityStats}

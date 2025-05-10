@@ -1,4 +1,5 @@
 // src/components/calculator/jade/JadeItem.jsx
+import React from 'react';
 import { getJadeRarityColor } from '../../../data/jades';
 
 const JadeItem = ({ index, jade, isActive, onClick }) => {

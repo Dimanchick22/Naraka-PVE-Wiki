@@ -1,0 +1,141 @@
+/* src/styles/components/cards.css */
+/* Базовая карточка */
+.card {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--box-shadow-md);
+  }
+  
+  /* Карточка элемента (для персонажей, нефритов, врагов и т.д.) */
+  .item-card {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    transition: var(--transition-slow);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-lg);
+  }
+  
+  .item-card.active {
+    border-width: 2px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+  
+  /* Контейнер для изображения */
+  .item-image-container {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+    background-color: rgba(75, 0, 130, 0.2);
+  }
+  
+  .item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .item-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 3rem;
+    color: var(--naraka-secondary);
+    opacity: 0.6;
+  }
+  
+  /* Содержимое карточки */
+  .item-content {
+    padding: var(--spacing-md);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .item-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+    color: var(--naraka-light);
+  }
+  
+  .item-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--naraka-secondary);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .item-description {
+    font-size: var(--font-size-sm);
+    color: var(--naraka-light);
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+  
+  /* Футер карточки */
+  .item-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    margin-top: auto;
+  }
+  
+  /* Карточки нефритов */
+  .jade-card {
+    border-width: 2px;
+  }
+  
+  .jade-common {
+    border-color: var(--rarity-common);
+  }
+  
+  .jade-uncommon {
+    border-color: var(--rarity-uncommon);
+  }
+  
+  .jade-rare {
+    border-color: var(--rarity-rare);
+  }
+  
+  .jade-epic {
+    border-color: var(--rarity-epic);
+  }
+  
+  .jade-legendary {
+    border-color: var(--rarity-legendary);
+  }
+  
+  .jade-mythic {
+    border-color: var(--rarity-mythic);
+  }
+  
+  /* Карточка детальной информации */
+  .detail-card {
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  /* Карточка раздела */
+  .section-card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  /* Рекомендуемые карточки */
+  .recommended-card {
+    background-color: rgba(26, 26, 26, 0.6);
+    border-left: 3px solid var(--naraka-secondary);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+  }

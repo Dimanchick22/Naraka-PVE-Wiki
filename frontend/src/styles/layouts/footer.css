@@ -1,0 +1,67 @@
+/* src/styles/layouts/footer.css */
+/* Подвал сайта */
+.footer {
+    background-color: var(--naraka-dark);
+    border-top: 1px solid var(--naraka-secondary);
+    padding: var(--spacing-lg) 0;
+    margin-top: auto;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .footer-brand {
+    text-align: center;
+  }
+  
+  .footer-brand-title {
+    font-size: var(--font-size-lg);
+    color: var(--naraka-secondary);
+    font-family: var(--font-heading);
+    font-weight: 700;
+  }
+  
+  .footer-brand-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--naraka-light);
+    opacity: 0.8;
+  }
+  
+  .footer-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .footer-copyright {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+    font-size: var(--font-size-xs);
+    color: var(--naraka-light);
+    opacity: 0.7;
+  }
+  
+  /* Медиа-запросы */
+  @media (min-width: 768px) {
+    .footer-content {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  
+    .footer-brand {
+      text-align: left;
+    }
+  
+    .footer-nav {
+      flex-direction: row;
+      gap: var(--spacing-lg);
+    }
+  }

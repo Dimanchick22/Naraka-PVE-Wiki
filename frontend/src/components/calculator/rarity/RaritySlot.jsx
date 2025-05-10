@@ -1,5 +1,5 @@
 // src/components/calculator/rarity/RaritySlot.jsx
-import { getActiveStats } from '../../../utils/rarityHelpers';
+import React from 'react';
 import { getRarityColor, getRarityName, getRarityTypeName } from '../../../data/rarities';
 import EmptyRarity from './EmptyRarity';
 import CloudinaryImage from '../../common/CloudinaryImage';
@@ -7,6 +7,32 @@ import CloudinaryImage from '../../common/CloudinaryImage';
 const RaritySlot = ({ type, rarity, isSelected, onClick }) => {
   // Цвет заголовка в зависимости от типа
   const headerColor = type === 'yin' ? '#1e4e8a' : '#8a1e1e';
+  
+  // Вспомогательная функция для получения отображаемого имени стата
+  const getStatDisplayName = (statType) => {
+    switch (statType) {
+      case 'attack':
+        return 'Атака';
+      case 'ice_explosion':
+        return 'Лед. взрыв';
+      case 'boss_attack':
+        return 'Атака по боссам';
+      case 'monster_attack':
+        return 'Атака по монстрам';
+      case 'fusion':
+        return 'Слияние';
+      case '':
+        return 'Пусто';
+      default:
+        return statType;
+    }
+  };
+
+  // Получение активных статов
+  const getActiveStats = (rarity) => {
+    if (!rarity || !rarity.customStats) return [];
+    return rarity.customStats.filter(stat => stat.type !== '');
+  };
   
   return (
     <div 
@@ -23,7 +49,9 @@ const RaritySlot = ({ type, rarity, isSelected, onClick }) => {
               <CloudinaryImage 
                 publicId={rarity.cloudinaryId} 
                 alt={rarity.name}
-                transformations={{ width: 60, height: 60, crop: "fill" }}
+                width={60}
+                height={60}
+                fit="fill"
               />
             ) : (
               <div className="rarity-icon-placeholder">
@@ -52,26 +80,6 @@ const RaritySlot = ({ type, rarity, isSelected, onClick }) => {
       )}
     </div>
   );
-};
-
-// Вспомогательная функция для получения отображаемого имени стата
-const getStatDisplayName = (statType) => {
-  switch (statType) {
-    case 'attack':
-      return 'Атака';
-    case 'ice_explosion':
-      return 'Лед. взрыв';
-    case 'boss_attack':
-      return 'Атака по боссам';
-    case 'monster_attack':
-      return 'Атака по монстрам';
-    case 'fusion':
-      return 'Слияние';
-    case '':
-      return 'Пусто';
-    default:
-      return statType;
-  }
 };
 
 export default RaritySlot;

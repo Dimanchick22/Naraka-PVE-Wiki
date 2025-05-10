@@ -1,0 +1,104 @@
+/* src/styles/layouts/sidebar.css */
+/* Боковая панель */
+.sidebar {
+    background-color: var(--naraka-dark);
+    border-right: 1px solid var(--naraka-secondary);
+    height: 100%;
+    width: 250px;
+    transition: width 0.3s ease;
+  }
+  
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  .sidebar-toggle {
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--spacing-sm);
+  }
+  
+  .sidebar-toggle-button {
+    color: var(--naraka-light);
+    padding: var(--spacing-xs);
+    transition: var(--transition-base);
+  }
+  
+  .sidebar-toggle-button:hover {
+    color: var(--naraka-secondary);
+  }
+  
+  .sidebar-nav {
+    margin-top: var(--spacing-md);
+  }
+  
+  .sidebar-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--naraka-light);
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar-nav-item:hover {
+    background-color: rgba(139, 0, 0, 0.2);
+  }
+  
+  .sidebar-nav-item.active {
+    background-color: var(--naraka-primary);
+    color: white;
+  }
+  
+  .sidebar-nav-icon {
+    margin-right: var(--spacing-sm);
+  }
+  
+  .sidebar.collapsed .sidebar-nav-text {
+    display: none;
+  }
+  
+  /* Подразделы */
+  .sidebar-subnav {
+    margin-top: var(--spacing-lg);
+    padding: 0 var(--spacing-md);
+  }
+  
+  .sidebar-subnav-heading {
+    font-size: var(--font-size-sm);
+    color: var(--naraka-secondary);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--naraka-secondary);
+  }
+  
+  .sidebar-subnav-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .sidebar-subnav-item {
+    padding: var(--spacing-xs) 0 var(--spacing-xs) var(--spacing-md);
+    border-left: 2px solid transparent;
+    color: var(--naraka-light);
+    transition: all 0.2s;
+  }
+  
+  .sidebar-subnav-item:hover {
+    color: var(--naraka-secondary);
+  }
+  
+  .sidebar-subnav-item.active {
+    border-left: 2px solid var(--naraka-secondary);
+    color: var(--naraka-secondary);
+  }
+  
+  .sidebar.collapsed .sidebar-subnav {
+    display: none;
+  }

@@ -1,5 +1,5 @@
-// pages/Enemies.jsx
-import { useState } from "react";
+// src/pages/Enemies.jsx
+import React, { useState } from "react";
 import EnemyCard from "../components/common/EnemyCard";
 import SearchBar from "../components/ui/SearchBar";
 import { enemiesData } from "../data/enemies";
@@ -47,52 +47,23 @@ const Enemies = () => {
     <div className="page-container">
       <h1 className="page-title">Враги</h1>
 
-      <div
-        className="filters-container"
-        style={{ maxWidth: "800px", margin: "0 auto 2rem auto" }}
-      >
+      <div className="filters-container">
         <div className="search-filter">
-          <SearchBar onSearch={handleSearch} placeholder="Поиск врагов..." />
+          <SearchBar 
+            onSearch={handleSearch} 
+            placeholder="Поиск врагов..." 
+            initialValue={searchTerm}
+          />
         </div>
 
-        <div
-          className="filter-group"
-          style={{
-            marginTop: "1rem",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "0.5rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className="filter-group">
           <div className="filter-section">
-            <span
-              className="filter-label"
-              style={{ marginRight: "0.5rem", fontSize: "0.875rem" }}
-            >
-              Тип:
-            </span>
-            <div
-              className="filter-options"
-              style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem" }}
-            >
+            <span className="filter-label">Тип:</span>
+            <div className="filter-options">
               {enemyTypes.map((type) => (
                 <button
                   key={type}
                   className={`filter-btn ${selectedType === type ? "active" : ""}`}
-                  style={{
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "4px",
-                    fontSize: "0.875rem",
-                    border: "none",
-                    backgroundColor:
-                      selectedType === type
-                        ? "var(--naraka-primary)"
-                        : "rgba(255, 255, 255, 0.1)",
-                    color:
-                      selectedType === type ? "white" : "var(--naraka-light)",
-                    cursor: "pointer",
-                  }}
                   onClick={() => handleTypeChange(type)}
                 >
                   {type === "all"
@@ -107,36 +78,13 @@ const Enemies = () => {
             </div>
           </div>
 
-          <div className="filter-section" style={{ marginLeft: "1rem" }}>
-            <span
-              className="filter-label"
-              style={{ marginRight: "0.5rem", fontSize: "0.875rem" }}
-            >
-              Сложность:
-            </span>
-            <div
-              className="filter-options"
-              style={{ display: "flex", flexWrap: "wrap", gap: "0.25rem" }}
-            >
+          <div className="filter-section">
+            <span className="filter-label">Сложность:</span>
+            <div className="filter-options">
               {[0, 1, 2, 3, 4, 5].map((difficulty) => (
                 <button
                   key={difficulty}
                   className={`filter-btn ${selectedDifficulty === difficulty ? "active" : ""}`}
-                  style={{
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "4px",
-                    fontSize: "0.875rem",
-                    border: "none",
-                    backgroundColor:
-                      selectedDifficulty === difficulty
-                        ? "var(--naraka-primary)"
-                        : "rgba(255, 255, 255, 0.1)",
-                    color:
-                      selectedDifficulty === difficulty
-                        ? "white"
-                        : "var(--naraka-light)",
-                    cursor: "pointer",
-                  }}
                   onClick={() => handleDifficultyChange(difficulty)}
                 >
                   {difficulty === 0 ? "Все" : "★".repeat(difficulty)}
@@ -148,11 +96,11 @@ const Enemies = () => {
       </div>
 
       {filteredEnemies.length === 0 ? (
-        <div className="text-center" style={{ padding: "2rem" }}>
+        <div className="empty-result">
           <p>По заданным параметрам ничего не найдено.</p>
         </div>
       ) : (
-        <div className="items-grid">
+        <div className="items-grid enemy-listing">
           {filteredEnemies.map((enemy) => (
             <EnemyCard key={enemy.id} enemy={enemy} />
           ))}

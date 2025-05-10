@@ -33,7 +33,7 @@ const Header = () => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      isActive ? "header-nav-link active" : "header-nav-link"
+                      `header-nav-link ${isActive ? 'active' : ''}`
                     }
                   >
                     {item.name}
@@ -47,6 +47,8 @@ const Header = () => {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="header-menu-button"
+            aria-label={mobileMenuOpen ? "Закрыть меню" : "Открыть меню"}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? "✕" : "☰"}
           </button>
@@ -61,7 +63,7 @@ const Header = () => {
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      isActive ? "header-nav-link active" : "header-nav-link"
+                      `header-nav-link ${isActive ? 'active' : ''}`
                     }
                     onClick={() => setMobileMenuOpen(false)}
                   >

@@ -1,5 +1,7 @@
-// pages/PveModes.jsx
+// src/pages/PveModes.jsx
+import React from "react";
 import { pveModesData } from "../data/pveModes";
+import Button from "../components/ui/Button";
 
 const PveModes = () => {
   // Функция для определения иконки в зависимости от режима
@@ -13,20 +15,25 @@ const PveModes = () => {
     }
   };
 
+  // Получение класса для сложности
+  const getDifficultyClass = (difficulty) => {
+    switch (difficulty) {
+      case "Нормальный":
+        return "text-green-400";
+      case "Сложный":
+        return "text-orange-400";
+      case "Очень сложный":
+        return "text-red-500";
+      default:
+        return "text-gray-400";
+    }
+  };
+
   return (
     <div className="page-container">
       <h1 className="page-title">PVE Режимы</h1>
 
-      <div
-        className="page-intro"
-        style={{
-          maxWidth: "800px",
-          margin: "0 auto 2rem auto",
-          textAlign: "center",
-          color: "var(--naraka-light)",
-          opacity: "0.9",
-        }}
-      >
+      <div className="section-description">
         <p>
           Naraka Bladepoint предлагает разнообразные PVE режимы, от простых для
           начинающих до экстремально сложных испытаний для опытных игроков.
@@ -34,212 +41,106 @@ const PveModes = () => {
         </p>
       </div>
 
-      <div className="pve-modes-list">
-        {pveModesData.map((mode) => (
-          <div
-            key={mode.id}
-            className="pve-mode-card"
-            style={{
-              margin: "2rem 0",
-              border: "1px solid var(--naraka-secondary)",
-              borderRadius: "8px",
-              overflow: "hidden",
-              backgroundColor: "rgba(26, 26, 26, 0.8)",
-            }}
-          >
+      {pveModesData.length > 0 ? (
+        <div className="pve-modes-list">
+          {pveModesData.map((mode) => (
             <div
-              className="pve-mode-header"
-              style={{
-                padding: "1.5rem",
-                borderBottom: "1px solid var(--naraka-secondary)",
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-              }}
+              key={mode.id}
+              className="card mb-8"
             >
-              <div
-                className="pve-mode-icon"
-                style={{
-                  width: "60px",
-                  height: "60px",
-                  backgroundColor: "rgba(139, 0, 0, 0.3)",
-                  borderRadius: "50%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  color: "var(--naraka-secondary)",
-                }}
-              >
-                {getModeIcon(mode)}
-              </div>
-
-              <div className="pve-mode-title">
-                <h2 style={{ marginBottom: "0.25rem" }}>{mode.name}</h2>
+              <div className="p-6 border-b border-opacity-30 border-yellow-600 flex items-center gap-4">
                 <div
-                  className="pve-mode-difficulty"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
+                  className="flex items-center justify-center w-15 h-15 rounded-full bg-red-900 bg-opacity-30 text-2xl font-bold text-secondary"
                 >
-                  <span
-                    style={{
-                      fontSize: "0.875rem",
-                      color: "var(--naraka-light)",
-                      opacity: "0.8",
-                    }}
-                  >
-                    Сложность:
-                  </span>
-                  <span
-                    style={{
-                      color:
-                        mode.difficulty === "Нормальный"
-                          ? "#4ade80"
-                          : mode.difficulty === "Сложный"
-                            ? "#fb923c"
-                            : "#ef4444",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {mode.difficulty}
-                  </span>
+                  {getModeIcon(mode)}
+                </div>
+
+                <div>
+                  <h2 className="text-xl mb-1">{mode.name}</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-light opacity-80">
+                      Сложность:
+                    </span>
+                    <span className={`font-bold ${getDifficultyClass(mode.difficulty)}`}>
+                      {mode.difficulty}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="pve-mode-content" style={{ padding: "1.5rem" }}>
-              <p
-                className="pve-mode-description"
-                style={{
-                  marginBottom: "1.5rem",
-                  color: "var(--naraka-light)",
-                  lineHeight: "1.6",
-                }}
-              >
-                {mode.description}
-              </p>
+              <div className="p-6">
+                <p className="mb-6 text-light leading-relaxed">
+                  {mode.description}
+                </p>
 
-              <div
-                className="pve-mode-details"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-                  gap: "1.5rem",
-                }}
-              >
-                <div className="pve-mode-section">
-                  <h3
-                    style={{
-                      fontSize: "1.125rem",
-                      marginBottom: "0.75rem",
-                      color: "var(--naraka-secondary)",
-                    }}
-                  >
-                    Награды
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg mb-3 text-secondary">
+                      Награды
+                    </h3>
+                    <ul className="pl-6 list-disc">
+                      {mode.rewards && mode.rewards.map((reward, i) => (
+                        <li key={i} className="mb-2">
+                          {reward}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg mb-3 text-secondary">
+                      Этапы
+                    </h3>
+                    <div className="mb-3">
+                      <span className="font-bold">
+                        Рекомендуемый уровень:
+                      </span>{" "}
+                      {mode.recommended_level}
+                    </div>
+                    <div className="space-y-3">
+                      {mode.stages && mode.stages.map((stage, i) => (
+                        <div
+                          key={i}
+                          className="p-2 bg-black bg-opacity-20 rounded"
+                        >
+                          <div className="font-bold mb-1">
+                            {stage.name}
+                          </div>
+                          <div className="text-sm opacity-80">
+                            {stage.description && stage.description.substring(0, 80)}...
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 bg-purple-900 bg-opacity-10 rounded border border-purple-900 border-opacity-30">
+                  <h3 className="text-lg mb-3 flex items-center gap-2">
+                    Советы для прохождения
                   </h3>
-                  <ul style={{ paddingLeft: "1.5rem", listStyleType: "disc" }}>
-                    {mode.rewards.map((reward, i) => (
-                      <li key={i} style={{ marginBottom: "0.5rem" }}>
-                        {reward}
+                  <ul className="pl-6 list-disc">
+                    {mode.tips && mode.tips.slice(0, 3).map((tip, i) => (
+                      <li key={i} className="mb-2">
+                        {tip}
                       </li>
                     ))}
                   </ul>
                 </div>
-
-                <div className="pve-mode-section">
-                  <h3
-                    style={{
-                      fontSize: "1.125rem",
-                      marginBottom: "0.75rem",
-                      color: "var(--naraka-secondary)",
-                    }}
-                  >
-                    Этапы
-                  </h3>
-                  <div style={{ marginBottom: "0.75rem" }}>
-                    <span style={{ fontWeight: "bold" }}>
-                      Рекомендуемый уровень:
-                    </span>{" "}
-                    {mode.recommended_level}
-                  </div>
-                  <div className="pve-stages">
-                    {mode.stages.map((stage, i) => (
-                      <div
-                        key={i}
-                        className="pve-stage-item"
-                        style={{
-                          marginBottom: "0.75rem",
-                          padding: "0.5rem",
-                          backgroundColor: "rgba(0, 0, 0, 0.2)",
-                          borderRadius: "4px",
-                        }}
-                      >
-                        <div
-                          style={{
-                            fontWeight: "bold",
-                            marginBottom: "0.25rem",
-                          }}
-                        >
-                          {stage.name}
-                        </div>
-                        <div style={{ fontSize: "0.875rem", opacity: "0.8" }}>
-                          {stage.description.substring(0, 80)}...
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
 
-              <div
-                className="pve-mode-tips"
-                style={{
-                  marginTop: "1.5rem",
-                  padding: "1rem",
-                  backgroundColor: "rgba(75, 0, 130, 0.1)",
-                  borderRadius: "4px",
-                  border: "1px solid rgba(75, 0, 130, 0.3)",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.125rem",
-                    marginBottom: "0.75rem",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                  }}
-                >
-                  Советы для прохождения
-                </h3>
-                <ul style={{ paddingLeft: "1.5rem", listStyleType: "disc" }}>
-                  {mode.tips.slice(0, 3).map((tip, i) => (
-                    <li key={i} style={{ marginBottom: "0.5rem" }}>
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
+              <div className="p-4 border-t border-opacity-30 border-yellow-600 flex justify-end">
+                <Button variant="secondary">Подробнее</Button>
               </div>
             </div>
-
-            <div
-              className="pve-mode-footer"
-              style={{
-                padding: "1rem 1.5rem",
-                borderTop: "1px solid rgba(212, 175, 55, 0.3)",
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <button className="btn btn-secondary">Подробнее</button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="empty-result">
+          <p>В настоящее время информация о PVE режимах отсутствует.</p>
+          <p className="mt-2">Информация будет добавлена в ближайшее время.</p>
+        </div>
+      )}
     </div>
   );
 };
