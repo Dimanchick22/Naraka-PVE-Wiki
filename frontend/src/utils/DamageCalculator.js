@@ -1,61 +1,34 @@
 // src/utils/DamageCalculator.js
 
 import { ModifierType, ModifierTarget } from "../data/jades";
-import { TalentModifierTarget } from "../data/characters";
+import { PotentialModifierTarget, POTENTIAL_VALUES } from "../data/potentials";
 import { RarityModifierTarget } from "../data/rarities";
-
-// Константы для расчетов
-const CONSTANTS = {
-  BASE_ATTACK: 140,                   // Базовое значение атаки
-  EXPLOSION_COEF: 4.06,               // Коэффициент урона ледяного взрыва
-  FLOWER_EXPLOSION_COEF: 4.97,        // Коэффициент урона взрыва цветка
-  JADE_FIRST_BLAST_MULTIPLIER: 0.55,  // Множитель первого взрыва нефрита
-  JADE_OTHER_BLAST_MULTIPLIER: 0.569, // Множитель второго и третьего взрывов нефрита
-  DEFAULT_CONSCIOUSNESS: 1120,        // Значение по умолчанию для сознания
-  DEFAULT_HERO_LEVEL: 20,             // Уровень героя по умолчанию
-  HERO_LEVEL_ATTACK_BONUS: {          // Бонусы к атаке по уровню героя
-    10: 0.03, // +3% на уровне 10
-    12: 0.03, // +3% на уровне 12
-    16: 0.03, // +3% на уровне 16
-    20: 0.03  // +3% на уровне 20
-  },
-  TALENT_VALUES: {
-    "untouchable_talent": 0.08,
-    "power": 0.045,
-    "ice_root": 0.4,
-    "ice_flash": 0.35,
-    "aroma_aura": 0.1,
-    "frost_seal": 0.2,
-    "tundra_power": 0.15,
-    "frostbound_lotus": 0.25,
-    "frost_bloom": 0.45,
-    "tessa_f": 1.08,
-    "consciousness_match": 1.15
-  }
-};
+import { baseStats, damageConstants } from "../data/baseStats";
+import { getCharacterBaseStats, getCharacterById } from "../data/characters";
+import { getCharacterDamageBoosts } from "../data/characterSkills";
 
 /**
- * Класс для расчета урона на основе характеристик персонажа, нефритов и диковинок
+ * Класс для расчета урона на основе характеристик персонажа, нефритов, диковинок и потенциалов
  */
 class DamageCalculator {
   constructor() {
     // Базовые параметры
     this.character = null;
-    this.consciousness = CONSTANTS.DEFAULT_CONSCIOUSNESS;
-    this.heroLevel = CONSTANTS.DEFAULT_HERO_LEVEL;
+    this.consciousness = damageConstants.DEFAULT_CONSCIOUSNESS;
+    this.heroLevel = 20;
     this.jades = [];
     this.rarity = null;
 
-    // Активные таланты
-    this.activeTalents = {
-      // Базовые таланты (влияют на базовую атаку)
+    // Активные потенциалы (таланты)
+    this.activePotentials = {
+      // Базовые потенциалы (влияют на базовую атаку)
       base: {
         untouchable_talent: false,
         power: false,
         ice_root: false,
         ice_flash: false
       },
-      // Боевые таланты
+      // Боевые потенциалы
       combat: {
         aroma_aura: false,
         frost_seal: false,
@@ -136,6 +109,32 @@ class DamageCalculator {
    */
   setCharacter(character) {
     this.character = character;
+    
+    // Добавляем бонусы к урону от навыков персонажа
+    if (character) {
+      const damageBoosts = getCharacterDamageBoosts(character.id);
+      
+      // Применяем бонусы к атаке
+      if (damageBoosts.attackBoost > 0) {
+        this.modifiers.attack.push({
+          source: `Skill: ${character.name} abilities`,
+          type: ModifierType.PERCENTAGE,
+          value: damageBoosts.attackBoost,
+          calculate: true
+        });
+      }
+      
+      // Применяем бонусы к ледяному взрыву
+      if (damageBoosts.iceExplosionBoost > 0) {
+        this.modifiers.ice_explosion.push({
+          source: `Skill: ${character.name} abilities`,
+          type: ModifierType.PERCENTAGE,
+          value: damageBoosts.iceExplosionBoost,
+          calculate: true
+        });
+      }
+    }
+    
     return this;
   }
 
@@ -186,27 +185,27 @@ class DamageCalculator {
   }
 
   /**
-   * Активация/деактивация базового таланта
-   * @param {string} talentId - ID таланта
-   * @param {boolean} active - Активен ли талант
+   * Активация/деактивация базового потенциала (таланта)
+   * @param {string} potentialId - ID потенциала
+   * @param {boolean} active - Активен ли потенциал
    * @returns {DamageCalculator} - this для цепочки вызовов
    */
-  setBaseTalent(talentId, active) {
-    if (talentId in this.activeTalents.base) {
-      this.activeTalents.base[talentId] = active;
+  setBaseTalent(potentialId, active) {
+    if (potentialId in this.activePotentials.base) {
+      this.activePotentials.base[potentialId] = active;
     }
     return this;
   }
 
   /**
-   * Активация/деактивация боевого таланта
-   * @param {string} talentId - ID таланта
-   * @param {boolean} active - Активен ли талант
+   * Активация/деактивация боевого потенциала (таланта)
+   * @param {string} potentialId - ID потенциала
+   * @param {boolean} active - Активен ли потенциал
    * @returns {DamageCalculator} - this для цепочки вызовов
    */
-  setCombatTalent(talentId, active) {
-    if (talentId in this.activeTalents.combat) {
-      this.activeTalents.combat[talentId] = active;
+  setCombatTalent(potentialId, active) {
+    if (potentialId in this.activePotentials.combat) {
+      this.activePotentials.combat[potentialId] = active;
     }
     return this;
   }
@@ -240,6 +239,24 @@ class DamageCalculator {
         });
       }
     });
+    
+    // Обработка пользовательских статов, если они есть
+    if (jade.customStats) {
+      jade.customStats.forEach(stat => {
+        if (!stat.type || stat.type === '') return;
+        
+        const targetKey = this._getModifierTargetKey(stat.type);
+        
+        if (targetKey && this.modifiers[targetKey]) {
+          this.modifiers[targetKey].push({
+            source: `Custom stat for ${jade.name}`,
+            type: ModifierType.PERCENTAGE,
+            value: stat.value,
+            calculate: true
+          });
+        }
+      });
+    }
   }
 
   /**
@@ -248,25 +265,46 @@ class DamageCalculator {
    * @private
    */
   _processRarityEffects(rarity) {
-    rarity.effects.forEach(effect => {
-      const targetKey = this._getModifierTargetKey(effect.target);
-      
-      if (targetKey && this.modifiers[targetKey]) {
-        this.modifiers[targetKey].push({
-          source: `Rarity: ${rarity.name}`,
-          type: effect.type,
-          value: effect.value,
-          condition: effect.condition
-        });
-      } else if (effect.target === RarityModifierTarget.FLOWER_EXPLOSION_DAMAGE) {
-        // Особая обработка для урона цветочного взрыва
-        this.modifiers.flower_explosion.push({
-          source: `Rarity: ${rarity.name}`,
-          type: effect.type,
-          value: effect.value
-        });
-      }
-    });
+    // Стандартные эффекты
+    if (rarity.effects) {
+      rarity.effects.forEach(effect => {
+        const targetKey = this._getModifierTargetKey(effect.target);
+        
+        if (targetKey && this.modifiers[targetKey]) {
+          this.modifiers[targetKey].push({
+            source: `Rarity: ${rarity.name}`,
+            type: effect.type,
+            value: effect.value,
+            condition: effect.condition
+          });
+        } else if (effect.target === RarityModifierTarget.FLOWER_EXPLOSION_DAMAGE) {
+          // Особая обработка для урона цветочного взрыва
+          this.modifiers.flower_explosion.push({
+            source: `Rarity: ${rarity.name}`,
+            type: effect.type,
+            value: effect.value
+          });
+        }
+      });
+    }
+    
+    // Пользовательские статы, если они есть
+    if (rarity.customStats) {
+      rarity.customStats.forEach(stat => {
+        if (!stat.type || stat.type === '') return;
+        
+        const targetKey = this._getModifierTargetKey(stat.type);
+        
+        if (targetKey && this.modifiers[targetKey]) {
+          this.modifiers[targetKey].push({
+            source: `Custom stat for ${rarity.name}`,
+            type: ModifierType.PERCENTAGE,
+            value: stat.value,
+            calculate: true
+          });
+        }
+      });
+    }
   }
 
   /**
@@ -303,9 +341,10 @@ class DamageCalculator {
   _calculateHeroLevelBonus() {
     let bonus = 0;
     
-    for (const level in CONSTANTS.HERO_LEVEL_ATTACK_BONUS) {
+    // Обходим baseStats.heroLevelBonuses
+    for (const level in baseStats.heroLevelBonuses) {
       if (this.heroLevel >= Number(level)) {
-        bonus += CONSTANTS.HERO_LEVEL_ATTACK_BONUS[level];
+        bonus += baseStats.heroLevelBonuses[level];
       }
     }
     
@@ -323,13 +362,13 @@ class DamageCalculator {
     // Бонус от уровня героя
     bonus += this._calculateHeroLevelBonus();
     
-    // Бонусы от базовых талантов
-    if (this.activeTalents.base.untouchable_talent) {
-      bonus += CONSTANTS.TALENT_VALUES.untouchable_talent;
+    // Бонусы от базовых потенциалов
+    if (this.activePotentials.base.untouchable_talent) {
+      bonus += POTENTIAL_VALUES.UNTOUCHABLE_TALENT;
     }
     
-    if (this.activeTalents.base.power) {
-      bonus += CONSTANTS.TALENT_VALUES.power;
+    if (this.activePotentials.base.power) {
+      bonus += POTENTIAL_VALUES.POWER;
     }
     
     // Бонусы от нефритов (процентные)
@@ -348,7 +387,7 @@ class DamageCalculator {
    * @private
    */
   _calculateBaseAttack() {
-    const baseAttackValue = CONSTANTS.BASE_ATTACK + (this.consciousness / 10);
+    const baseAttackValue = baseStats.base_attack + (this.consciousness / 10);
     const baseAttackBonus = this._calculateBaseAttackBonus();
     
     const baseAttack = baseAttackValue * baseAttackBonus;
@@ -357,7 +396,7 @@ class DamageCalculator {
     this.results.calculationSteps.push({
       name: "Базовая атака",
       formula: "(BASE_ATTACK + (сознание/10)) * бонус_базовой_атаки",
-      calculation: `(${CONSTANTS.BASE_ATTACK} + (${this.consciousness}/10)) * ${baseAttackBonus.toFixed(3)}`,
+      calculation: `(${baseStats.base_attack} + (${this.consciousness}/10)) * ${baseAttackBonus.toFixed(3)}`,
       result: baseAttack.toFixed(2)
     });
     
@@ -372,13 +411,13 @@ class DamageCalculator {
   _calculateBaseIceExplosionPercent() {
     let percent = 1.0; // Базовое значение 100%
     
-    // Бонусы от базовых талантов
-    if (this.activeTalents.base.ice_root) {
-      percent += CONSTANTS.TALENT_VALUES.ice_root;
+    // Бонусы от базовых потенциалов
+    if (this.activePotentials.base.ice_root) {
+      percent += POTENTIAL_VALUES.ICE_ROOT;
     }
     
-    if (this.activeTalents.base.ice_flash) {
-      percent += CONSTANTS.TALENT_VALUES.ice_flash;
+    if (this.activePotentials.base.ice_flash) {
+      percent += POTENTIAL_VALUES.ICE_FLASH;
     }
     
     // Бонусы от нефритов
@@ -391,8 +430,8 @@ class DamageCalculator {
     this.results.iceExplosionPercent = percent;
     this.results.calculationSteps.push({
       name: "Базовый процент ледяного взрыва",
-      formula: "1.0 + бонусы_талантов + бонусы_нефритов",
-      calculation: `1.0 + ${this.activeTalents.base.ice_root ? CONSTANTS.TALENT_VALUES.ice_root : 0} + ${this.activeTalents.base.ice_flash ? CONSTANTS.TALENT_VALUES.ice_flash : 0} + ${percent - 1.0 - (this.activeTalents.base.ice_root ? CONSTANTS.TALENT_VALUES.ice_root : 0) - (this.activeTalents.base.ice_flash ? CONSTANTS.TALENT_VALUES.ice_flash : 0)}`,
+      formula: "1.0 + бонусы_потенциалов + бонусы_нефритов",
+      calculation: `1.0 + ${this.activePotentials.base.ice_root ? POTENTIAL_VALUES.ICE_ROOT : 0} + ${this.activePotentials.base.ice_flash ? POTENTIAL_VALUES.ICE_FLASH : 0} + ${percent - 1.0 - (this.activePotentials.base.ice_root ? POTENTIAL_VALUES.ICE_ROOT : 0) - (this.activePotentials.base.ice_flash ? POTENTIAL_VALUES.ICE_FLASH : 0)}`,
       result: percent.toFixed(2)
     });
     
@@ -407,27 +446,27 @@ class DamageCalculator {
   _calculateCombatAttackBonus() {
     let bonus = this._calculateBaseAttackBonus();
     
-    // Бонусы от боевых талантов
-    if (this.activeTalents.combat.aroma_aura) {
-      bonus += CONSTANTS.TALENT_VALUES.aroma_aura;
+    // Бонусы от боевых потенциалов
+    if (this.activePotentials.combat.aroma_aura) {
+      bonus += POTENTIAL_VALUES.AROMA_AURA;
     }
     
-    if (this.activeTalents.combat.frost_seal) {
-      bonus += CONSTANTS.TALENT_VALUES.frost_seal;
+    if (this.activePotentials.combat.frost_seal) {
+      bonus += POTENTIAL_VALUES.FROST_SEAL;
     }
     
-    if (this.activeTalents.combat.tundra_power) {
-      bonus += CONSTANTS.TALENT_VALUES.tundra_power;
+    if (this.activePotentials.combat.tundra_power) {
+      bonus += POTENTIAL_VALUES.TUNDRA_POWER;
     }
     
-    if (this.activeTalents.combat.frostbound_lotus) {
-      bonus += CONSTANTS.TALENT_VALUES.frostbound_lotus;
+    if (this.activePotentials.combat.frostbound_lotus) {
+      bonus += POTENTIAL_VALUES.FROSTBOUND_LOTUS;
     }
     
     this.results.calculationSteps.push({
       name: "Бонус боевой атаки",
-      formula: "бонус_базовой_атаки + боевые_бонусы_талантов",
-      calculation: `${this._calculateBaseAttackBonus().toFixed(3)} + ${this.activeTalents.combat.aroma_aura ? CONSTANTS.TALENT_VALUES.aroma_aura : 0} + ${this.activeTalents.combat.frost_seal ? CONSTANTS.TALENT_VALUES.frost_seal : 0} + ${this.activeTalents.combat.tundra_power ? CONSTANTS.TALENT_VALUES.tundra_power : 0} + ${this.activeTalents.combat.frostbound_lotus ? CONSTANTS.TALENT_VALUES.frostbound_lotus : 0}`,
+      formula: "бонус_базовой_атаки + боевые_бонусы_потенциалов",
+      calculation: `${this._calculateBaseAttackBonus().toFixed(3)} + ${this.activePotentials.combat.aroma_aura ? POTENTIAL_VALUES.AROMA_AURA : 0} + ${this.activePotentials.combat.frost_seal ? POTENTIAL_VALUES.FROST_SEAL : 0} + ${this.activePotentials.combat.tundra_power ? POTENTIAL_VALUES.TUNDRA_POWER : 0} + ${this.activePotentials.combat.frostbound_lotus ? POTENTIAL_VALUES.FROSTBOUND_LOTUS : 0}`,
       result: bonus.toFixed(3)
     });
     
@@ -440,19 +479,19 @@ class DamageCalculator {
    * @private
    */
   _calculateFinalAttack() {
-    const baseAttackValue = CONSTANTS.BASE_ATTACK + (this.consciousness / 10);
+    const baseAttackValue = baseStats.base_attack + (this.consciousness / 10);
     const combatAttackBonus = this._calculateCombatAttackBonus();
     
     let finalAttack = baseAttackValue * combatAttackBonus;
     
-    // Применение множителя Tessa F
-    if (this.activeTalents.combat.tessa_f) {
-      finalAttack *= CONSTANTS.TALENT_VALUES.tessa_f;
+    // Применение множителя от потенциала Tessa F
+    if (this.activePotentials.combat.tessa_f) {
+      finalAttack *= POTENTIAL_VALUES.TESSA_F;
     }
     
-    // Применение множителя совпадения сознания
-    if (this.activeTalents.combat.consciousness_match) {
-      finalAttack *= CONSTANTS.TALENT_VALUES.consciousness_match;
+    // Применение множителя от потенциала совпадения сознания
+    if (this.activePotentials.combat.consciousness_match) {
+      finalAttack *= POTENTIAL_VALUES.CONSCIOUSNESS_MATCH;
     }
     
     this.results.finalAttack = finalAttack;
@@ -461,7 +500,7 @@ class DamageCalculator {
     this.results.calculationSteps.push({
       name: "Финальная атака",
       formula: "(BASE_ATTACK + (сознание/10)) * бонус_боевой_атаки * tessa_f * consciousness_match",
-      calculation: `(${CONSTANTS.BASE_ATTACK} + (${this.consciousness}/10)) * ${combatAttackBonus.toFixed(3)} * ${this.activeTalents.combat.tessa_f ? CONSTANTS.TALENT_VALUES.tessa_f : 1.0} * ${this.activeTalents.combat.consciousness_match ? CONSTANTS.TALENT_VALUES.consciousness_match : 1.0}`,
+      calculation: `(${baseStats.base_attack} + (${this.consciousness}/10)) * ${combatAttackBonus.toFixed(3)} * ${this.activePotentials.combat.tessa_f ? POTENTIAL_VALUES.TESSA_F : 1.0} * ${this.activePotentials.combat.consciousness_match ? POTENTIAL_VALUES.CONSCIOUSNESS_MATCH : 1.0}`,
       result: finalAttack.toFixed(2)
     });
     
@@ -476,16 +515,16 @@ class DamageCalculator {
   _calculateFinalIceExplosionPercent() {
     let percent = this._calculateBaseIceExplosionPercent();
     
-    // Бонус от таланта frost_bloom
-    if (this.activeTalents.combat.frost_bloom) {
-      percent += CONSTANTS.TALENT_VALUES.frost_bloom;
+    // Бонус от потенциала frost_bloom
+    if (this.activePotentials.combat.frost_bloom) {
+      percent += POTENTIAL_VALUES.FROST_BLOOM;
     }
     
     this.results.finalIceExplosionPercent = percent;
     this.results.calculationSteps.push({
       name: "Финальный процент ледяного взрыва",
       formula: "базовый_процент_ледяного_взрыва + frost_bloom",
-      calculation: `${this._calculateBaseIceExplosionPercent().toFixed(2)} + ${this.activeTalents.combat.frost_bloom ? CONSTANTS.TALENT_VALUES.frost_bloom : 0}`,
+      calculation: `${this._calculateBaseIceExplosionPercent().toFixed(2)} + ${this.activePotentials.combat.frost_bloom ? POTENTIAL_VALUES.FROST_BLOOM : 0}`,
       result: percent.toFixed(2)
     });
     
@@ -501,24 +540,24 @@ class DamageCalculator {
     const iceExplosionPercent = this._calculateFinalIceExplosionPercent();
     
     // Урон ледяного взрыва
-    const iceExplosionDamage = finalAttack * iceExplosionPercent * CONSTANTS.EXPLOSION_COEF;
+    const iceExplosionDamage = finalAttack * iceExplosionPercent * damageConstants.EXPLOSION_COEF;
     this.results.iceExplosionDamage = iceExplosionDamage;
     
     // Урон цветочного взрыва
-    const flowerExplosionDamage = finalAttack * iceExplosionPercent * CONSTANTS.FLOWER_EXPLOSION_COEF;
+    const flowerExplosionDamage = finalAttack * iceExplosionPercent * damageConstants.FLOWER_EXPLOSION_COEF;
     this.results.flowerExplosionDamage = flowerExplosionDamage;
     
     this.results.calculationSteps.push({
       name: "Урон ледяного взрыва",
       formula: "финальная_атака * процент_ледяного_взрыва * EXPLOSION_COEF",
-      calculation: `${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${CONSTANTS.EXPLOSION_COEF}`,
+      calculation: `${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${damageConstants.EXPLOSION_COEF}`,
       result: iceExplosionDamage.toFixed(2)
     });
     
     this.results.calculationSteps.push({
       name: "Урон цветочного взрыва",
       formula: "финальная_атака * процент_ледяного_взрыва * FLOWER_EXPLOSION_COEF",
-      calculation: `${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${CONSTANTS.FLOWER_EXPLOSION_COEF}`,
+      calculation: `${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${damageConstants.FLOWER_EXPLOSION_COEF}`,
       result: flowerExplosionDamage.toFixed(2)
     });
   }
@@ -566,11 +605,11 @@ class DamageCalculator {
     this.results.bossIceExplosionPercent = bossIceExplosionPercent;
     
     // Урон ледяного взрыва по боссам
-    const bossIceExplosionDamage = finalAttack * bossIceExplosionPercent * CONSTANTS.EXPLOSION_COEF;
+    const bossIceExplosionDamage = finalAttack * bossIceExplosionPercent * damageConstants.EXPLOSION_COEF;
     this.results.bossIceExplosionDamage = bossIceExplosionDamage;
     
     // Урон цветочного взрыва по боссам
-    const bossFlowerExplosionDamage = finalAttack * bossIceExplosionPercent * CONSTANTS.FLOWER_EXPLOSION_COEF;
+    const bossFlowerExplosionDamage = finalAttack * bossIceExplosionPercent * damageConstants.FLOWER_EXPLOSION_COEF;
     this.results.bossFlowerExplosionDamage = bossFlowerExplosionDamage;
     
     this.results.calculationSteps.push({
@@ -583,7 +622,7 @@ class DamageCalculator {
     this.results.calculationSteps.push({
       name: "Урон ледяного взрыва по боссам",
       formula: "финальная_атака * процент_ледяного_взрыва_по_боссам * EXPLOSION_COEF",
-      calculation: `${finalAttack.toFixed(2)} * ${bossIceExplosionPercent.toFixed(2)} * ${CONSTANTS.EXPLOSION_COEF}`,
+      calculation: `${finalAttack.toFixed(2)} * ${bossIceExplosionPercent.toFixed(2)} * ${damageConstants.EXPLOSION_COEF}`,
       result: bossIceExplosionDamage.toFixed(2)
     });
   }
@@ -631,11 +670,11 @@ class DamageCalculator {
     this.results.monsterIceExplosionPercent = monsterIceExplosionPercent;
     
     // Урон ледяного взрыва по монстрам
-    const monsterIceExplosionDamage = finalAttack * monsterIceExplosionPercent * CONSTANTS.EXPLOSION_COEF;
+    const monsterIceExplosionDamage = finalAttack * monsterIceExplosionPercent * damageConstants.EXPLOSION_COEF;
     this.results.monsterIceExplosionDamage = monsterIceExplosionDamage;
     
     // Урон цветочного взрыва по монстрам
-    const monsterFlowerExplosionDamage = finalAttack * monsterIceExplosionPercent * CONSTANTS.FLOWER_EXPLOSION_COEF;
+    const monsterFlowerExplosionDamage = finalAttack * monsterIceExplosionPercent * damageConstants.FLOWER_EXPLOSION_COEF;
     this.results.monsterFlowerExplosionDamage = monsterFlowerExplosionDamage;
     
     this.results.calculationSteps.push({
@@ -646,183 +685,183 @@ class DamageCalculator {
     });
     
     this.results.calculationSteps.push({
-      name: "Урон ледяного взрыва по монстрам",
-      formula: "финальная_атака * процент_ледяного_взрыва_по_монстрам * EXPLOSION_COEF",
-      calculation: `${finalAttack.toFixed(2)} * ${monsterIceExplosionPercent.toFixed(2)} * ${CONSTANTS.EXPLOSION_COEF}`,
-      result: monsterIceExplosionDamage.toFixed(2)
-    });
-  }
-
-/**
-   * Расчет урона от последовательности нефрита (3 взрыва)
-   * @private
-   */
-_calculateJadeBlastDamage() {
-    // Обычный урон
-    const finalAttack = this.results.finalAttack;
-    const iceExplosionPercent = this.results.finalIceExplosionPercent;
-    
-    const jadeFirstBlastDamage = Math.round(finalAttack * iceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_FIRST_BLAST_MULTIPLIER);
-    const jadeSecondBlastDamage = Math.round(finalAttack * iceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_OTHER_BLAST_MULTIPLIER);
-    const jadeThirdBlastDamage = jadeSecondBlastDamage; // Третий взрыв равен второму
-    const jadeTotalBlastDamage = jadeFirstBlastDamage + jadeSecondBlastDamage + jadeThirdBlastDamage;
-    
-    this.results.jadeFirstBlastDamage = jadeFirstBlastDamage;
-    this.results.jadeSecondBlastDamage = jadeSecondBlastDamage;
-    this.results.jadeThirdBlastDamage = jadeThirdBlastDamage;
-    this.results.jadeTotalBlastDamage = jadeTotalBlastDamage;
-    
-    // Урон по боссам
-    const bossIceExplosionPercent = this.results.bossIceExplosionPercent;
-    
-    const bossJadeFirstBlastDamage = Math.round(finalAttack * bossIceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_FIRST_BLAST_MULTIPLIER);
-    const bossJadeSecondBlastDamage = Math.round(finalAttack * bossIceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_OTHER_BLAST_MULTIPLIER);
-    const bossJadeThirdBlastDamage = bossJadeSecondBlastDamage;
-    const bossJadeTotalBlastDamage = bossJadeFirstBlastDamage + bossJadeSecondBlastDamage + bossJadeThirdBlastDamage;
-    
-    this.results.bossJadeFirstBlastDamage = bossJadeFirstBlastDamage;
-    this.results.bossJadeSecondBlastDamage = bossJadeSecondBlastDamage;
-    this.results.bossJadeThirdBlastDamage = bossJadeThirdBlastDamage;
-    this.results.bossJadeTotalBlastDamage = bossJadeTotalBlastDamage;
-    
-    // Урон по монстрам
-    const monsterIceExplosionPercent = this.results.monsterIceExplosionPercent;
-    
-    const monsterJadeFirstBlastDamage = Math.round(finalAttack * monsterIceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_FIRST_BLAST_MULTIPLIER);
-    const monsterJadeSecondBlastDamage = Math.round(finalAttack * monsterIceExplosionPercent * CONSTANTS.EXPLOSION_COEF * CONSTANTS.JADE_OTHER_BLAST_MULTIPLIER);
-    const monsterJadeThirdBlastDamage = monsterJadeSecondBlastDamage;
-    const monsterJadeTotalBlastDamage = monsterJadeFirstBlastDamage + monsterJadeSecondBlastDamage + monsterJadeThirdBlastDamage;
-    
-    this.results.monsterJadeFirstBlastDamage = monsterJadeFirstBlastDamage;
-    this.results.monsterJadeSecondBlastDamage = monsterJadeSecondBlastDamage;
-    this.results.monsterJadeThirdBlastDamage = monsterJadeThirdBlastDamage;
-    this.results.monsterJadeTotalBlastDamage = monsterJadeTotalBlastDamage;
-    
-    this.results.calculationSteps.push({
-      name: "Урон первого взрыва нефрита",
-      formula: "round(финальная_атака * процент_ледяного_взрыва * EXPLOSION_COEF * JADE_FIRST_BLAST_MULTIPLIER)",
-      calculation: `round(${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${CONSTANTS.EXPLOSION_COEF} * ${CONSTANTS.JADE_FIRST_BLAST_MULTIPLIER})`,
-      result: jadeFirstBlastDamage
-    });
-    
-    this.results.calculationSteps.push({
-      name: "Урон второго взрыва нефрита",
-      formula: "round(финальная_атака * процент_ледяного_взрыва * EXPLOSION_COEF * JADE_OTHER_BLAST_MULTIPLIER)",
-      calculation: `round(${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${CONSTANTS.EXPLOSION_COEF} * ${CONSTANTS.JADE_OTHER_BLAST_MULTIPLIER})`,
-      result: jadeSecondBlastDamage
-    });
-    
-    this.results.calculationSteps.push({
-      name: "Общий урон нефрита",
-      formula: "первый_взрыв + второй_взрыв + третий_взрыв",
-      calculation: `${jadeFirstBlastDamage} + ${jadeSecondBlastDamage} + ${jadeThirdBlastDamage}`,
-      result: jadeTotalBlastDamage
-    });
-  }
-
-  /**
-   * Выполнение расчета урона на основе установленных параметров
-   * @returns {Object} - Результаты расчета
-   */
-  calculate() {
-    // Сброс результатов и шагов расчета
-    this.results = {
-      baseAttack: 0,
-      finalAttack: 0,
-      iceExplosionPercent: 0,
-      finalIceExplosionPercent: 0,
-      physicalDamage: 0,
-      iceExplosionDamage: 0,
-      flowerExplosionDamage: 0,
-      bossPhysicalDamage: 0,
-      bossAttackPercent: 0,
-      bossIceExplosionPercent: 0,
-      bossIceExplosionDamage: 0,
-      bossFlowerExplosionDamage: 0,
-      monsterPhysicalDamage: 0,
-      monsterAttackPercent: 0,
-      monsterIceExplosionPercent: 0,
-      monsterIceExplosionDamage: 0,
-      monsterFlowerExplosionDamage: 0,
-      jadeFirstBlastDamage: 0,
-      jadeSecondBlastDamage: 0,
-      jadeThirdBlastDamage: 0,
-      jadeTotalBlastDamage: 0,
-      bossJadeFirstBlastDamage: 0,
-      bossJadeSecondBlastDamage: 0,
-      bossJadeThirdBlastDamage: 0,
-      bossJadeTotalBlastDamage: 0,
-      monsterJadeFirstBlastDamage: 0,
-      monsterJadeSecondBlastDamage: 0,
-      monsterJadeThirdBlastDamage: 0,
-      monsterJadeTotalBlastDamage: 0,
-      calculationSteps: []
-    };
-    
-    // Расчет базовой атаки
-    this._calculateBaseAttack();
-    
-    // Расчет базового процента ледяного взрыва
-    this._calculateBaseIceExplosionPercent();
-    
-    // Расчет финальной атаки
-    this._calculateFinalAttack();
-    
-    // Расчет финального процента ледяного взрыва
-    this._calculateFinalIceExplosionPercent();
-    
-    // Расчет урона ледяного взрыва
-    this._calculateIceExplosionDamage();
-    
-    // Расчет урона по боссам
-    this._calculateBossDamage();
-    
-    // Расчет урона по монстрам
-    this._calculateMonsterDamage();
-    
-    // Расчет урона последовательности нефрита
-    this._calculateJadeBlastDamage();
-    
-    return this.results;
-  }
-
-  /**
-   * Получение текущих результатов расчета
-   * @returns {Object} - Результаты расчета
-   */
-  getResults() {
-    return this.results;
-  }
-
-  /**
-   * Получение шагов расчета для подробного вывода
-   * @returns {Array} - Шаги расчета
-   */
-  getCalculationSteps() {
-    return this.results.calculationSteps;
-  }
-
-  /**
-   * Получение информации о текущих модификаторах
-   * @returns {Object} - Информация о модификаторах
-   */
-  getModifiersInfo() {
-    // Подготовка информации о модификаторах для отображения
-    const modifiersInfo = {};
-    
-    for (const key in this.modifiers) {
-      if (this.modifiers[key].length > 0) {
-        modifiersInfo[key] = this.modifiers[key].map(mod => ({
-          source: mod.source,
-          type: mod.type,
-          value: mod.value,
-          condition: mod.condition || null
-        }));
-      }
+        name: "Урон ледяного взрыва по монстрам",
+        formula: "финальная_атака * процент_ледяного_взрыва_по_монстрам * EXPLOSION_COEF",
+        calculation: `${finalAttack.toFixed(2)} * ${monsterIceExplosionPercent.toFixed(2)} * ${damageConstants.EXPLOSION_COEF}`,
+        result: monsterIceExplosionDamage.toFixed(2)
+      });
     }
-    
-    return modifiersInfo;
+  
+    /**
+     * Расчет урона от последовательности нефрита (3 взрыва)
+     * @private
+     */
+    _calculateJadeBlastDamage() {
+      // Обычный урон
+      const finalAttack = this.results.finalAttack;
+      const iceExplosionPercent = this.results.finalIceExplosionPercent;
+      
+      const jadeFirstBlastDamage = Math.round(finalAttack * iceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_FIRST_BLAST_MULTIPLIER);
+      const jadeSecondBlastDamage = Math.round(finalAttack * iceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_OTHER_BLAST_MULTIPLIER);
+      const jadeThirdBlastDamage = jadeSecondBlastDamage; // Третий взрыв равен второму
+      const jadeTotalBlastDamage = jadeFirstBlastDamage + jadeSecondBlastDamage + jadeThirdBlastDamage;
+      
+      this.results.jadeFirstBlastDamage = jadeFirstBlastDamage;
+      this.results.jadeSecondBlastDamage = jadeSecondBlastDamage;
+      this.results.jadeThirdBlastDamage = jadeThirdBlastDamage;
+      this.results.jadeTotalBlastDamage = jadeTotalBlastDamage;
+      
+      // Урон по боссам
+      const bossIceExplosionPercent = this.results.bossIceExplosionPercent;
+      
+      const bossJadeFirstBlastDamage = Math.round(finalAttack * bossIceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_FIRST_BLAST_MULTIPLIER);
+      const bossJadeSecondBlastDamage = Math.round(finalAttack * bossIceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_OTHER_BLAST_MULTIPLIER);
+      const bossJadeThirdBlastDamage = bossJadeSecondBlastDamage;
+      const bossJadeTotalBlastDamage = bossJadeFirstBlastDamage + bossJadeSecondBlastDamage + bossJadeThirdBlastDamage;
+      
+      this.results.bossJadeFirstBlastDamage = bossJadeFirstBlastDamage;
+      this.results.bossJadeSecondBlastDamage = bossJadeSecondBlastDamage;
+      this.results.bossJadeThirdBlastDamage = bossJadeThirdBlastDamage;
+      this.results.bossJadeTotalBlastDamage = bossJadeTotalBlastDamage;
+      
+      // Урон по монстрам
+      const monsterIceExplosionPercent = this.results.monsterIceExplosionPercent;
+      
+      const monsterJadeFirstBlastDamage = Math.round(finalAttack * monsterIceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_FIRST_BLAST_MULTIPLIER);
+      const monsterJadeSecondBlastDamage = Math.round(finalAttack * monsterIceExplosionPercent * damageConstants.EXPLOSION_COEF * damageConstants.JADE_OTHER_BLAST_MULTIPLIER);
+      const monsterJadeThirdBlastDamage = monsterJadeSecondBlastDamage;
+      const monsterJadeTotalBlastDamage = monsterJadeFirstBlastDamage + monsterJadeSecondBlastDamage + monsterJadeThirdBlastDamage;
+      
+      this.results.monsterJadeFirstBlastDamage = monsterJadeFirstBlastDamage;
+      this.results.monsterJadeSecondBlastDamage = monsterJadeSecondBlastDamage;
+      this.results.monsterJadeThirdBlastDamage = monsterJadeThirdBlastDamage;
+      this.results.monsterJadeTotalBlastDamage = monsterJadeTotalBlastDamage;
+      
+      this.results.calculationSteps.push({
+        name: "Урон первого взрыва нефрита",
+        formula: "round(финальная_атака * процент_ледяного_взрыва * EXPLOSION_COEF * JADE_FIRST_BLAST_MULTIPLIER)",
+        calculation: `round(${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${damageConstants.EXPLOSION_COEF} * ${damageConstants.JADE_FIRST_BLAST_MULTIPLIER})`,
+        result: jadeFirstBlastDamage
+      });
+      
+      this.results.calculationSteps.push({
+        name: "Урон второго взрыва нефрита",
+        formula: "round(финальная_атака * процент_ледяного_взрыва * EXPLOSION_COEF * JADE_OTHER_BLAST_MULTIPLIER)",
+        calculation: `round(${finalAttack.toFixed(2)} * ${iceExplosionPercent.toFixed(2)} * ${damageConstants.EXPLOSION_COEF} * ${damageConstants.JADE_OTHER_BLAST_MULTIPLIER})`,
+        result: jadeSecondBlastDamage
+      });
+      
+      this.results.calculationSteps.push({
+        name: "Общий урон нефрита",
+        formula: "первый_взрыв + второй_взрыв + третий_взрыв",
+        calculation: `${jadeFirstBlastDamage} + ${jadeSecondBlastDamage} + ${jadeThirdBlastDamage}`,
+        result: jadeTotalBlastDamage
+      });
+    }
+  
+    /**
+     * Выполнение расчета урона на основе установленных параметров
+     * @returns {Object} - Результаты расчета
+     */
+    calculate() {
+      // Сброс результатов и шагов расчета
+      this.results = {
+        baseAttack: 0,
+        finalAttack: 0,
+        iceExplosionPercent: 0,
+        finalIceExplosionPercent: 0,
+        physicalDamage: 0,
+        iceExplosionDamage: 0,
+        flowerExplosionDamage: 0,
+        bossPhysicalDamage: 0,
+        bossAttackPercent: 0,
+        bossIceExplosionPercent: 0,
+        bossIceExplosionDamage: 0,
+        bossFlowerExplosionDamage: 0,
+        monsterPhysicalDamage: 0,
+        monsterAttackPercent: 0,
+        monsterIceExplosionPercent: 0,
+        monsterIceExplosionDamage: 0,
+        monsterFlowerExplosionDamage: 0,
+        jadeFirstBlastDamage: 0,
+        jadeSecondBlastDamage: 0,
+        jadeThirdBlastDamage: 0,
+        jadeTotalBlastDamage: 0,
+        bossJadeFirstBlastDamage: 0,
+        bossJadeSecondBlastDamage: 0,
+        bossJadeThirdBlastDamage: 0,
+        bossJadeTotalBlastDamage: 0,
+        monsterJadeFirstBlastDamage: 0,
+        monsterJadeSecondBlastDamage: 0,
+        monsterJadeThirdBlastDamage: 0,
+        monsterJadeTotalBlastDamage: 0,
+        calculationSteps: []
+      };
+      
+      // Расчет базовой атаки
+      this._calculateBaseAttack();
+      
+      // Расчет базового процента ледяного взрыва
+      this._calculateBaseIceExplosionPercent();
+      
+      // Расчет финальной атаки
+      this._calculateFinalAttack();
+      
+      // Расчет финального процента ледяного взрыва
+      this._calculateFinalIceExplosionPercent();
+      
+      // Расчет урона ледяного взрыва
+      this._calculateIceExplosionDamage();
+      
+      // Расчет урона по боссам
+      this._calculateBossDamage();
+      
+      // Расчет урона по монстрам
+      this._calculateMonsterDamage();
+      
+      // Расчет урона последовательности нефрита
+      this._calculateJadeBlastDamage();
+      
+      return this.results;
+    }
+  
+    /**
+     * Получение текущих результатов расчета
+     * @returns {Object} - Результаты расчета
+     */
+    getResults() {
+      return this.results;
+    }
+  
+    /**
+     * Получение шагов расчета для подробного вывода
+     * @returns {Array} - Шаги расчета
+     */
+    getCalculationSteps() {
+      return this.results.calculationSteps;
+    }
+  
+    /**
+     * Получение информации о текущих модификаторах
+     * @returns {Object} - Информация о модификаторах
+     */
+    getModifiersInfo() {
+      // Подготовка информации о модификаторах для отображения
+      const modifiersInfo = {};
+      
+      for (const key in this.modifiers) {
+        if (this.modifiers[key].length > 0) {
+          modifiersInfo[key] = this.modifiers[key].map(mod => ({
+            source: mod.source,
+            type: mod.type,
+            value: mod.value,
+            condition: mod.condition || null
+          }));
+        }
+      }
+      
+      return modifiersInfo;
+    }
   }
-}
-
-export default DamageCalculator;
+  
+  export default DamageCalculator;

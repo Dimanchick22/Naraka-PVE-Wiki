@@ -24,9 +24,9 @@ export const jadesData = [
     id: "jade_frozen_lotos",
     name: "Морозный лотос",
     type: "attack",
-    rarity: "epic",
+    rarity: "legendary",
     thumbnail: null,
-    description: "Увеличивает урон на 25%, но одновременно с этим накапливает обморожение в течении 5с",
+    description: "После поподания [Удара лотоса] Увеличивает урон на 25%, но одновременно с этим накапливает обморожение в течении 5с",
     stats: [
       {
         id: "frozen_lotos_attack",
@@ -45,103 +45,88 @@ export const jadesData = [
     type: "ice_explosion",
     rarity: "legendary",
     thumbnail: null,
-    description: "Увеличивает урон ледяного взрыва на 30%",
+    description: "Увеличивает урон ледяного взрыва на 35%, уменьшает перезарядку 33% и снижает минимальное значение обморожения на 450",
     stats: [
       {
         id: "ice_blast_explosion",
         name: "Лед. взрыв",
         type: ModifierType.PERCENTAGE,
         target: ModifierTarget.ICE_EXPLOSION,
-        value: 30,
+        value: 35,
         condition: null
       }
     ],
     recommended_for: ["ziping"],
   },
   {
-    id: "jade_fusion_core",
-    name: "Ядро слияния",
-    type: "fusion",
-    rarity: "epic",
-    thumbnail: null,
-    description: "Усиливает эффекты других нефритов на 30%",
-    stats: [
-      {
-        id: "fusion_core_stat",
-        name: "Слияние",
-        type: ModifierType.PERCENTAGE,
-        target: ModifierTarget.FUSION,
-        value: 30,
-        condition: null
-      }
-    ],
-    recommended_for: [],
-  },
-  {
-    id: "jade_boss_hunter",
-    name: "Охотник на боссов",
-    type: "boss_attack",
+    id: "successive_ice_blast",
+    name: "Непрерывный ледяной взрыв",
+    type: null,
     rarity: "legendary",
     thumbnail: null,
-    description: "Увеличивает урон по боссам на 20%",
-    stats: [
-      {
-        id: "boss_hunter_stat",
-        name: "Атака по боссу",
-        type: ModifierType.PERCENTAGE,
-        target: ModifierTarget.BOSS_ATTACK,
-        value: 20,
-        condition: null
-      }
-    ],
+    description: "Ледяеной взрыв сработает 3 раза, но урон от каждого взрыва будет уменьшен на 45%",
+    stats: null,
     recommended_for: [],
   },
   {
-    id: "jade_monster_slayer",
-    name: "Истребитель монстров",
-    type: "monster_attack",
-    rarity: "epic",
+    id: "elemental_lotus",
+    name: "Элементальный лотас",
+    type: null,
+    rarity: "legendary",
     thumbnail: null,
-    description: "Увеличивает урон по обычным монстрам на 15%",
-    stats: [
-      {
-        id: "monster_slayer_stat",
-        name: "Атака по монстрам",
-        type: ModifierType.PERCENTAGE,
-        target: ModifierTarget.MONSTER_ATTACK,
-        value: 15,
-        condition: null
-      }
-    ],
+    description: "Призывает лотасы на 16с которые крутятся вокруг вас и наносят урон врагам, максимальное значение лотасов 4",
+    stats: null,
     recommended_for: [],
   },
   {
-    id: "jade_dual_effect",
-    name: "Двойной эффект",
+    id: "ghastbloom",
+    name: "Финальное цвеетение",
+    type: null,
+    rarity: "legendary",
+    thumbnail: null,
+    description: "Призывает [Цветочные взрывы] когда лотас исчезает или когда лотасы превышают максимальное значение",
+    stats: null,
+    recommended_for: [],
+  },
+  {
+    id: "thundra_might",
+    name: "Мощь тундры",
     type: "mixed",
-    rarity: "legendary",
+    rarity: "epic",
     thumbnail: null,
-    description: "Увеличивает атаку на 15% и урон ледяного взрыва на 20%",
+    description: "Увеличивает атаку на 15% и накопление ледяного взрыва на 45% на 5с каждый раз когда вы накапливаете обморожение",
     stats: [
       {
-        id: "dual_effect_attack",
+        id: "thundra_might_attack",
         name: "Атака",
         type: ModifierType.PERCENTAGE,
         target: ModifierTarget.ATTACK,
         value: 15,
         condition: null
-      },
+      }
+    ],
+    recommended_for: ["tessa", "ziping"],
+  },
+  {
+    id: "sub-zero_seal",
+    name: "Морозная печать",
+    type: "mixed",
+    rarity: "epic",
+    thumbnail: null,
+    description: "При здоровье больше 50% Увеличивает атаку на 20%, но одновременно у владельца непрерывно накапливается обморожение",
+    stats: [
       {
-        id: "dual_effect_ice",
-        name: "Лед. взрыв",
+        id: "sub-zero_seal_attack",
+        name: "Атака",
         type: ModifierType.PERCENTAGE,
-        target: ModifierTarget.ICE_EXPLOSION,
+        target: ModifierTarget.ATTACK,
         value: 20,
         condition: null
       }
     ],
     recommended_for: ["tessa", "ziping"],
   }
+
 ];
 
 // Функция для получения иконки нефрита

@@ -1,0 +1,102 @@
+/* src/styles/potentials.css */
+
+/* Сетка для отображения потенциалов */
+.potentials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .potentials-section {
+    margin-bottom: 2rem;
+  }
+  
+  /* Стили для потенциалов */
+  .potential-item {
+    background-color: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 6px;
+    padding: 0.75rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .potential-item:hover {
+    background-color: rgba(26, 26, 26, 1);
+    border-color: var(--naraka-secondary);
+  }
+  
+  .potential-item.active {
+    background-color: rgba(75, 0, 130, 0.2);
+    border-color: var(--naraka-secondary);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+  }
+  
+  .potential-checkbox {
+    margin-right: 0.75rem;
+  }
+  
+  .potential-info {
+    flex: 1;
+  }
+  
+  .potential-name {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: var(--naraka-secondary);
+  }
+  
+  .potential-description {
+    font-size: 0.875rem;
+    color: var(--naraka-light);
+    opacity: 0.9;
+  }
+  
+  /* Стили для групп потенциалов */
+  .potential-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .potential-group-title {
+    font-size: 1.125rem;
+    color: var(--naraka-secondary);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  
+  /* Стили для категорий потенциалов */
+  .base-potentials .potential-item {
+    border-left: 3px solid rgba(75, 0, 130, 0.7);
+  }
+  
+  .combat-potentials .potential-item {
+    border-left: 3px solid rgba(139, 0, 0, 0.7);
+  }
+  
+  /* Стили для типов потенциалов */
+  .potential-item[data-type="attack"] {
+    border-left-color: rgba(139, 0, 0, 0.7);
+  }
+  
+  .potential-item[data-type="ice_explosion"] {
+    border-left-color: rgba(0, 112, 221, 0.7);
+  }
+  
+  .potential-item[data-type="defense"] {
+    border-left-color: rgba(45, 197, 14, 0.7);
+  }
+  
+  .potential-item[data-type="special"] {
+    border-left-color: rgba(163, 53, 238, 0.7);
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .potentials-grid {
+      grid-template-columns: 1fr;
+    }
+  }

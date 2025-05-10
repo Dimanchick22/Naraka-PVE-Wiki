@@ -2,7 +2,7 @@
 
 import { ModifierType } from './jades';
 
-// Цели модификаторов специфичные для диковинок
+// Типы модификаторов специфичные для диковинок
 export const RarityModifierTarget = {
   FLOWER_EXPLOSION_DAMAGE: 'flower_explosion_damage',
   FLOWER_EXPLOSION_RADIUS: 'flower_explosion_radius',
@@ -166,12 +166,14 @@ export const raritiesData = [
       }
     ],
     cloudinaryId: "withered-glory-mythic_zds2gn.png",
-  },
-  
-  // Дополните этот массив своими диковинками при необходимости
+  }
 ];
 
-// Функция для получения цвета диковинки по редкости
+/**
+ * Получение цвета диковинки по редкости
+ * @param {string} rarity - Редкость диковинки
+ * @returns {string} - HEX-код цвета
+ */
 export function getRarityColor(rarity) {
   switch (rarity.toLowerCase()) {
     case RarityLevel.MYTHIC:
@@ -185,7 +187,11 @@ export function getRarityColor(rarity) {
   }
 }
 
-// Функция для получения названия редкости
+/**
+ * Получение названия редкости
+ * @param {string} rarity - Редкость диковинки
+ * @returns {string} - Название редкости
+ */
 export function getRarityName(rarity) {
   switch (rarity.toLowerCase()) {
     case RarityLevel.MYTHIC:
@@ -199,7 +205,11 @@ export function getRarityName(rarity) {
   }
 }
 
-// Функция для получения названия типа
+/**
+ * Получение названия типа
+ * @param {string} type - Тип диковинки
+ * @returns {string} - Название типа
+ */
 export function getRarityTypeName(type) {
   switch (type.toLowerCase()) {
     case RarityType.YIN:
@@ -211,12 +221,24 @@ export function getRarityTypeName(type) {
   }
 }
 
-// Функция для получения диковинки по ID
+/**
+ * Получение диковинки по ID
+ * @param {string} id - ID диковинки
+ * @returns {Object|null} - Объект диковинки или null
+ */
 export function getRarityById(id) {
   return raritiesData.find(rarity => rarity.id === id) || null;
 }
 
-// Функция для фильтрации диковинок
+/**
+ * Фильтрация диковинок
+ * @param {Object} params - Параметры фильтрации
+ * @param {string|null} params.rarity - Редкость диковинки
+ * @param {string|null} params.type - Тип диковинки
+ * @param {string|null} params.searchTerm - Строка поиска
+ * @param {string|null} params.character - Персонаж
+ * @returns {Array} - Отфильтрованный массив диковинок
+ */
 export function filterRarities({ rarity, type, searchTerm, character }) {
   return raritiesData.filter(item => {
     const matchesRarity = !rarity || rarity === "all" || item.rarity === rarity;
@@ -226,7 +248,8 @@ export function filterRarities({ rarity, type, searchTerm, character }) {
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCharacter = !character || 
       !item.for_character || 
-      item.for_character === character;
+      item.for_character === character ||
+      item.name === "Чаша увядшей славы"; // Чаша увядшей славы доступна для всех
     
     return matchesRarity && matchesType && matchesSearch && matchesCharacter;
   });

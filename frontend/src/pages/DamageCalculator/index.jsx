@@ -3,17 +3,18 @@ import { useState, useEffect } from 'react';
 import { charactersData } from '../../data/characters';
 import { RarityType } from '../../data/rarities';
 import { ModifierType } from '../../data/jades';
+import { baseStats, damageConstants } from '../../data/baseStats';
 import DamageCalculator from '../../utils/DamageCalculator';
 import TabbedCalculator from '../../components/calculator/TabbedCalculator';
 import CharacterSelect from './CharacterSelect';
 import BasicParameters from './BasicParameters';
-import TalentSelection from './TalentSelection';
+import PotentialSelection from './PotentialSelection';
 import ResultsSection from './ResultsSection';
 
 const DamageCalculatorPage = () => {
   // Состояние калькулятора
   const [character, setCharacter] = useState(null);
-  const [consciousness, setConsciousness] = useState(1120);
+  const [consciousness, setConsciousness] = useState(damageConstants.DEFAULT_CONSCIOUSNESS);
   const [heroLevel, setHeroLevel] = useState(20);
   const [selectedJades, setSelectedJades] = useState(Array(6).fill(null));
   const [yinRarity, setYinRarity] = useState(null);
@@ -44,15 +45,15 @@ const DamageCalculatorPage = () => {
     { type: '', value: 0 }
   ]);
   
-  // Состояние талантов
-  const [baseTalents, setBaseTalents] = useState({
+  // Состояние потенциалов (бывшие таланты)
+  const [basePotentials, setBasePotentials] = useState({
     untouchable_talent: false,
     power: false,
     ice_root: false,
     ice_flash: false
   });
   
-  const [combatTalents, setCombatTalents] = useState({
+  const [combatPotentials, setCombatPotentials] = useState({
     aroma_aura: false,
     frost_seal: false,
     tundra_power: false,
@@ -67,17 +68,17 @@ const DamageCalculatorPage = () => {
   const [activeTab, setActiveTab] = useState('normal'); // 'normal', 'boss', 'monster'
   const [showDetailedCalc, setShowDetailedCalc] = useState(false);
 
-  // Эффект при изменении персонажа - сброс талантов
+  // Эффект при изменении персонажа - сброс потенциалов
   useEffect(() => {
     if (character) {
-      setBaseTalents({
+      setBasePotentials({
         untouchable_talent: false,
         power: false,
         ice_root: false,
         ice_flash: false
       });
       
-      setCombatTalents({
+      setCombatPotentials({
         aroma_aura: false,
         frost_seal: false,
         tundra_power: false,
@@ -140,19 +141,19 @@ const DamageCalculatorPage = () => {
     }
   };
   
-  // Обработчик изменения базового таланта
-  const handleBaseTalentChange = (talentId) => {
-    setBaseTalents(prev => ({
+  // Обработчик изменения базового потенциала
+  const handleBasePotentialChange = (potentialId) => {
+    setBasePotentials(prev => ({
       ...prev,
-      [talentId]: !prev[talentId]
+      [potentialId]: !prev[potentialId]
     }));
   };
   
-  // Обработчик изменения боевого таланта
-  const handleCombatTalentChange = (talentId) => {
-    setCombatTalents(prev => ({
+  // Обработчик изменения боевого потенциала
+  const handleCombatPotentialChange = (potentialId) => {
+    setCombatPotentials(prev => ({
       ...prev,
-      [talentId]: !prev[talentId]
+      [potentialId]: !prev[potentialId]
     }));
   };
   
@@ -198,14 +199,14 @@ const DamageCalculatorPage = () => {
       .setConsciousness(consciousness)
       .setHeroLevel(heroLevel);
     
-    // Установка базовых талантов
-    Object.keys(baseTalents).forEach(talentId => {
-      calculator.setBaseTalent(talentId, baseTalents[talentId]);
+    // Установка базовых потенциалов
+    Object.keys(basePotentials).forEach(potentialId => {
+      calculator.setBaseTalent(potentialId, basePotentials[potentialId]);
     });
     
-    // Установка боевых талантов
-    Object.keys(combatTalents).forEach(talentId => {
-      calculator.setCombatTalent(talentId, combatTalents[talentId]);
+    // Установка боевых потенциалов
+    Object.keys(combatPotentials).forEach(potentialId => {
+      calculator.setCombatTalent(potentialId, combatPotentials[potentialId]);
     });
     
     // Добавление нефритов
@@ -292,7 +293,7 @@ const DamageCalculatorPage = () => {
       <div className="section-description">
         <p>
           Этот калькулятор позволяет рассчитать урон персонажа на основе различных параметров, 
-          включая сознание, уровень героя, нефриты, диковинки и активные таланты.
+          включая сознание, уровень героя, нефриты, диковинки и активные потенциалы.
         </p>
       </div>
       
@@ -315,12 +316,11 @@ const DamageCalculatorPage = () => {
             />
             
             {character && (
-              <TalentSelection
-                character={character}
-                baseTalents={baseTalents}
-                combatTalents={combatTalents}
-                onBaseTalentChange={handleBaseTalentChange}
-                onCombatTalentChange={handleCombatTalentChange}
+              <PotentialSelection
+                basePotentials={basePotentials}
+                combatPotentials={combatPotentials}
+                onBasePotentialChange={handleBasePotentialChange}
+                onCombatPotentialChange={handleCombatPotentialChange}
               />
             )}
             

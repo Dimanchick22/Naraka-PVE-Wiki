@@ -205,7 +205,41 @@ const MonsterDamageTab = ({ results }) => (
         </div>
       </div>
       
-      {/* Остальные блоки опущены для краткости */}
+      <div className="summary-block monster-damage">
+        <h4 className="summary-title">Урон по монстрам</h4>
+        <div className="summary-item">
+          <span className="summary-label">Физический урон:</span>
+          <span className="summary-value">{Math.round(results.monsterPhysicalDamage)}</span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Урон лед. взрыва:</span>
+          <span className="summary-value">{Math.round(results.monsterIceExplosionDamage)}</span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Урон цветочного взрыва:</span>
+          <span className="summary-value">{Math.round(results.monsterFlowerExplosionDamage)}</span>
+        </div>
+      </div>
+      
+      <div className="summary-block monster-damage">
+        <h4 className="summary-title">Урон нефрита по монстрам</h4>
+        <div className="summary-item">
+          <span className="summary-label">Первый взрыв:</span>
+          <span className="summary-value">{results.monsterJadeFirstBlastDamage}</span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Второй взрыв:</span>
+          <span className="summary-value">{results.monsterJadeSecondBlastDamage}</span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Третий взрыв:</span>
+          <span className="summary-value">{results.monsterJadeThirdBlastDamage}</span>
+        </div>
+        <div className="summary-item">
+          <span className="summary-label">Общий урон:</span>
+          <span className="summary-value highlight">{results.monsterJadeTotalBlastDamage}</span>
+        </div>
+      </div>
     </div>
   </div>
 );
