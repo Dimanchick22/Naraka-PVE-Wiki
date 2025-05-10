@@ -1,0 +1,154 @@
+/* src/styles/components/calculatorResults.css */
+/* Стили для отображения результатов расчета в калькуляторе */
+
+/* Контейнер для результатов */
+.calculator-results-section {
+    margin-top: var(--spacing-xl);
+    width: 100%;
+  }
+  
+  /* Контейнер для шагов расчета */
+  .steps-container {
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    overflow-x: auto;
+  }
+  
+  /* Таблица со всеми шагами расчета */
+  .steps-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-sm);
+  }
+  
+  .steps-table th {
+    background-color: rgba(139, 0, 0, 0.3);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: left;
+    color: var(--naraka-light);
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .steps-table td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    vertical-align: top;
+  }
+  
+  .steps-table td code {
+    font-family: monospace;
+    white-space: nowrap;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 90%;
+  }
+  
+  .steps-table .even-row {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  .steps-table .odd-row {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Блоки с суммарным уроном */
+  .summary-blocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .summary-block {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+  }
+  
+  .summary-block.boss-damage {
+    border-left: 4px solid var(--naraka-primary);
+  }
+  
+  .summary-block.monster-damage {
+    border-left: 4px solid var(--naraka-accent);
+  }
+  
+  .summary-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  }
+  
+  .summary-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  .summary-label {
+    font-weight: bold;
+  }
+  
+  .summary-value {
+    font-size: var(--font-size-lg);
+    font-weight: bold;
+    color: var(--naraka-secondary);
+  }
+  
+  .summary-value.highlight {
+    color: var(--naraka-primary);
+    font-size: var(--font-size-xl);
+  }
+  
+  /* Переключатель подробного расчета */
+  .detailed-calc-section {
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    padding-top: var(--spacing-md);
+  }
+  
+  .section-toggle {
+    cursor: pointer;
+    transition: var(--transition-base);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .section-toggle:hover {
+    background-color: rgba(139, 0, 0, 0.2);
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .summary-blocks {
+      grid-template-columns: 1fr;
+    }
+    
+    .steps-table {
+      font-size: var(--font-size-xs);
+    }
+    
+    .steps-table td,
+    .steps-table th {
+      padding: var(--spacing-xs) var(--spacing-sm);
+    }
+  }

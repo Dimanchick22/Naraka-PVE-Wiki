@@ -1,10 +1,10 @@
 /* src/styles/components/customSelect.css */
-/* Стили для кастомного селекта */
+/* Стили для кастомного выпадающего списка */
 
 .custom-select {
     position: relative;
-    font-family: var(--font-body);
     width: 100%;
+    font-family: var(--font-body);
   }
   
   .custom-select-selected {
@@ -62,13 +62,15 @@
     border: 1px solid var(--naraka-secondary);
     border-top: none;
     border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
-    z-index: var(--z-index-dropdown);
-    box-shadow: var(--box-shadow-md);
-    display: none;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    animation: fadeIn 0.2s ease-out;
   }
   
-  .custom-select.open .custom-select-options {
-    display: block;
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   .custom-select-option {
@@ -106,104 +108,6 @@
   .custom-select-options::-webkit-scrollbar-thumb {
     background-color: var(--naraka-primary);
     border-radius: 3px;
-  }
-  
-  /* Дополнительные стили для групп опций */
-  .custom-select-optgroup {
-    padding: var(--spacing-xs) var(--spacing-md);
-    font-weight: bold;
-    color: var(--naraka-secondary);
-    opacity: 0.8;
-    pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-  
-  .custom-select-optgroup-items {
-    padding-left: var(--spacing-md);
-  }
-  
-  /* Красивая анимация появления списка */
-  @keyframes selectFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-5px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .custom-select.open .custom-select-options {
-    animation: selectFadeIn 0.2s ease-out forwards;
-  }
-  
-  /* Состояния для неактивных элементов */
-  .custom-select-option.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: transparent !important;
-    color: var(--naraka-light) !important;
-  }
-  
-  /* Стили для поисковой строки внутри селекта */
-  .custom-select-search {
-    padding: var(--spacing-xs) var(--spacing-md);
-    background-color: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  }
-  
-  .custom-select-search-input {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    border-radius: var(--border-radius-sm);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    color: var(--naraka-light);
-    font-size: var(--font-size-sm);
-  }
-  
-  .custom-select-search-input:focus {
-    outline: none;
-    border-color: var(--naraka-secondary);
-  }
-  
-  /* Стили для мульти-селекта */
-  .custom-multi-select .custom-select-selected {
-    height: auto;
-    min-height: 36px;
-    flex-wrap: wrap;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-  
-  .selected-option-tag {
-    display: inline-flex;
-    align-items: center;
-    background-color: rgba(139, 0, 0, 0.3);
-    border-radius: var(--border-radius-sm);
-    padding: 2px var(--spacing-xs);
-    font-size: var(--font-size-sm);
-    margin-right: var(--spacing-xs);
-  }
-  
-  .selected-option-tag .remove-tag {
-    margin-left: var(--spacing-xs);
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.2);
-    font-size: 12px;
-    cursor: pointer;
-    transition: var(--transition-base);
-  }
-  
-  .selected-option-tag .remove-tag:hover {
-    background-color: var(--naraka-primary);
-    color: white;
   }
   
   /* Адаптивность для мобильных устройств */

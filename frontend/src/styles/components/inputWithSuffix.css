@@ -1,0 +1,36 @@
+/* src/styles/components/inputWithSuffix.css */
+/* Стили для полей ввода с суффиксом */
+
+.input-with-suffix {
+    position: relative;
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .input-with-suffix .form-control {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+  
+  .input-suffix {
+    position: absolute;
+    right: var(--spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--naraka-light);
+    opacity: 0.7;
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  /* Состояние для неактивных полей */
+  .input-with-suffix .form-control:disabled + .input-suffix {
+    opacity: 0.4;
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .input-with-suffix {
+      width: 100%;
+    }
+  }

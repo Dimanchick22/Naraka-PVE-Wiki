@@ -1,0 +1,216 @@
+/* src/styles/components/rarityComponents.css */
+/* Стили для сетки диковинок и элементов диковинок */
+
+/* Сетка диковинок */
+.rarities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Слоты диковинок */
+  .rarity-slot {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    background-color: rgba(26, 26, 26, 0.6);
+  }
+  
+  .rarity-slot:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .rarity-slot.active {
+    border-width: 3px;
+    border-color: var(--naraka-secondary);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+  
+  .rarity-slot-header {
+    padding: 0.75rem;
+    text-align: center;
+  }
+  
+  .rarity-slot-header h4 {
+    margin: 0;
+    color: white;
+    font-size: 1.125rem;
+  }
+  
+  .rarity-content {
+    padding: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .rarity-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  
+  .rarity-icon-placeholder {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--naraka-secondary);
+  }
+  
+  .rarity-info {
+    flex: 1;
+  }
+  
+  .rarity-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    color: var(--naraka-light);
+  }
+  
+  .rarity-level {
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .rarity-stats {
+    margin-top: 0.5rem;
+  }
+  
+  .rarity-stat {
+    font-size: 0.75rem;
+    color: var(--naraka-light);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    margin-bottom: 0.125rem;
+    display: inline-block;
+    margin-right: 0.25rem;
+  }
+  
+  /* Пустая диковинка */
+  .empty-rarity {
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .empty-rarity-icon {
+    font-size: 2rem;
+    font-weight: bold;
+    color: rgba(212, 175, 55, 0.5);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .empty-rarity-text {
+    color: var(--naraka-light);
+    opacity: 0.5;
+    font-style: italic;
+  }
+  
+  /* Типы диковинок */
+  .yin-slot .empty-rarity-icon {
+    color: rgba(30, 78, 138, 0.7);
+  }
+  
+  .yang-slot .empty-rarity-icon {
+    color: rgba(138, 30, 30, 0.7);
+  }
+  
+  /* Панель редактирования диковинки */
+  .rarity-edit-panel {
+    background-color: rgba(20, 20, 20, 0.95);
+    border: 1px solid var(--naraka-secondary);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .rarity-edit-title {
+    color: var(--naraka-secondary);
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    text-align: center;
+  }
+  
+  .rarity-stats-list {
+    width: 100%;
+  }
+  
+  /* Строка стата диковинки */
+  .rarity-stat-row {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.5rem;
+    border-radius: 4px;
+    border-left: 3px solid var(--naraka-secondary);
+  }
+  
+  /* Модификаторы для различных типов статов */
+  .rarity-stat-row[data-type="attack"] {
+    border-left-color: rgba(139, 0, 0, 0.7);
+  }
+  
+  .rarity-stat-row[data-type="ice_explosion"] {
+    border-left-color: rgba(0, 112, 221, 0.7);
+  }
+  
+  .rarity-stat-row[data-type="boss_attack"] {
+    border-left-color: rgba(163, 53, 238, 0.7);
+  }
+  
+  .rarity-stat-row[data-type="monster_attack"] {
+    border-left-color: rgba(45, 197, 14, 0.7);
+  }
+  
+  .rarity-stat-row[data-type="fusion"] {
+    border-left-color: rgba(255, 128, 0, 0.7);
+  }
+  
+  .rarity-stat-row[data-type="empty"] {
+    border-left-color: rgba(128, 128, 128, 0.5);
+  }
+  
+  /* Адаптивность для мобильных устройств */
+  @media (max-width: 768px) {
+    .rarities-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(2, auto);
+    }
+    
+    .rarity-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .rarity-info {
+      width: 100%;
+      text-align: center;
+    }
+    
+    .rarity-stats {
+      text-align: center;
+    }
+  }

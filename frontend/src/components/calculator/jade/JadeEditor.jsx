@@ -1,7 +1,8 @@
-// src/components/calculator/jade/JadeEditor.jsx
+// Обновленный компонент JadeEditor с использованием CustomSelect
 import React from 'react';
 import { jadesData } from '../../../data/jades';
 import JadeStatRow from './JadeStatRow';
+import CustomSelect from '../../common/CustomSelect';
 
 const JadeEditor = ({
   jadeIndex,
@@ -12,61 +13,63 @@ const JadeEditor = ({
   onStatValueChange,
   onClose
 }) => {
+  // Подготовка опций для CustomSelect
+  const emptyOption = { id: '', name: 'Нет нефрита' };
+  
+  // Создаем группы для разных типов нефритов
+  const attackJades = jadesData.filter(jade => jade.type === 'attack').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  const iceExplosionJades = jadesData.filter(jade => jade.type === 'ice_explosion').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  const bossAttackJades = jadesData.filter(jade => jade.type === 'boss_attack').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  const monsterAttackJades = jadesData.filter(jade => jade.type === 'monster_attack').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  const fusionJades = jadesData.filter(jade => jade.type === 'fusion').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  const mixedJades = jadesData.filter(jade => jade.type === 'mixed').map(jade => ({ 
+    id: jade.id, 
+    name: `${jade.name} (${jade.rarity})` 
+  }));
+  
+  // Объединяем все группы в один массив опций
+  const options = [
+    emptyOption,
+    ...attackJades,
+    ...iceExplosionJades,
+    ...bossAttackJades,
+    ...monsterAttackJades,
+    ...fusionJades,
+    ...mixedJades
+  ];
+
   return (
     <div className="jade-edit-panel">
       <h4 className="jade-edit-title">Настройка нефрита #{jadeIndex + 1}</h4>
       
       <div className="form-group">
         <label className="mb-2 block">Выберите тип нефрита:</label>
-        <select 
-          className="form-control"
+        <CustomSelect 
+          options={options}
           value={jade?.id || ''}
-          onChange={(e) => onJadeSelect(e.target.value)}
-        >
-          <option value="">Нет нефрита</option>
-          <optgroup label="Атака">
-            {jadesData.filter(jade => jade.type === 'attack').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Ледяной взрыв">
-            {jadesData.filter(jade => jade.type === 'ice_explosion').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Атака по боссам">
-            {jadesData.filter(jade => jade.type === 'boss_attack').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Атака по монстрам">
-            {jadesData.filter(jade => jade.type === 'monster_attack').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Слияние">
-            {jadesData.filter(jade => jade.type === 'fusion').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Смешанные">
-            {jadesData.filter(jade => jade.type === 'mixed').map(jade => (
-              <option key={jade.id} value={jade.id}>
-                {jade.name} ({jade.rarity})
-              </option>
-            ))}
-          </optgroup>
-        </select>
+          onChange={onJadeSelect}
+          placeholder="Выберите нефрит"
+        />
       </div>
       
       {/* Настройка статов нефрита - максимум 4 стата */}

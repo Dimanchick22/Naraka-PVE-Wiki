@@ -1,4 +1,4 @@
-// components/ui/CustomSelect.jsx
+// components/common/CustomSelect.jsx
 import React, { useState, useRef, useEffect } from 'react';
 
 const CustomSelect = ({ 
@@ -94,7 +94,8 @@ const CustomSelect = ({
     }
   };
 
-  const containerClasses = `custom-select-container ${isOpen ? 'open' : ''} ${className}`;
+  // Используем классы, которые соответствуют вашему CSS
+  const containerClasses = `custom-select ${isOpen ? 'open' : ''} ${className}`;
   const selectedClasses = `custom-select-selected ${isOpen ? 'open' : ''} ${disabled ? 'disabled' : ''} ${error ? 'error' : ''}`;
 
   return (

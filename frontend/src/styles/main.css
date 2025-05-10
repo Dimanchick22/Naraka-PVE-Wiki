@@ -11,14 +11,18 @@
 @import url('./components/buttons.css');
 @import url('./components/forms.css');
 @import url('./components/select.css');
-@import url('./components/customSelect.css');
 @import url('./components/grid.css');
 @import url('./components/cards.css');
 @import url('./components/tabs.css');
 
-/* Отдельные компоненты калькулятора */
-@import url('./components/jadeGrid.css');
+/* Специализированные компоненты */
+@import url('./components/jadeComponents.css');
+@import url('./components/rarityComponents.css');
 @import url('./components/potentials.css');
+@import url('./components/tabbedCalculator.css');
+@import url('./components/calculatorResults.css');
+@import url('./components/customSelect.css');
+@import url('./components/inputWithSuffix.css');
 
 /* Макеты */
 @import url('./layouts/container.css');

@@ -2,6 +2,7 @@
 import React from 'react';
 import { raritiesData } from '../../../data/rarities';
 import RarityStatRow from './RarityStatRow';
+import CustomSelect from '../../common/CustomSelect';
 
 const RarityEditor = ({
   type,
@@ -27,6 +28,30 @@ const RarityEditor = ({
 
   // Доступные диковинки для выбранного типа
   const availableRarities = getAvailableRarities(type);
+  
+  // Подготовка опций для CustomSelect
+  const emptyOption = { id: '', name: 'Без диковинки' };
+  
+  // Создаем группы для разных редкостей
+  const mythicOptions = availableRarities
+    .filter(r => r.rarity === 'mythic')
+    .map(r => ({ id: r.id, name: `${r.name} (Мифический)` }));
+    
+  const legendaryOptions = availableRarities
+    .filter(r => r.rarity === 'legendary')
+    .map(r => ({ id: r.id, name: `${r.name} (Легендарный)` }));
+    
+  const epicOptions = availableRarities
+    .filter(r => r.rarity === 'epic')
+    .map(r => ({ id: r.id, name: `${r.name} (Эпический)` }));
+  
+  // Объединяем все опции
+  const options = [
+    emptyOption,
+    ...mythicOptions,
+    ...legendaryOptions,
+    ...epicOptions
+  ];
 
   return (
     <div className="rarity-edit-panel">
@@ -36,34 +61,12 @@ const RarityEditor = ({
 
       <div className="form-group">
         <label className="block mb-2">Выберите диковинку:</label>
-        <select
-          className="form-control"
+        <CustomSelect
+          options={options}
           value={rarity?.id || ''}
-          onChange={(e) => onRarityChange(e.target.value)}
-        >
-          <option value="">Без диковинки</option>
-          <optgroup label="Мифические">
-            {availableRarities.filter(r => r.rarity === 'mythic').map(r => (
-              <option key={r.id} value={r.id}>
-                {r.name} (Мифический)
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Легендарные">
-            {availableRarities.filter(r => r.rarity === 'legendary').map(r => (
-              <option key={r.id} value={r.id}>
-                {r.name} (Легендарный)
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Эпические">
-            {availableRarities.filter(r => r.rarity === 'epic').map(r => (
-              <option key={r.id} value={r.id}>
-                {r.name} (Эпический)
-              </option>
-            ))}
-          </optgroup>
-        </select>
+          onChange={onRarityChange}
+          placeholder="Выберите диковинку"
+        />
       </div>
 
       {/* Настройка статов диковинки */}

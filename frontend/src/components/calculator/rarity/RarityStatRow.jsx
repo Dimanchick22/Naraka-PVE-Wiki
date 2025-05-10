@@ -1,15 +1,16 @@
 // src/components/calculator/rarity/RarityStatRow.jsx
 import React from 'react';
 import { ModifierTarget } from '../../../data/jades';
+import CustomSelect from '../../common/CustomSelect';
 
 // Опции для выбора типа стата (такие же, как для нефритов)
 const statTypeOptions = [
-  { value: '', label: 'Пусто' },
-  { value: ModifierTarget.ATTACK, label: 'Атака' },
-  { value: ModifierTarget.ICE_EXPLOSION, label: 'Лед. взрыв' },
-  { value: ModifierTarget.BOSS_ATTACK, label: 'Атака по боссам' },
-  { value: ModifierTarget.MONSTER_ATTACK, label: 'Атака по монстрам' },
-  { value: ModifierTarget.FUSION, label: 'Слияние' }
+  { id: '', name: 'Пусто' },
+  { id: ModifierTarget.ATTACK, name: 'Атака' },
+  { id: ModifierTarget.ICE_EXPLOSION, name: 'Лед. взрыв' },
+  { id: ModifierTarget.BOSS_ATTACK, name: 'Атака по боссам' },
+  { id: ModifierTarget.MONSTER_ATTACK, name: 'Атака по монстрам' },
+  { id: ModifierTarget.FUSION, name: 'Слияние' }
 ];
 
 const RarityStatRow = ({ stat, statIndex, onTypeChange, onValueChange }) => {
@@ -20,17 +21,12 @@ const RarityStatRow = ({ stat, statIndex, onTypeChange, onValueChange }) => {
     >
       <div className="flex gap-3 items-center">
         <div className="flex-1">
-          <select
-            className="form-control"
+          <CustomSelect
+            options={statTypeOptions}
             value={stat.type}
-            onChange={(e) => onTypeChange(e.target.value)}
-          >
-            {statTypeOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            onChange={onTypeChange}
+            placeholder="Выберите тип стата"
+          />
         </div>
         <div className="input-with-suffix">
           <input
