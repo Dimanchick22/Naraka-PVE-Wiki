@@ -1,6 +1,4 @@
-/* src/styles/tabbedCalculator.css */
-
-/* Обновленные стили для контейнера с вкладками */
+/* src/styles/components/tabbedCalculator.css */
 .calculator-tabbed-container {
     background-color: rgba(26, 26, 26, 0.8);
     border: 1px solid var(--naraka-secondary);
@@ -62,6 +60,7 @@
   .tab-content {
     flex: 1;
     overflow-y: auto;
+    display: block;
   }
   
   /* Стили для улучшенной сетки нефритов */

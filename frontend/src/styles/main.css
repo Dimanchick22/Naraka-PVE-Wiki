@@ -15,6 +15,11 @@
 @import url('./components/grid.css');
 @import url('./components/tabs.css');
 
+/* Отдельные компоненты калькулятора */
+@import url('./components/jadeGrid.css');
+@import url('./components/tabbedCalculator.css');
+@import url('./customSelect.css');
+
 /* Макеты */
 @import url('./layouts/container.css');
 @import url('./layouts/header.css');
@@ -26,6 +31,7 @@
 @import url('./pages/details.css');
 @import url('./pages/calculator.css');
 @import url('./pages/listings.css');
+@import url('./pages/damageCalculator.css');
 
 /* Импорт шрифтов */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
