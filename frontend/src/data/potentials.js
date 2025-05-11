@@ -120,4 +120,27 @@ export const potentialsData = [
   }
 ];
 
-// Остальные функции остаются без изменений
+/**
+ * Получить все базовые потенциалы
+ * @returns {Array} - Массив базовых потенциалов
+ */
+export function getBasePotentials() {
+    return potentialsData.filter(potential => potential.type === PotentialType.BASE);
+  }
+  
+  /**
+   * Получить все боевые потенциалы
+   * @returns {Array} - Массив боевых потенциалов
+   */
+  export function getCombatPotentials() {
+    return potentialsData.filter(potential => potential.type === PotentialType.COMBAT);
+  }
+  
+  /**
+   * Получить потенциал по ID
+   * @param {string} id - ID потенциала
+   * @returns {Object|null} - Объект потенциала или null
+   */
+  export function getPotentialById(id) {
+    return potentialsData.find(potential => potential.id === id) || null;
+  }

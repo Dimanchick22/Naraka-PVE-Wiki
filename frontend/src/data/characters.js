@@ -7,9 +7,6 @@ export const SkillEffectType = {
     ATTACK_BOOST: 'attack_boost',         // Увеличение атаки
     ICE_EXPLOSION_BOOST: 'ice_boost',     // Увеличение урона ледяного взрыва
     DEFENSIVE: 'defensive',               // Защитный эффект
-    CROWD_CONTROL: 'crowd_control',       // Контроль толпы
-    SUMMON: 'summon',                     // Призыв
-    MOBILITY: 'mobility',                 // Мобильность
     DOT: 'dot',                           // Урон со временем
     HEAL: 'heal',                         // Лечение
     BUFF: 'buff',                         // Усиление
@@ -42,9 +39,6 @@ export const charactersData = [
     recommended_jades: ["iron-heart", "guardian-shield", "resilience"],
     skills: [
       // Здесь можно добавить навыки Тянь Хай, если они есть
-    ],
-    talents: [
-      // Здесь могут быть таланты конкретно для Тянь Хай
     ]
   },
   {
@@ -58,59 +52,33 @@ export const charactersData = [
       {
         id: "ice_explosion",
         name: "Ледяной взрыв",
-        description: "Создает область ледяного взрыва, наносящая урон всем врагам в зоне действия.",
+        description: "Баф элементального урона на 100%",
         cooldown: "12 секунд",
         effectType: SkillEffectType.ICE_EXPLOSION_BOOST,
         effects: [
           {
-            description: "Наносит 220% от базовой атаки в качестве урона",
-            value: 100
-          }
-        ],
-        isActive: false // Добавляем флаг активности навыка
-      },
-      {
-        id: "flower_magic",
-        name: "Цветочная магия",
-        description: "Призывает ледяной цветок, который взрывается, нанося урон и замедляя врагов.",
-        cooldown: "15 секунд",
-        effectType: SkillEffectType.ICE_EXPLOSION_BOOST,
-        effects: [
-          {
-            description: "Наносит 180% от базовой атаки в качестве урона",
-            value: 180
-          },
-          {
-            description: "Замедляет врагов на 30% на 4 секунды",
-            value: 30,
-            duration: 4
-          },
-          {
-            description: "Увеличивает урон цветочного взрыва на 25% на 6 секунд",
-            value: 25,
-            duration: 6
+            description: "Наносит 100% от базовой атаки в качестве урона",
+            value: 100,
+            valueType: EffectValueType.PERCENTAGE
           }
         ],
         isActive: false
       },
       {
-        id: "winter_freeze",
-        name: "Зимняя стужа",
-        description: "Пассивный навык, увеличивающий урон ледяных атак при последовательных попаданиях.",
-        cooldown: "Пассивный",
-        effectType: SkillEffectType.ICE_EXPLOSION_BOOST,
+        id: "flower_magic",
+        name: "F",
+        description: "Атака 20%",
+        cooldown: "15 секунд",
+        effectType: SkillEffectType.ATTACK_BOOST,
         effects: [
           {
-            description: "Каждое попадание увеличивает урон ледяного взрыва на 5%, суммируется до 5 раз",
-            value: 5,
-            stacks: 5
+            description: "Наносит 180% от базовой атаки в качестве урона",
+            value: 20,
+            valueType: EffectValueType.PERCENTAGE
           }
         ],
         isActive: false
       }
-    ],
-    talents: [
-      // Таланты для Цзыпин
     ]
   },
   {
@@ -121,21 +89,6 @@ export const charactersData = [
     description: "Быстрая и смертоносная охотница на демонов, использующая духов лисы для нанесения дополнительного урона.",
     recommended_jades: ["jade_frozen_lotos", "jade_dual_effect", "jade_boss_hunter"],
     skills: [
-      {
-        id: "tail_strike",
-        name: "Удар хвостом",
-        description: "Быстрый удар с возможностью призыва духа лисы для дополнительного урона.",
-        cooldown: "10 секунд",
-        effectType: SkillEffectType.ATTACK_BOOST,
-        effects: [
-          {
-            description: "Увеличивает атаку на 8%",
-            value: 8,
-            valueType: EffectValueType.PERCENTAGE
-          }
-        ],
-        isActive: false
-      },
       {
         id: "tessa_f",
         name: "Духовная связь",
@@ -151,9 +104,6 @@ export const charactersData = [
         ],
         isActive: false
       }
-    ],
-    talents: [
-      // Таланты для Тессы
     ]
   }
 ];
