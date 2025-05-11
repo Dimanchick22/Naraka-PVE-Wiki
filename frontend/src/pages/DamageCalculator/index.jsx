@@ -94,21 +94,19 @@ const DamageCalculatorPage = () => {
   }, [character]);
   
   // Обработчики для обновления пользовательских статов
+  // ИСПРАВЛЕННАЯ функция handleJadeStatsChange
   const handleJadeStatsChange = (jadeIndex, statIndex, type, value) => {
     const updatedStats = [...customJadeStats];
+    
+    // Обновляем только указанные поля
     if (type !== undefined) updatedStats[jadeIndex][statIndex].type = type;
     if (value !== undefined) updatedStats[jadeIndex][statIndex].value = value;
+    
+    // Обновляем стейт статов
     setCustomJadeStats(updatedStats);
     
-    // Обновляем нефрит с новыми статами
-    if (selectedJades[jadeIndex]) {
-      const updatedJades = [...selectedJades];
-      updatedJades[jadeIndex] = {
-        ...selectedJades[jadeIndex],
-        customStats: updatedStats[jadeIndex]
-      };
-      setSelectedJades(updatedJades);
-    }
+    // НЕ ОБНОВЛЯЕМ здесь сам нефрит - это причина дублирования!
+    // Вместо этого статы будут добавлены только при расчете
   };
   
   const handleYinRarityStatsChange = (statIndex, type, value) => {
@@ -117,13 +115,7 @@ const DamageCalculatorPage = () => {
     if (value !== undefined) updatedStats[statIndex].value = value;
     setYinRarityStats(updatedStats);
     
-    // Обновляем диковинку с новыми статами
-    if (yinRarity) {
-      setYinRarity({
-        ...yinRarity,
-        customStats: updatedStats
-      });
-    }
+    // Не обновляем саму диковинку - только статы
   };
   
   const handleYangRarityStatsChange = (statIndex, type, value) => {
@@ -132,13 +124,7 @@ const DamageCalculatorPage = () => {
     if (value !== undefined) updatedStats[statIndex].value = value;
     setYangRarityStats(updatedStats);
     
-    // Обновляем диковинку с новыми статами
-    if (yangRarity) {
-      setYangRarity({
-        ...yangRarity,
-        customStats: updatedStats
-      });
-    }
+    // Не обновляем саму диковинку - только статы
   };
   
   // Обработчик изменения базового потенциала
@@ -194,7 +180,7 @@ const DamageCalculatorPage = () => {
     }
   };
   
-  // Обработчик расчета урона
+  // ИСПРАВЛЕННЫЙ обработчик расчета урона
   const calculateDamage = () => {
     if (!character) {
       alert('Выберите персонажа для расчета');
@@ -206,7 +192,7 @@ const DamageCalculatorPage = () => {
       .setCharacter(character)
       .setConsciousness(consciousness)
       .setHeroLevel(heroLevel)
-      .setActiveSkills(activeSkills); // Устанавливаем активные навыки
+      .setActiveSkills(activeSkills);
     
     // Установка базовых потенциалов
     Object.keys(basePotentials).forEach(potentialId => {
@@ -221,7 +207,8 @@ const DamageCalculatorPage = () => {
     // Добавление нефритов
     selectedJades.forEach((jade, index) => {
       if (jade) {
-        // Создаем копию нефрита с пользовательскими статами
+        // Обратите внимание, здесь мы НЕ модифицируем исходный нефрит
+        // Вместо этого создаем временную копию для калькулятора
         const jadeWithStats = { ...jade };
         
         // Добавляем пользовательские статы
@@ -237,8 +224,9 @@ const DamageCalculatorPage = () => {
             condition: null
           }));
           
-          // Добавляем статы к нефриту
-          jadeWithStats.stats = [...(jadeWithStats.stats || []), ...calculatorStats];
+          // Добавляем статы к копии нефрита
+          // Если у нефрита уже есть статы, создаем новый массив
+          jadeWithStats.stats = [...(jade.stats || []), ...calculatorStats];
         }
         
         calculator.addJade(jadeWithStats);
@@ -259,7 +247,7 @@ const DamageCalculatorPage = () => {
           value: stat.value
         }));
         
-        yinRarityWithStats.effects = [...(yinRarityWithStats.effects || []), ...calculatorStats];
+        yinRarityWithStats.effects = [...(yinRarity.effects || []), ...calculatorStats];
       }
       calculator.setRarity(yinRarityWithStats);
     }
@@ -277,7 +265,7 @@ const DamageCalculatorPage = () => {
           value: stat.value
         }));
         
-        yangRarityWithStats.effects = [...(yangRarityWithStats.effects || []), ...calculatorStats];
+        yangRarityWithStats.effects = [...(yangRarity.effects || []), ...calculatorStats];
       }
       calculator.setRarity(yangRarityWithStats);
     }

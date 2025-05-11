@@ -35,28 +35,36 @@ const RaritiesPanel = ({
   };
 
   // Обработчик изменения диковинки
-  const handleRarityChange = (rarityId, type) => {
-    // Если rarityId пустой, удаляем диковинку
-    if (!rarityId) {
-      if (type === RarityType.YIN) {
-        onRarityChange(null, type);
-      } else if (type === RarityType.YANG) {
-        onRarityChange(null, type);
-      }
-      return;
-    }
+  const handleRarityChange = (rarity) => {
+    // Выбираем тип диковинки на основе текущего состояния
+    const type = selectedType;
     
-    // Находим выбранную диковинку в импортированных данных
-    const selectedRarity = raritiesData.find(r => r.id === rarityId);
-    if (selectedRarity) {
-      // Создаем копию со статами
-      const rarityWithStats = {
-        ...selectedRarity,
-        customStats: type === RarityType.YIN ? yinRarityStats : yangRarityStats
-      };
+    if (!type) return; // Если тип не определен, выходим
+    
+    // Обновляем состояние в родительском компоненте
+    onRarityChange(rarity, type);
+    
+    // Если выбрана пустая диковинка (null), сбрасываем также статы
+    if (!rarity) {
+      // Сбрасываем статы для соответствующего типа
+      const defaultStats = [
+        { type: '', value: 0 },
+        { type: '', value: 0 },
+        { type: '', value: 0 },
+        { type: '', value: 0 }
+      ];
       
-      // Обновляем состояние
-      onRarityChange(rarityWithStats, type);
+      if (type === RarityType.YIN) {
+        // Сбрасываем статы для Инь
+        defaultStats.forEach((_, index) => {
+          onYinRarityStatsChange(index, '', 0);
+        });
+      } else if (type === RarityType.YANG) {
+        // Сбрасываем статы для Ян
+        defaultStats.forEach((_, index) => {
+          onYangRarityStatsChange(index, '', 0);
+        });
+      }
     }
   };
   
@@ -112,7 +120,7 @@ const RaritiesPanel = ({
           rarity={selectedType === RarityType.YIN ? yinRarity : yangRarity}
           stats={selectedType === RarityType.YIN ? yinRarityStats : yangRarityStats}
           character={character}
-          onRarityChange={(rarityId) => handleRarityChange(rarityId, selectedType)}
+          onRarityChange={handleRarityChange}
           onStatTypeChange={handleStatTypeChange}
           onStatValueChange={handleStatValueChange}
           onClose={() => setSelectedType(null)}

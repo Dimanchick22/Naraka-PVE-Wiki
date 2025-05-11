@@ -53,6 +53,23 @@ const RarityEditor = ({
     ...epicOptions
   ];
 
+  // Обработчик выбора диковинки
+  const handleRaritySelect = (rarityId) => {
+    if (!rarityId) {
+      // Если выбрано пустое значение, сбрасываем диковинку
+      onRarityChange(null);
+      return;
+    }
+
+    // Находим выбранную диковинку в данных
+    const selectedRarity = raritiesData.find(r => r.id === rarityId);
+    if (selectedRarity) {
+      // Важно: не добавляем кастомные статы к объекту диковинки,
+      // они хранятся отдельно и применяются только при расчете
+      onRarityChange(selectedRarity);
+    }
+  };
+
   return (
     <div className="rarity-edit-panel">
       <h4 className="rarity-edit-title">
@@ -64,7 +81,7 @@ const RarityEditor = ({
         <CustomSelect
           options={options}
           value={rarity?.id || ''}
-          onChange={onRarityChange}
+          onChange={handleRaritySelect}
           placeholder="Выберите диковинку"
         />
       </div>

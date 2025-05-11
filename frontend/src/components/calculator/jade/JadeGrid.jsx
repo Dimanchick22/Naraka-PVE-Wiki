@@ -22,9 +22,20 @@ const JadeGrid = ({
   const handleJadeSelect = (jadeId) => {
     if (!jadeId) {
       // Если выбрано пустое значение, удаляем нефрит
+      // и сбрасываем его кастомные статы
       const updatedJades = [...jades];
       updatedJades[activeJadeIndex] = null;
       onJadeChange(updatedJades);
+      
+      // Сбрасываем кастомные статы для этого нефрита
+      const updatedStats = [...customJadeStats];
+      updatedStats[activeJadeIndex] = [
+        { type: '', value: 0 },
+        { type: '', value: 0 },
+        { type: '', value: 0 },
+        { type: '', value: 0 }
+      ];
+      onJadeStatsChange(activeJadeIndex, 0, '', 0); // Вызываем с пустыми значениями для сброса
       return;
     }
 
@@ -32,6 +43,8 @@ const JadeGrid = ({
     const selectedJade = jadesData.find(jade => jade.id === jadeId);
     if (selectedJade) {
       const updatedJades = [...jades];
+      // Важно: НЕ добавляем customStats в объект нефрита здесь
+      // Они хранятся отдельно в массиве customJadeStats
       updatedJades[activeJadeIndex] = selectedJade;
       onJadeChange(updatedJades);
     }

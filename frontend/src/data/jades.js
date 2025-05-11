@@ -91,7 +91,7 @@ export const jadesData = [
   {
     id: "thundra_might",
     name: "Мощь тундры",
-    type: "mixed",
+    type: "attack",
     rarity: "epic",
     thumbnail: null,
     description: "Увеличивает атаку на 15% и накопление ледяного взрыва на 45% на 5с каждый раз когда вы накапливаете обморожение",
@@ -110,7 +110,7 @@ export const jadesData = [
   {
     id: "sub-zero_seal",
     name: "Морозная печать",
-    type: "mixed",
+    type: "attack",
     rarity: "epic",
     thumbnail: null,
     description: "При здоровье больше 50% Увеличивает атаку на 20%, но одновременно у владельца непрерывно накапливается обморожение",
