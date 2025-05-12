@@ -1,4 +1,4 @@
-// src/pages/DamageCalculator/ResultsSection.jsx
+// src/pages/DamageCalculator/ResultsSection.jsx (обновленная версия)
 import React from 'react';
 import CalculationSteps from './CalculationSteps';
 
@@ -70,20 +70,12 @@ const NormalDamageTab = ({ results }) => (
     <div className="summary-block">
       <h4 className="summary-title">Базовые характеристики</h4>
       <div className="summary-item">
-        <span className="summary-label">Базовая атака:</span>
-        <span className="summary-value">{Math.round(results.baseAttack)}</span>
-      </div>
-      <div className="summary-item">
-        <span className="summary-label">Финальная атака:</span>
-        <span className="summary-value highlight">{Math.round(results.finalAttack)}</span>
+        <span className="summary-label">Атака:</span>
+        <span className="summary-value highlight">{Math.round(results.attack)}</span>
       </div>
       <div className="summary-item">
         <span className="summary-label">Базовый % лед. взрыва:</span>
-        <span className="summary-value">{Math.round(results.iceExplosionPercent * 100)}%</span>
-      </div>
-      <div className="summary-item">
-        <span className="summary-label">Финальный % лед. взрыва:</span>
-        <span className="summary-value highlight">{Math.round(results.finalIceExplosionPercent * 100)}%</span>
+        <span className="summary-value highlight">{Math.round(results.iceExplosionPercent * 100)}%</span>
       </div>
     </div>
     
